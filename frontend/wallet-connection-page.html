@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ReligySync - Connect Wallet</title>
+  <style>
+    /* ReligySync Global CSS */
+    :root {
+      /* Primary Colors */
+      --dark-blue-1: #1a1a2e;
+      --dark-blue-2: #16213e;
+      --dark-blue-3: #0d1b2a;
+      --dark-blue-4: #161b33;
+      --dark-blue-5: #1e2a3b;
+      --dark-blue-6: #121e2e;
+      
+      /* Accent Colors */
+      --accent-blue: #3a86ff;
+      --accent-blue-light: #4361ee;
+      --accent-blue-lightest: #4cc9f0;
+      --accent-purple: #7209b7;
+      --accent-purple-dark: #3a0ca3;
+      
+      /* Text Colors */
+      --text-white: #ffffff;
+      --text-light: #e9ecef;
+      --text-gray-light: #d8e2dc;
+      --text-gray: #8d99ae;
+      --text-gray-dark: #5c677d;
+    }
+
+    /* Base Styles */
+    body {
+      font-family: Arial, sans-serif;
+      color: var(--text-white);
+      background: linear-gradient(to bottom right, var(--dark-blue-1), var(--dark-blue-2));
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 20px 20px;
+    }
+    
+    /* Header */
+    header {
+      background-color: var(--dark-blue-3);
+      opacity: 0.7;
+      height: 80px;
+      width: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 50px;
+    }
+    
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      color: var(--text-white);
+      text-decoration: none;
+    }
+    
+    nav ul {
+      display: flex;
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+    
+    nav ul li {
+      margin-left: 30px;
+    }
+    
+    nav ul li a {
+      color: var(--text-gray);
+      font-size: 18px;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    nav ul li a:hover,
+    nav ul li a.active {
+      color: var(--text-light);
+    }
+    
+    /* Page Header */
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    
+    .page-title {
+      font-size: 36px;
+      color: var(--text-light);
+      margin: 0;
+    }
+    
+    /* Wallet Connection Section */
+    .wallet-section {
+      display: flex;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+    
+    .wallet-connection {
+      flex: 1;
+      background: linear-gradient(to bottom right, var(--dark-blue-5), var(--dark-blue-6));
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    
+    .wallet-info {
+      flex: 1;
+      background: linear-gradient(to bottom right, var(--dark-blue-5), var(--dark-blue-6));
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    
+    .section-title {
+      font-size: 24px;
+      color: var(--text-light);
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--accent-purple);
+      display: inline-block;
+      padding-bottom: 8px;
+    }
+    
+    .wallet-providers {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+    
+    .wallet-provider {
+      background-color: rgba(26, 26, 46, 0.6);
+      border: 1px solid var(--accent-blue-light);
+      border-radius: 6px;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .wallet-provider:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      background-color: rgba(26, 26, 46, 0.8);
+    }
+    
+    .wallet-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--dark-blue-4);
+      margin-right: 15px;
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--accent-blue-lightest);
+    }
+    
+    .wallet-name {
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--text-light);
+    }
+    
+    .wallet-status {
+      text-align: center;
+      padding: 15px;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: bold;
+      background-color: rgba(26, 26, 46, 0.6);
+      color: var(--text-gray);
+      margin-bottom: 25px;
+    }
+    
+    .wallet-status.connected {
+      background-color: rgba(58, 134, 255, 0.1);
+      color: var(--accent-blue-lightest);
+    }
+    
+    .connect-button {
+      background: linear-gradient(to bottom right, var(--accent-blue-light), var(--accent-purple-dark));
+      color: var(--text-white);
+      border-radius: 20px;
+      padding: 12px 30px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+      font-size: 16px;
+      width: 100%;
+      display: block;
+      text-align: center;
+    }
+    
+    .connect-button:hover {
+      opacity: 0.9;
+    }
+    
+    /* Wallet Info Card */
+    .wallet-info-card {
+      background-color: rgba(26, 26, 46, 0.6);
+      border-radius: 6px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .info-title {
+      font-size: 18px;
+      color: var(--text-light);
+      margin-bottom: 15px;
+    }
+    
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(141, 153, 174, 0.2);
+    }
+    
+    .info-row:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    
+    .info-label {
+      color: var(--text-gray);
+      font-size: 14px;
+    }
+    
+    .info-value {
+      color: var(--text-light);
+      font-size: 14px;
+      font-weight: bold;
+    }
+    
+    .token-value {
+      color: var(--accent-blue-lightest);
+    }
+    
+    /* Activity Table */
+    .activity-table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+    
+    .activity-table th {
+      text-align: left;
+      padding: 12px 15px;
+      background-color: rgba(26, 26, 46, 0.6);
+      color: var(--text-gray-light);
+      font-size: 14px;
+    }
+    
+    .activity-table td {
+      padding: 12px 15px;
+      border-bottom: 1px solid rgba(141, 153, 174, 0.2);
+      color: var(--text-light);
+      font-size: 14px;
+    }
+    
+    .activity-type {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    
+    .type-send {
+      background-color: rgba(114, 9, 183, 0.1);
+      color: var(--accent-purple);
+    }
+    
+    .type-receive {
+      background-color: rgba(76, 201, 240, 0.1);
+      color: var(--accent-blue-lightest);
+    }
+    
+    .transaction-link {
+      color: var(--accent-blue-light);
+      text-decoration: none;
+    }
+    
+    .transaction-link:hover {
+      text-decoration: underline;
+    }
+    
+    /* Benefits Section */
+    .benefits-section {
+      margin-top: 40px;
+    }
+    
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    
+    .benefit-card {
+      background: linear-gradient(to bottom right, var(--dark-blue-5), var(--dark-blue-6));
+      border-radius: 8px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+    }
+    
+    .benefit-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .benefit-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background-color: rgba(114, 9, 183, 0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto 15px;
+      font-size: 24px;
+      color: var(--accent-purple);
+    }
+    
+    .benefit-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--text-white);
+      margin-bottom: 10px;
+    }
+    
+    .benefit-description {
+      color: var(--text-gray-light);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--dark-blue-3);
+      opacity: 0.7;
+      min-height: 50px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 40px;
+      padding: 20px 0;
+    }
+    
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 1200px;
+      padding: 0 20px;
+    }
+    
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .footer-links a {
+      color: var(--text-gray);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .footer-links a:hover {
+      color: var(--accent-blue-light);
+    }
+    
+    .copyright {
+      color: var(--text-gray);
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <a href="index.html" class="logo">ReligySync</a>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="questions.html">Questions</a></li>
+        <li><a href="scholars.html">Scholars</a></li>
+        <li><a href="wallet.html" class="active">Connect Wallet</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="container">
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1 class="page-title">Wallet Connection</h1>
+    </div>
+
+    <!-- Wallet Connection Section -->
+    <div class="wallet-section">
+      <div class="wallet-connection">
+        <h2 class="section-title">Connect Your Wallet</h2>
+        <p>Connect your Sui wallet to participate in the ReligySync ecosystem. Reward scholars, earn tokens, and build your reputation.</p>
+        
+        <div class="wallet-providers">
+          <div class="wallet-provider">
+            <div class="wallet-icon">SW</div>
+            <div class="wallet-name">Sui Wallet</div>
+          </div>
+          <div class="wallet-provider">
+            <div class="wallet-icon">MM</div>
+            <div class="wallet-name">MetaMask</div>
+          </div>
+          <div class="wallet-provider">
+            <div class="wallet-icon">ET</div>
+            <div class="wallet-name">Ethos Wallet</div>
+          </div>
+          <div class="wallet-provider">
+            <div class="wallet-icon">SC</div>
+            <div class="wallet-name">Suiet</div>
+          </div>
+        </div>
+        
+        <div class="wallet-status">
+          Not Connected
+        </div>
+        
+        <button class="connect-button">Connect Wallet</button>
+      </div>
+      
+      <div class="wallet-info">
+        <h2 class="section-title">Your Wallet Info</h2>
+        <div class="wallet-info-card">
+          <h3 class="info-title">Balance</h3>
+          <div class="info-row">
+            <div class="info-label">Address</div>
+            <div class="info-value">0x1a2...8f9b</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">SUI Balance</div>
+            <div class="info-value token-value">125.45 SUI</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">SYNC Tokens</div>
+            <div class="info-value token-value">750 SYNC</div>
+          </div>
+        </div>
+        
+        <h3 class="info-title">Recent Activity</h3>
+        <table class="activity-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Type</th>
+              <th>Amount</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Mar 28, 2025</td>
+              <td><span class="activity-type type-send">Sent</span></td>
+              <td>15 SUI</td>
+              <td><a href="#" class="transaction-link">View Transaction</a></td>
+            </tr>
+            <tr>
+              <td>Mar 25, 2025</td>
+              <td><span class="activity-type type-receive">Received</span></td>
+              <td>50 SYNC</td>
+              <td><a href="#" class="transaction-link">View Transaction</a></td>
+            </tr>
+            <tr>
+              <td>Mar 22, 2025</td>
+              <td><span class="activity-type type-send">Sent</span></td>
+              <td>5 SUI</td>
+              <td><a href="#" class="transaction-link">View Transaction</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Benefits Section -->
+    <div class="benefits-section">
+      <h2 class="section-title">Benefits of Connecting Your Wallet</h2>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">🎁</div>
+          <h3 class="benefit-title">Reward Scholars</h3>
+          <p class="benefit-description">Show appreciation to scholars who provide valuable insights by rewarding them with SUI tokens.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">⛓️</div>
+          <div class="benefit-title">On-Chain Authentication</div>
+          <p class="benefit-description">Questions, answers, and educational content are minted as NFTs, ensuring authenticity and permanence.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">🌟</div>
+          <div class="benefit-title">Earn SYNC Tokens</div>
+          <p class="benefit-description">Participate in the community by asking questions, providing feedback, and engaging with content to earn platform tokens.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="#">Help Center</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+      <div class="copyright">© 2025 ReligySync - Built on Sui Blockchain</div>
+    </div>
+  </footer>
+</body>
+</html>

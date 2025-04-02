@@ -1,0 +1,59 @@
+.header {
+  background-color: var(--dark-blue-3);
+  opacity: 0.7;
+  height: 80px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 50px;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--text-white);
+  text-decoration: none;
+}
+
+.navList {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+  align-items: center;
+}
+
+.navList a {
+  color: var(--text-gray);
+  font-size: 18px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.navList a:hover {
+  color: var(--text-light);
+}
+
+.navList a.active {
+  color: var(--text-white);
+}
+
+.connect a {
+  background: linear-gradient(
+    to bottom right,
+    var(--accent-blue-light),
+    var(--accent-purple-dark)
+  );
+  color: var(--text-white);
+  border-radius: 20px;
+  padding: 12px 30px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  font-size: 16px;
+}

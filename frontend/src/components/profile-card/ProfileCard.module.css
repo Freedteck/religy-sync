@@ -1,0 +1,61 @@
+.card {
+  background: linear-gradient(
+    to bottom right,
+    var(--dark-blue-4),
+    var(--dark-blue-3)
+  );
+  border: 1px solid var(--accent-blue-light);
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: rgba(114, 9, 183, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  font-weight: bold;
+  color: var(--text-white);
+  margin: 0 auto 15px;
+}
+
+.name {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--text-white);
+  margin-bottom: 8px;
+}
+
+.tradition {
+  color: var(--text-gray);
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  font-size: 14px;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+}
+
+.value {
+  color: var(--accent-blue-light);
+  font-weight: bold;
+  margin-right: 5px;
+}

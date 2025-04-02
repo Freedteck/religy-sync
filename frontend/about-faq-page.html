@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ReligySync - About & FAQ</title>
+  <style>
+    /* ReligySync Global CSS */
+    :root {
+      /* Primary Colors */
+      --dark-blue-1: #1a1a2e;
+      --dark-blue-2: #16213e;
+      --dark-blue-3: #0d1b2a;
+      --dark-blue-4: #161b33;
+      --dark-blue-5: #1e2a3b;
+      --dark-blue-6: #121e2e;
+      
+      /* Accent Colors */
+      --accent-blue: #3a86ff;
+      --accent-blue-light: #4361ee;
+      --accent-blue-lightest: #4cc9f0;
+      --accent-purple: #7209b7;
+      --accent-purple-dark: #3a0ca3;
+      
+      /* Text Colors */
+      --text-white: #ffffff;
+      --text-light: #e9ecef;
+      --text-gray-light: #d8e2dc;
+      --text-gray: #8d99ae;
+      --text-gray-dark: #5c677d;
+    }
+
+    /* Base Styles */
+    body {
+      font-family: Arial, sans-serif;
+      color: var(--text-white);
+      background: linear-gradient(to bottom right, var(--dark-blue-1), var(--dark-blue-2));
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 20px 20px;
+    }
+    
+    /* Header */
+    header {
+      background-color: var(--dark-blue-3);
+      opacity: 0.7;
+      height: 80px;
+      width: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 50px;
+    }
+    
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      color: var(--text-white);
+      text-decoration: none;
+    }
+    
+    nav ul {
+      display: flex;
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+    
+    nav ul li {
+      margin-left: 30px;
+    }
+    
+    nav ul li a {
+      color: var(--text-gray);
+      font-size: 18px;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    nav ul li a:hover,
+    nav ul li a.active {
+      color: var(--text-light);
+    }
+
+    /* Page Header */
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .page-title {
+      font-size: 42px;
+      margin-bottom: 15px;
+      background: linear-gradient(to right, var(--accent-blue-light), var(--accent-purple));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    .page-subtitle {
+      color: var(--text-gray-light);
+      font-size: 18px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* About Section */
+    .about-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 60px;
+    }
+    
+    .about-content {
+      background: linear-gradient(to bottom right, var(--dark-blue-5), var(--dark-blue-6));
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .section-title {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: var(--text-light);
+      border-bottom: 2px solid var(--accent-purple);
+      display: inline-block;
+      padding-bottom: 8px;
+    }
+    
+    .about-content p {
+      color: var(--text-gray-light);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    
+    .about-content p:last-child {
+      margin-bottom: 0;
+    }
+    
+    .platform-features {
+      background: linear-gradient(to bottom right, var(--dark-blue-4), var(--dark-blue-3));
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .feature-list {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+    
+    .feature-icon {
+      background: linear-gradient(to bottom right, var(--accent-blue-light), var(--accent-purple));
+      color: var(--text-white);
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      margin-right: 15px;
+      flex-shrink: 0;
+    }
+    
+    .feature-text {
+      flex-grow: 1;
+    }
+    
+    .feature-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--text-light);
+      margin-bottom: 5px;
+    }
+    
+    .feature-description {
+      color: var(--text-gray-light);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* FAQ Section */
+    .faq-section {
+      margin-bottom: 60px;
+    }
+    
+    .faq-container {
+      background: linear-gradient(to bottom right, var(--dark-blue-5), var(--dark-blue-6));
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .faq-item {
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(114, 9, 183, 0.3);
+      padding-bottom: 20px;
+    }
+    
+    .faq-item:last-child {
+      margin-bottom: 0;
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    
+    .faq-question {
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--text-light);
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+    
+    .faq-question::after {
+      content: "+";
+      font-size: 24px;
+      color: var(--accent-blue-light);
+    }
+    
+    .faq-answer {
+      color: var(--text-gray-light);
+      line-height: 1.6;
+      display: none;
+      padding-top: 10px;
+    }
+    
+    .faq-item.active .faq-question::after {
+      content: "-";
+    }
+    
+    .faq-item.active .faq-answer {
+      display: block;
+    }
+
+    /* Blockchain Section */
+    .blockchain-section {
+      background: radial-gradient(circle at 50% 50%, rgba(114, 9, 183, 0.1), transparent 70%);
+      border-radius: 8px;
+      padding: 40px;
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    
+    .blockchain-title {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: var(--text-light);
+    }
+    
+    .blockchain-description {
+      color: var(--text-gray-light);
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto 30px;
+    }
+    
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    
+    .benefit-card {
+      background: linear-gradient(to bottom right, var(--dark-blue-4), var(--dark-blue-3));
+      border: 1px solid var(--accent-blue-light);
+      border-radius: 8px;
+      padding: 20px;
+      transition: transform 0.3s ease;
+    }
+    
+    .benefit-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .benefit-icon {
+      background: linear-gradient(to bottom right, var(--accent-blue-light), var(--accent-purple));
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin: 0 auto 15px;
+      color: var(--text-white);
+    }
+    
+    .benefit-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--text-light);
+      margin-bottom: 10px;
+    }
+    
+    .benefit-text {
+      color: var(--text-gray-light);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* Team Section */
+    .team-section {
+      margin-bottom: 60px;
+    }
+    
+    .team-container {
+      background: linear-gradient(to bottom right, var(--dark-blue-5), var(--dark-blue-6));
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    
+    .team-member {
+      text-align: center;
+    }
+    
+    .member-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background-color: rgba(114, 9, 183, 0.3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 40px;
+      font-weight: bold;
+      color: var(--text-white);
+      margin: 0 auto 15px;
+      background: linear-gradient(135deg, var(--accent-blue-light), var(--accent-purple));
+    }
+    
+    .member-name {
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--text-white);
+      margin-bottom: 5px;
+    }
+    
+    .member-role {
+      color: var(--accent-blue-light);
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+    
+    .member-bio {
+      color: var(--text-gray-light);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* Contact Section */
+    .contact-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 60px;
+    }
+    
+    .contact-info {
+      background: linear-gradient(to bottom right, var(--dark-blue-5), var(--dark-blue-6));
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .contact-list {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .contact-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .contact-icon {
+      background: linear-gradient(to bottom right, var(--accent-blue-light), var(--accent-purple));
+      color: var(--text-white);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      margin-right: 15px;
+      flex-shrink: 0;
+    }
+    
+    .contact-text {
+      color: var(--text-gray-light);
+    }
+    
+    .contact-form {
+      background: linear-gradient(to bottom right, var(--dark-blue-4), var(--dark-blue-3));
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text-light);
+      font-size: 16px;
+    }
+    
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--dark-blue-1);
+      border: 1px solid var(--accent-blue-light);
+      border-radius: 4px;
+      color: var(--text-light);
+      font-size: 16px;
+    }
+    
+    .form-textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    
+    .submit-button {
+      background: linear-gradient(to bottom right, var(--accent-blue-light), var(--accent-purple-dark));
+      color: var(--text-white);
+      border-radius: 20px;
+      padding: 12px 30px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+      font-size: 16px;
+      display: inline-block;
+    }
+    
+    .submit-button:hover {
+      opacity: 0.9;
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--dark-blue-3);
+      opacity: 0.7;
+      min-height: 50px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 40px;
+      padding: 20px 0;
+    }
+    
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 1200px;
+      padding: 0 20px;
+    }
+    
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .footer-links a {
+      color: var(--text-gray);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .footer-links a:hover {
+      color: var(--accent-blue-light);
+    }
+    
+    .copyright {
+      color: var(--text-gray);
+      font-size: 14px;
+    }
+
+    /* JavaScript for FAQ accordion */
+    .active .faq-answer {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <a href="index.html" class="logo">ReligySync</a>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="questions.html">Questions</a></li>
+        <li><a href="scholars.html">Scholars</a></li>
+        <li><a href="wallet.html">Connect Wallet</a></li>
+        <li><a href="about.html" class="active">About</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="container">
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1 class="page-title">About ReligySync</h1>
+      <p class="page-subtitle">Discover authentic spiritual wisdom secured by blockchain technology</p>
+    </div>
+
+    <!-- About Section -->
+    <div class="about-section">
+      <div class="about-content">
+        <h2 class="section-title">Our Mission</h2>
+        <p>ReligySync is a Web3-powered faith-based platform built on the Sui blockchain that bridges the gap between spiritual seekers and verified religious scholars. We provide a decentralized space where authentic religious knowledge can be shared, discussed, and preserved for generations to come.</p>
+        <p>Our mission is to democratize access to authentic religious knowledge while maintaining the highest standards of accuracy and respect. By leveraging blockchain technology, we ensure that valuable spiritual insights are permanently recorded and immune to censorship or manipulation.</p>
+        <p>Whether you're exploring your own faith tradition more deeply or seeking to understand other religious perspectives, ReligySync provides a trusted space for respectful dialogue and learning across different belief systems.</p>
+      </div>
+      
+      <div class="platform-features">
+        <h2 class="section-title">Key Features</h2>
+        <ul class="feature-list">
+          <li class="feature-item">
+            <div class="feature-icon">Q</div>
+            <div class="feature-text">
+              <div class="feature-title">Ask Religious Questions</div>
+              <div class="feature-description">Post your spiritual and religious questions and receive thoughtful answers from verified religious scholars.</div>
+            </div>
+          </li>
+          <li class="feature-item">
+            <div class="feature-icon">V</div>
+            <div class="feature-text">
+              <div class="feature-title">Verified Scholars</div>
+              <div class="feature-description">All religious experts are thoroughly verified to ensure authentic and accurate information.</div>
+            </div>
+          </li>
+          <li class="feature-item">
+            <div class="feature-icon">B</div>
+            <div class="feature-text">
+              <div class="feature-title">Blockchain Authentication</div>
+              <div class="feature-description">All content is stored on the Sui blockchain as NFTs for authenticity and permanence.</div>
+            </div>
+          </li>
+          <li class="feature-item">
+            <div class="feature-icon">R</div>
+            <div class="feature-text">
+              <div class="feature-title">Reward System</div>
+              <div class="feature-description">Show appreciation by rewarding valuable contributions with SUI tokens.</div>
+            </div>
+          </li>
+          <li class="feature-item">
+            <div class="feature-icon">I</div>
+            <div class="feature-text">
+              <div class="feature-title">Interfaith Dialogue</div>
+              <div class="feature-description">Explore multiple faith traditions in a respectful and inclusive environment.</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="faq-section">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <div class="faq-container">
+        <div class="faq-item active">
+          <div class="faq-question">What is ReligySync?</div>
+          <div class="faq-answer">
+            ReligySync is a Web3 platform that connects spiritual seekers with verified religious scholars. It allows users to ask religious questions, access faith-based knowledge, and engage with authentic spiritual content. All contributions are stored on the Sui blockchain for transparency and permanence.
+          </div>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">How do I ask a question?</div>
+          <div class="faq-answer">
+            To ask a question, click on the "Ask a Question" button on the homepage or Questions page. You'll be prompted to select relevant tags for your question, write your question in detail, and submit it. Once submitted, your question will be available for verified scholars to answer.
+          </div>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">How are scholars verified?</div>
+          <div class="faq-answer">
+            Scholars undergo a rigorous verification process that includes credential checks, community vouching, and review of their religious educational background. We verify scholars' expertise in their claimed faith traditions to ensure authentic and accurate information is shared on our platform.
+          </div>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">What blockchain technology does ReligySync use?</div>
+          <div class="faq-answer">
+            ReligySync is built on the Sui blockchain, which provides speed, scalability, and low transaction costs. This allows us to store all questions, answers, and educational content as NFTs on-chain, ensuring authenticity and permanence of knowledge.
+          </div>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">How does the reward system work?</div>
+          <div class="faq-answer">
+            Users can reward helpful scholars and content creators by sending them SUI tokens directly through the platform. This incentivizes high-quality contributions and allows the community to show appreciation for valuable insights and teachings.
+          </div>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">Which faith traditions are supported?</div>
+          <div class="faq-answer">
+            ReligySync currently supports major world religions including Buddhism, Christianity, Hinduism, Islam, Judaism, and Sikhism, as well as other spiritual traditions. We're continuously expanding our network of verified scholars to include more diverse religious perspectives.
+          </div>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">Do I need a crypto wallet to use ReligySync?</div>
+          <div class="faq-answer">
+            While you can browse questions and answers without a wallet, connecting a wallet allows you to ask questions, reward scholars, and have your contributions stored on-chain. We support most major Sui-compatible wallets for a seamless Web3 experience.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Blockchain Section -->
+    <div class="blockchain-section">
+      <h2 class="blockchain-title">Why Blockchain Technology?</h2>
+      <p class="blockchain-description">
+        By leveraging the Sui blockchain, ReligySync brings unprecedented benefits to religious knowledge sharing and preservation. Here's how blockchain technology enhances our mission:
+      </p>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">A</div>
+          <h3 class="benefit-title">Authenticity</h3>
+          <p class="benefit-text">Blockchain verification ensures that all content is authentic and cannot be altered after posting, preserving the integrity of religious teachings.</p>
+        </div>
+        
+        <div class="benefit-card">
+          <div class="benefit-icon">P</div>
+          <h3 class="benefit-title">Permanence</h3>
+          <p class="benefit-text">Religious insights and teachings are stored permanently on-chain, creating an enduring repository of spiritual knowledge for future generations.</p>
+        </div>
+        
+        <div class="benefit-card">
+          <div class="benefit-icon">T</div>
+          <h3 class="benefit-title">Transparency</h3>
+          <p class="benefit-text">The verification status of scholars and the provenance of all content is transparent and verifiable by anyone on the blockchain.</p>
+        </div>
+        
+        <div class="benefit-card">
+          <div class="benefit-icon">R</div>
+          <h3 class="benefit-title">Reward System</h3>
+          <p class="benefit-text">Direct token transfers enable seamless rewards for valuable contributions, encouraging high-quality religious scholarship.</p>
+        </div>
+        
+        <div class="benefit-card">
+          <div class="benefit-icon">D</div>
+          <h3 class="benefit-title">Decentralization</h3>
+          <p class="benefit-text">No central authority controls the content, allowing for uncensored, diverse religious perspectives to flourish.</p>
+        </div>
+        
+        <div class="benefit-card">
+          <div class="benefit-icon">O</div>
+          <h3 class="benefit-title">Ownership</h3>
+          <p class="benefit-text">Contributors maintain ownership of their content through NFTs, giving proper attribution to scholars and content creators.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Team Section -->
+    <div class="team-section">
+      <h2 class="section-title">Meet Our Team</h2>
+      <div class="team-container">
+        <div class="team-grid">
+          <div class="team-member">
+            <div class="member-avatar">AR</div>
+            <h3 class="member-name">Ava Rodriguez</h3>
+            <div class="member-role">Founder & CEO</div>
+            <p class="member-bio">Interfaith scholar with expertise in comparative religion and 8 years of experience in blockchain technology.</p>
+          </div>
+          
+          <div class="team-member">
+            <div class="member-avatar">JL</div>
+            <h3 class="member-name">James Lee</h3>
+            <div class="member-role">CTO</div>
+            <p class="member-bio">Blockchain architect with previous experience at major Web3 projects and a background in religious studies.</p>
+          </div>
+          
+          <div class="team-member">
+            <div class="member-avatar">SM</div>
+            <h3 class="member-name">Sarah Miller</h3>
+            <div class="member-role">Head of Scholar Relations</div>
+            <p class="member-bio">PhD in Religious Studies with extensive connections across multiple faith communities worldwide.</p>
+          </div>
+          
+          <div class="team-member">
+            <div class="member-avatar">RK</div>
+            <h3 class="member-name">Raj Kumar</h3>
+            <div class="member-role">Lead Developer</div>
+            <p class="member-bio">Full-stack developer with specialization in Web3 technologies and smart contract development.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="contact-section">
+      <div class="contact-info">
+        <h2 class="section-title">Contact Information</h2>
+        <ul class="contact-list">
+          <li class="contact-item">
+            <div class="contact-icon">📧</div>
+            <div class="contact-text">hello@religysync.io</div>
+          </li>
+          <li class="contact-item">
+            <div class="contact-icon">🔗</div>
+            <div class="contact-text">@ReligySync on all social platforms</div>
+          </li>
+          <li class="contact-item">
+            <div class="contact-icon">📱</div>
+            <div class="contact-text">Join our Discord community</div>
+          </li>
+          <li class="contact-item">
+            <div class="contact-icon">📍</div>
+            <div class="contact-text">San Francisco, CA & Remote Worldwide</div>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="contact-form">
+        <h2 class="section-title">Send Us a Message</h2>
+        <form>
+          <div class="form-group">
+            <label for="name" class="form-label">Your Name</label>
+            <input type="text" id="name" class="form-input" placeholder="Enter your name">
+          </div>
+          <div class="form-group">
+            <label for="email" class="form-label">Email Address</label>
+            <input type="email" id="email" class="form-input" placeholder="Enter your email">
+          </div>
+          <div class="form-group">
+            <label for="subject" class="form-label">Subject</label>
+            <input type="text" id="subject" class="form-input" placeholder="What is this about?">
+          </div>
+          <div class="form-group">
+            <label for="message" class="form-label">Message</label>
+            <textarea id="message" class="form-textarea" placeholder="Your message..."></textarea>
+          </div>
+          <button type="submit" class="submit-button">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="#">About</a>
+        <a href="#">Help Center</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+      <div class="copyright">© 2025 ReligySync - Built on Sui Blockchain</div>
+    </div>
+  </footer>
+
+  <script>
+    // Simple JavaScript for FAQ accordion functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const faqItems = document.querySelectorAll('.faq-item');
+      
+      faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        
+        question.addEventListener('click', () => {
+          // Toggle active class on the clicked item
+          item.classList.toggle('active');
+          
+          // Close other items (optional)
+          faqItems.forEach(otherItem => {
+            if (otherItem !== item) {
+              otherItem.classList.remove('active');
+            }
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>
