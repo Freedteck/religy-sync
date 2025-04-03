@@ -1,0 +1,47 @@
+.related-questions {
+  margin-top: 40px;
+}
+
+.related-title {
+  font-size: 20px;
+  color: var(--text-light);
+  margin-bottom: 15px;
+}
+
+.related-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.related-item {
+  background: linear-gradient(
+    to bottom right,
+    var(--dark-blue-4),
+    var(--dark-blue-5)
+  );
+  border: 1px solid var(--dark-blue-3);
+  border-radius: 6px;
+  padding: 12px 15px;
+  transition: transform 0.3s ease;
+}
+
+.related-item:hover {
+  transform: translateX(5px);
+  border-color: var(--accent-blue-light);
+}
+
+.related-link {
+  color: var(--text-light);
+  text-decoration: none;
+  font-size: 16px;
+  display: block;
+}
+
+.related-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--text-gray);
+}

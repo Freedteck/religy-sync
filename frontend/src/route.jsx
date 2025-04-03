@@ -1,6 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import Root from "./routes/root/Root";
 import Home from "./routes/home/Home";
+import Questions from "./routes/questions/Questions";
+import QuestionDetails from "./routes/question-detail/QuestionDetails";
 
 export const router = createBrowserRouter([
   {
@@ -11,6 +13,14 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: "questions",
+        element: <Questions />,
+      },
+      {
+        path: "questions/:id",
+        element: <QuestionDetails />,
       },
     ],
   },

@@ -1,0 +1,31 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.page-button {
+  background-color: var(--dark-blue-4);
+  color: var(--text-gray);
+  border: 1px solid var(--dark-blue-3);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 5px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.page-button:hover {
+  background-color: var(--dark-blue-3);
+  color: var(--text-light);
+}
+
+.page-button.active {
+  background-color: var(--accent-blue-light);
+  color: var(--text-white);
+  border-color: var(--accent-blue-light);
+}

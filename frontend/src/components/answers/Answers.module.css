@@ -1,0 +1,149 @@
+.answers-section {
+  margin-top: 40px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 24px;
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.answer-count {
+  background-color: rgba(76, 201, 240, 0.1);
+  color: var(--accent-blue-light);
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 16px;
+}
+
+.sort-dropdown {
+  background-color: var(--dark-blue-4);
+  color: var(--text-light);
+  border: 1px solid var(--accent-blue-light);
+  border-radius: 4px;
+  padding: 8px 12px;
+}
+
+.answer-item {
+  background: linear-gradient(
+    to bottom right,
+    var(--dark-blue-4),
+    var(--dark-blue-5)
+  );
+  border: 1px solid var(--accent-blue-light);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.answer-content {
+  color: var(--text-light);
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.answer-meta {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 15px;
+  border-top: 1px solid rgba(76, 201, 240, 0.1);
+}
+
+.scholar-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.scholar-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(114, 9, 183, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: var(--text-white);
+}
+
+.scholar-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.scholar-name {
+  font-weight: bold;
+  color: var(--text-white);
+}
+
+.scholar-title {
+  font-size: 14px;
+  color: var(--text-gray);
+}
+
+.answer-stats {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.helpful-btn {
+  background: linear-gradient(
+    to bottom right,
+    var(--accent-blue-light),
+    var(--accent-purple-dark)
+  );
+  color: var(--text-white);
+  border-radius: 15px;
+  padding: 6px 15px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.helpful-btn:hover {
+  opacity: 0.9;
+}
+
+.tip-btn {
+  background: transparent;
+  color: var(--text-white);
+  border: 1px solid var(--accent-blue-light);
+  border-radius: 15px;
+  padding: 5px 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tip-btn:hover {
+  background-color: rgba(67, 97, 238, 0.1);
+}
+
+.tip-icon {
+  font-size: 16px;
+}
+
+.answer-date {
+  color: var(--text-gray);
+  font-size: 14px;
+}
