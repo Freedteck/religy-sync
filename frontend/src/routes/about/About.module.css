@@ -1,0 +1,150 @@
+.about {
+  padding-block: 50px;
+}
+
+.top-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.title {
+  font-size: 42px;
+  margin-bottom: 15px;
+  background: linear-gradient(
+    to right,
+    var(--accent-blue-light),
+    var(--accent-purple)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.sub-title {
+  color: var(--text-gray-light);
+  font-size: 18px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.about-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 40px;
+  margin-bottom: 60px;
+}
+
+.about-content {
+  background: linear-gradient(
+    to bottom right,
+    var(--dark-blue-5),
+    var(--dark-blue-6)
+  );
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.section-title {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: var(--text-light);
+  border-bottom: 2px solid var(--accent-purple);
+  display: inline-block;
+  padding-bottom: 8px;
+}
+
+.about-content p {
+  color: var(--text-gray-light);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.about-content p:last-child {
+  margin-bottom: 0;
+}
+
+.platform-features {
+  background: linear-gradient(
+    to bottom right,
+    var(--dark-blue-4),
+    var(--dark-blue-3)
+  );
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.faq-section {
+  margin-bottom: 60px;
+  padding: 30px;
+}
+
+.faq-container {
+  background: linear-gradient(
+    to bottom right,
+    var(--dark-blue-5),
+    var(--dark-blue-6)
+  );
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.blockchain-section {
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(114, 9, 183, 0.1),
+    transparent 70%
+  );
+  border-radius: 8px;
+  padding: 30px;
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.blockchain-title {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: var(--text-light);
+}
+
+.blockchain-description {
+  color: var(--text-gray-light);
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto 30px;
+}
+
+.benefit-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.team-section {
+  margin-bottom: 60px;
+  padding: 30px;
+}
+
+.team-container {
+  background: linear-gradient(
+    to bottom right,
+    var(--dark-blue-5),
+    var(--dark-blue-6)
+  );
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.contact-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 40px;
+  margin-bottom: 60px;
+}

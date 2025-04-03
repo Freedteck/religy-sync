@@ -3,6 +3,7 @@ import Root from "./routes/root/Root";
 import Home from "./routes/home/Home";
 import Questions from "./routes/questions/Questions";
 import QuestionDetails from "./routes/question-detail/QuestionDetails";
+import About from "./routes/about/About";
 
 export const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ export const router = createBrowserRouter([
       {
         path: "questions/:id",
         element: <QuestionDetails />,
+      },
+      {
+        path: "about",
+        element: <About />,
       },
     ],
   },

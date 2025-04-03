@@ -41,9 +41,7 @@ const Answers = ({ answers, sortOrder, handleSortChange }) => {
                 <span className={styles["tip-icon"]}>🪙</span>
                 <span>Tip Scholar</span>
               </button>
-              <div className={styles["answer-date"]}>
-                Answered {answer.answeredAt}
-              </div>
+              <div className={styles["answer-date"]}>{answer.answeredAt}</div>
             </div>
           </div>
         </div>

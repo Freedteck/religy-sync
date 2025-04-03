@@ -1,0 +1,41 @@
+.team-member {
+  text-align: center;
+}
+
+.member-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: rgba(114, 9, 183, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
+  font-weight: bold;
+  color: var(--text-white);
+  margin: 0 auto 15px;
+  background: linear-gradient(
+    135deg,
+    var(--accent-blue-light),
+    var(--accent-purple)
+  );
+}
+
+.member-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--text-white);
+  margin-bottom: 5px;
+}
+
+.member-role {
+  color: var(--accent-blue-light);
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.member-bio {
+  color: var(--text-gray-light);
+  font-size: 14px;
+  line-height: 1.5;
+}
