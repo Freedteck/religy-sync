@@ -1,9 +1,11 @@
 import { getFullnodeUrl } from "@mysten/sui/client";
 import {
-  DEVNET_COUNTER_PACKAGE_ID,
-  TESTNET_COUNTER_PACKAGE_ID,
-  MAINNET_COUNTER_PACKAGE_ID,
-} from "./constants.ts";
+  DEVNET_RELIGY_SYNC_PACKAGE_ID,
+  TESTNET_RELIGY_SYNC_PACKAGE_ID,
+  MAINNET_RELIGY_SYNC_PACKAGE_ID,
+  PLATFORM_ID,
+  ADMIN_CAP_ID,
+} from "./constants.js";
 import { createNetworkConfig } from "@mysten/dapp-kit";
 
 const { networkConfig, useNetworkVariable, useNetworkVariables } =
@@ -11,19 +13,21 @@ const { networkConfig, useNetworkVariable, useNetworkVariables } =
     devnet: {
       url: getFullnodeUrl("devnet"),
       variables: {
-        counterPackageId: DEVNET_COUNTER_PACKAGE_ID,
+        religySyncPackageId: DEVNET_RELIGY_SYNC_PACKAGE_ID,
+        platformId: PLATFORM_ID,
+        adminCapId: ADMIN_CAP_ID,
       },
     },
     testnet: {
       url: getFullnodeUrl("testnet"),
       variables: {
-        counterPackageId: TESTNET_COUNTER_PACKAGE_ID,
+        religySyncPackageId: TESTNET_RELIGY_SYNC_PACKAGE_ID,
       },
     },
     mainnet: {
       url: getFullnodeUrl("mainnet"),
       variables: {
-        counterPackageId: MAINNET_COUNTER_PACKAGE_ID,
+        religySyncPackageId: MAINNET_RELIGY_SYNC_PACKAGE_ID,
       },
     },
   });

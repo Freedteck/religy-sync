@@ -1,14 +1,19 @@
+import { useNavigate } from "react-router-dom";
 import Button from "../../components/button/Button";
 import Pagination from "../../components/pagination/Pagination";
 import QuestionList from "../../components/question-list/QuestionList";
 import { questionList } from "../../samples/questions";
 import styles from "./Questions.module.css";
 const Questions = () => {
+  const navigate = useNavigate();
+  const askQuestion = () => {
+    navigate("/ask-question");
+  };
   return (
     <main className={styles.questions}>
       <section className={styles["top-header"]}>
         <h1>Questions & Answers</h1>
-        <Button text={"Ask a Question"} onClick={() => {}} />
+        <Button text={"Ask a Question"} onClick={askQuestion} />
       </section>
       <section className={styles.filters}>
         <h3 className={styles.title}>Filter Questions</h3>

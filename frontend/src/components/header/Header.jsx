@@ -1,3 +1,4 @@
+import { ConnectButton } from "@mysten/dapp-kit";
 import styles from "./Header.module.css";
 import { Link, NavLink } from "react-router-dom";
 const Header = () => {
@@ -40,14 +41,15 @@ const Header = () => {
               About/FAQ
             </NavLink>
           </li>
-          <li className={styles.connect}>
+          {/* <li className={styles.connect}>
             <NavLink
               to="/connect"
               className={({ isActive }) => (isActive ? styles.active : "")}
             >
               Connect
             </NavLink>
-          </li>
+          </li> */}
+          <ConnectButton />
         </ul>
       </nav>
     </header>

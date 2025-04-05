@@ -77,7 +77,6 @@
 
 .faq-section {
   margin-bottom: 60px;
-  padding: 30px;
 }
 
 .faq-container {
@@ -88,6 +87,7 @@
   );
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 30px;
 }
 
 .blockchain-section {
@@ -97,7 +97,7 @@
     transparent 70%
   );
   border-radius: 8px;
-  padding: 30px;
+  /* padding: 30px; */
   text-align: center;
   margin-bottom: 60px;
 }
@@ -123,7 +123,6 @@
 
 .team-section {
   margin-bottom: 60px;
-  padding: 30px;
 }
 
 .team-container {
@@ -134,6 +133,7 @@
   );
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 30px;
 }
 
 .team-grid {

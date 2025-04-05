@@ -1,0 +1,47 @@
+.blockchain-info {
+  background: linear-gradient(to right, var(--dark-blue-4), var(--dark-blue-5));
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 40px;
+}
+
+.blockchain-title {
+  font-size: 18px;
+  color: var(--text-light);
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.blockchain-icon {
+  width: 24px;
+  height: 24px;
+  background-color: var(--accent-purple);
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.blockchain-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.blockchain-item {
+  background-color: rgba(13, 27, 42, 0.5);
+  border-radius: 6px;
+  padding: 15px;
+  flex: 1;
+  min-width: 200px;
+}
+
+.blockchain-item-title {
+  font-size: 14px;
+  color: var(--text-gray);
+  margin-bottom: 8px;
+}
+
+.blockchain-item-value {
+  font-size: 16px;
+  color: var(--text-light);
+}

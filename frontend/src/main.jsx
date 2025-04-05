@@ -9,18 +9,19 @@ import { getFullnodeUrl } from "@mysten/sui/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./route.jsx";
+import { networkConfig } from "./config/networkConfig.js";
 
 const queryClient = new QueryClient();
-const networks = {
-  devnet: { url: getFullnodeUrl("devnet") },
-  testnet: { url: getFullnodeUrl("testnet") },
-  mainnet: { url: getFullnodeUrl("mainnet") },
-};
+// const networks = {
+//   devnet: { url: getFullnodeUrl("devnet") },
+//   testnet: { url: getFullnodeUrl("testnet") },
+//   mainnet: { url: getFullnodeUrl("mainnet") },
+// };
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <SuiClientProvider networks={networks} defaultNetwork="devnet">
+      <SuiClientProvider networks={networkConfig} defaultNetwork="devnet">
         <WalletProvider>
           <RouterProvider router={router} />
         </WalletProvider>
