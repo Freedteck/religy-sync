@@ -1,218 +1,103 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Answers from "../../components/answers/Answers";
 import Breadcrumb from "../../components/breadcrumb/Breadcrumb";
 import Question from "../../components/question/Question";
 import RelatedQuestions from "../../components/related-questions/RelatedQuestions";
 import YourAnswer from "../../components/your-answer/YourAnswer";
 import styles from "./QuestionDetails.module.css";
+import { useParams } from "react-router-dom";
+import { useSuiClientInfiniteQuery, useSuiClientQuery } from "@mysten/dapp-kit";
+import { useNetworkVariable } from "../../config/networkConfig";
 
 const QuestionDetails = () => {
-  const question = {
-    id: "q123",
-    title: "What is the difference between Theravada and Mahayana Buddhism?",
-    status: "Answered",
-    statusClass: "status-answered",
-    details: (
-      <>
-        <p>
-          I understand that these are two major schools of Buddhism, but I'm not
-          clear on their main differences in terms of teachings, practices, and
-          historical development. Could someone explain the key distinctions
-          between these traditions?
-        </p>
-        <p>I'm especially interested in understanding:</p>
-        <ul>
-          <li>Core philosophical differences</li>
-          <li>Different approaches to enlightenment</li>
-          <li>Historical origins and geographic spread</li>
-          <li>Major texts and authoritative sources</li>
-        </ul>
-        <p>Any scholarly insights would be greatly appreciated. Thank you!</p>
-      </>
-    ),
-    tags: ["Buddhism", "Theravada", "Mahayana", "Comparative Religion"],
-    votes: 42,
-    answers: 3,
-    views: 876,
-    askedBy: "DharmaSeekerX",
-    askedByInitials: "D",
-    askedAt: "2 days ago • 08:45 AM",
-  };
-
-  const answers = [
+  const { id } = useParams();
+  const [objectIds, setObjectIds] = useState([id]);
+  const [timestampMs, setTimeStampMs] = useState([]);
+  const [answers, setAnswers] = useState([]);
+  const religySyncPackageId = useNetworkVariable("religySyncPackageId");
+  const {
+    data: eventsData,
+    // isFetchingNextPage,
+    // fetchNextPage,
+    // hasNextPage,
+  } = useSuiClientInfiniteQuery(
+    "queryEvents",
     {
-      id: "a1",
-      content: (
-        <>
-          <p>
-            Theravada and Mahayana Buddhism represent two major branches of
-            Buddhist thought that diverged over centuries of development. Here
-            are the key differences:
-          </p>
-
-          <p>
-            <strong>Historical Development:</strong>
-          </p>
-          <ul>
-            <li>
-              Theravada (Way of the Elders): Claims to preserve the original
-              teachings of the Buddha. Emerged from the Sthaviravada school
-              following the Second Buddhist Council (4th century BCE).
-            </li>
-            <li>
-              Mahayana (Great Vehicle): Emerged around the 1st century CE,
-              representing a more adaptive and expansive interpretation of
-              Buddha's teachings.
-            </li>
-          </ul>
-
-          <p>
-            <strong>Core Philosophical Differences:</strong>
-          </p>
-          <ul>
-            <li>
-              Theravada emphasizes individual enlightenment through one's own
-              efforts. The goal is to become an arhat (worthy one) who has
-              attained nirvana.
-            </li>
-            <li>
-              Mahayana emphasizes the bodhisattva ideal - attaining
-              enlightenment not just for oneself but delaying final nirvana to
-              help all sentient beings achieve liberation.
-            </li>
-          </ul>
-
-          <p>
-            <strong>Scripture and Authority:</strong>
-          </p>
-          <ul>
-            <li>
-              Theravada primarily follows the Pali Canon (Tipitaka), believed to
-              contain the earliest recorded teachings of the Buddha.
-            </li>
-            <li>
-              Mahayana incorporates the Pali texts but adds numerous additional
-              sutras that Theravadins don't recognize as authentic Buddha
-              teachings, like the Lotus Sutra, Heart Sutra, and Diamond Sutra.
-            </li>
-          </ul>
-
-          <p>
-            <strong>Geographic Distribution:</strong>
-          </p>
-          <ul>
-            <li>
-              Theravada is dominant in Sri Lanka, Thailand, Myanmar, Cambodia,
-              and Laos.
-            </li>
-            <li>
-              Mahayana spread throughout East Asia, including China, Japan,
-              Korea, and Vietnam.
-            </li>
-          </ul>
-
-          <p>
-            <strong>Buddha Concept:</strong>
-          </p>
-          <ul>
-            <li>
-              Theravada views the Buddha as a supremely enlightened human
-              teacher.
-            </li>
-            <li>
-              Mahayana developed the concept of the trikaya (three bodies of
-              Buddha), viewing the Buddha as having transcendental aspects
-              beyond his historical manifestation.
-            </li>
-          </ul>
-
-          <p>
-            Despite these differences, both traditions share fundamental
-            elements like the Four Noble Truths, the Eightfold Path, and core
-            ethical precepts. Modern scholarship has increasingly recognized
-            that the divisions aren't always clear-cut, and many practitioners
-            incorporate elements from both traditions.
-          </p>
-        </>
-      ),
-      scholarInitials: "VS",
-      scholarName: "Venerable Sumedho",
-      scholarTitle: "Buddhist Scholar • Theravada Tradition",
-      helpfulCount: 36,
-      answeredAt: "Answered 1 day ago",
+      query: {
+        MoveEventType: `${religySyncPackageId}::religy_sync::ContentCreated`,
+      },
+      limit: 8,
+      cursor: null,
     },
     {
-      id: "a2",
-      content: (
-        <>
-          <p>
-            To build on what Venerable Sumedho has explained, I'd like to add
-            some details about the practical and meditative differences between
-            these traditions:
-          </p>
+      enabled: true,
+      select: (data) =>
+        data.pages
+          .flatMap((page) => page.data)
+          .filter((x) => x.parsedJson.content_type === 1),
+    }
+  );
 
-          <p>
-            <strong>Meditation Practices:</strong>
-          </p>
-          <ul>
-            <li>
-              Theravada emphasizes Vipassana (insight) and Samatha
-              (concentration) meditation, with a focus on observing the three
-              marks of existence: impermanence, suffering, and non-self.
-            </li>
-            <li>
-              Mahayana incorporates these practices but also includes
-              visualization techniques, mantra recitation, and other methods
-              developed in various schools like Chan/Zen (meditation-focused)
-              and Pure Land (devotion-focused).
-            </li>
-          </ul>
-
-          <p>
-            <strong>Understanding of Emptiness (Sunyata):</strong>
-          </p>
-          <ul>
-            <li>
-              Theravada addresses emptiness primarily through the concept of
-              anatta (non-self).
-            </li>
-            <li>
-              Mahayana, particularly in the Madhyamaka philosophical school,
-              developed elaborate theories of emptiness extending beyond just
-              personal identity to all phenomena.
-            </li>
-          </ul>
-
-          <p>
-            <strong>Philosophical Schools:</strong>
-          </p>
-          <ul>
-            <li>
-              Theravada's philosophical development is primarily represented by
-              the Abhidhamma and commentaries.
-            </li>
-            <li>
-              Mahayana gave rise to diverse philosophical schools including
-              Madhyamaka, Yogacara, Tiantai, and Huayan, each with distinct
-              interpretations of Buddha's teachings.
-            </li>
-          </ul>
-
-          <p>
-            Both traditions offer profound paths to awakening, but they
-            emphasize different aspects and approaches to the journey. Neither
-            is inherently "better" - they simply address different spiritual
-            temperaments and cultural contexts.
-          </p>
-        </>
-      ),
-      scholarInitials: "DL",
-      scholarName: "Dr. Lin",
-      scholarTitle: "Buddhist Studies Professor • Comparative Religion",
-      helpfulCount: 22,
-      answeredAt: "Answered 16 hours ago",
+  const { data: answerListData } = useSuiClientQuery(
+    "multiGetObjects",
+    {
+      ids: objectIds,
+      options: {
+        showType: true,
+        showOwner: true,
+        showPreviousTransaction: false,
+        showDisplay: false,
+        showContent: true,
+        showBcs: false,
+        showStorageRebate: false,
+      },
+      cursor: null,
     },
-  ];
+    {
+      // enabled: objectIds.length > 0,
+    }
+  );
+
+  const { data: question } = useSuiClientQuery(
+    "getObject",
+    {
+      id: id,
+      options: {
+        showContent: true,
+        showDisplay: true,
+        showOwner: true,
+        showPreviousTransaction: false,
+        showType: true,
+        showBcs: true,
+        showStorageRebate: true,
+      },
+    },
+    {
+      select: (data) => data.data?.content,
+    }
+  );
+
+  useEffect(() => {
+    console.log("Answers", eventsData);
+    if (eventsData) {
+      const ids = eventsData.flatMap((event) => event.parsedJson.content_id);
+      const timestampMs = eventsData.flatMap((event) => event.timestampMs);
+      setObjectIds(ids);
+      setTimeStampMs(timestampMs);
+    }
+  }, [id, eventsData]);
+
+  useEffect(() => {
+    if (answerListData) {
+      const answersList = answerListData?.map((question, index) => {
+        return {
+          ...question,
+          timestampMs: timestampMs[index],
+        };
+      });
+      setAnswers(answersList);
+    }
+  }, [answerListData, timestampMs]);
 
   const relatedQuestions = [
     {
@@ -250,9 +135,9 @@ const QuestionDetails = () => {
     setSortOrder(e.target.value);
   };
 
-  const handleAnswerChange = (e) => {
-    setAnswerText(e.target.value);
-  };
+  // const handleAnswerChange = (e) => {
+  //   setAnswerText(e.target.value);
+  // };
 
   const handleSubmitAnswer = () => {
     // Logic to submit answer to backend
@@ -263,7 +148,7 @@ const QuestionDetails = () => {
   return (
     <main className={styles["question-details"]}>
       <Breadcrumb />
-      <Question question={question} />
+      <Question question={question?.fields} />
       <Answers
         answers={answers}
         sortOrder={sortOrder}

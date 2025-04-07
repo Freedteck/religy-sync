@@ -15,10 +15,11 @@
 }
 
 .form-label {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   font-size: 16px;
   color: var(--text-light);
-  margin-bottom: 8px;
   font-weight: bold;
 }
 
@@ -67,7 +68,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 15px;
 }
 
 .tag-input {

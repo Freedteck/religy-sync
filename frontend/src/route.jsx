@@ -9,32 +9,32 @@ import AskQuestion from "./routes/ask-question/AskQuestion";
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Root />,
+    Component: Root,
     errorElement: <div>Oops! Something went wrong.</div>,
     children: [
       {
         index: true,
-        element: <Home />,
+        Component: Home,
       },
       {
         path: "connect",
-        element: <div>Connect</div>,
+        // Component: div>Connect/div>,
       },
       {
         path: "questions",
-        element: <Questions />,
+        Component: Questions,
       },
       {
         path: "questions/:id",
-        element: <QuestionDetails />,
+        Component: QuestionDetails,
       },
       {
         path: "about",
-        element: <About />,
+        Component: About,
       },
       {
         path: "ask-question",
-        element: <AskQuestion />,
+        Component: AskQuestion,
       },
     ],
   },

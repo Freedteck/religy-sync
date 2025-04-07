@@ -7,6 +7,12 @@
   font-size: 16px;
 }
 
+.btn:disabled {
+  background-color: rgba(67, 97, 238, 0.1);
+  color: var(--text-white);
+  cursor: not-allowed;
+}
+
 .primary {
   composes: btn;
   background: linear-gradient(

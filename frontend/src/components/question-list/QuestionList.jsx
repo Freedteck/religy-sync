@@ -1,52 +1,63 @@
 import { Link } from "react-router-dom";
 import styles from "./QuestionList.module.css";
 import PropTypes from "prop-types";
+import { formatTime } from "../../utils/timeFormatter";
+import { truncateAddress } from "../../utils/truncateAddress";
 
 const QuestionList = ({ questionList }) => {
   return (
     <ul className={styles["question-list"]}>
-      {questionList.map((q, index) => (
-        <li className={styles["question-item"]} key={index}>
-          <Link to={`/questions/${index}`} className={styles["question-link"]}>
+      {questionList?.map((question) => (
+        <li className={styles["question-item"]} key={question.data.objectId}>
+          <Link
+            to={`/questions/${question.data.objectId}`}
+            className={styles["question-link"]}
+          >
             <div className={styles["question-header"]}>
-              <h2 className={styles.title}>{q.title}</h2>
+              <h2 className={styles.title}>
+                {question.data.content.fields.title}
+              </h2>
               <div
                 className={`${styles["question-status"]} ${
-                  q.status === "Answered"
+                  question.data.content.fields.status === "Answered"
                     ? styles["status-answered"]
                     : styles["status-pending"]
                 }`}
               >
-                {q.status}
+                {question.data.content.fields.status}
               </div>
             </div>
-            <p className={styles["question-content"]}>{q.content}</p>
+            <p className={styles["question-content"]}>
+              {question.data.content.fields.body}
+            </p>
             <div className={styles["question-tags"]}>
-              {q.tags.map((tag, idx) => (
-                <div className={styles.tag} key={idx}>
-                  {tag}
-                </div>
-              ))}
+              {JSON.parse(question.data.content.fields.metadata).tags.map(
+                (tag, idx) => (
+                  <div className={styles.tag} key={idx}>
+                    {tag}
+                  </div>
+                )
+              )}
             </div>
             <div className={styles.meta}>
               <div className={styles.left}>
                 <div className={styles.item}>
                   <span className={styles.icon}>↑</span>
-                  <span>{q.votes} votes</span>
+                  <span>{question.data.content.fields.likes} votes</span>
                 </div>
                 <div className={styles.item}>
                   <span className={styles.icon}>💬</span>
-                  <span>{q.answers} answers</span>
-                </div>
-                <div className={styles.item}>
-                  <span className={styles.icon}>👁️</span>
-                  <span>{q.views} views</span>
+                  <span>{question.data.content.fields.answers} answers</span>
                 </div>
               </div>
               <div className={styles.user}>
-                <div className={styles.avatar}>{q.user.charAt(0)}</div>
+                <div className={styles.avatar}>
+                  {question.data.content.fields.creator.charAt(0)}
+                </div>
                 <span>
-                  Asked by {q.user} • {q.time}
+                  Asked by{" "}
+                  {truncateAddress(question.data.content.fields.creator)} •{" "}
+                  {formatTime(question.timestampMs)}
                 </span>
               </div>
             </div>

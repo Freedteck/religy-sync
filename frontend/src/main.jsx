@@ -5,7 +5,6 @@ import App from "./App.jsx";
 import "@mysten/dapp-kit/dist/index.css";
 
 import { SuiClientProvider, WalletProvider } from "@mysten/dapp-kit";
-import { getFullnodeUrl } from "@mysten/sui/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./route.jsx";
