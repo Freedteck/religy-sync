@@ -58,7 +58,7 @@ const QuestionDetails = () => {
     }
   );
 
-  const { data: question } = useSuiClientQuery(
+  const { data: question, isPending } = useSuiClientQuery(
     "getObject",
     {
       id: id,
@@ -148,7 +148,11 @@ const QuestionDetails = () => {
   return (
     <main className={styles["question-details"]}>
       <Breadcrumb />
-      <Question question={question?.fields} />
+      {!isPending ? (
+        <Question question={question?.fields} />
+      ) : (
+        <div className={styles["loading"]}>Loading...</div>
+      )}
       <Answers
         answers={answers}
         sortOrder={sortOrder}
