@@ -3,14 +3,13 @@ import Button from "../../components/button/Button";
 import Pagination from "../../components/pagination/Pagination";
 import QuestionList from "../../components/question-list/QuestionList";
 import styles from "./Questions.module.css";
-import { useSuiClientInfiniteQuery, useSuiClientQuery } from "@mysten/dapp-kit";
+import { useSuiClientInfiniteQuery } from "@mysten/dapp-kit";
 import { useNetworkVariable } from "../../config/networkConfig";
 import { useEffect, useState } from "react";
+import useContentFromEvents from "../../hooks/useContentFromEvent";
+import { filterAndSortContent } from "../../utils/helpers";
 
 const Questions = () => {
-  const [objectIds, setObjectIds] = useState([]);
-  const [timestampMs, setTimeStampMs] = useState([]);
-  const [questionList, setQuestionList] = useState([]);
   const [filteredQuestions, setFilteredQuestions] = useState([]);
   const navigate = useNavigate();
 
@@ -23,7 +22,7 @@ const Questions = () => {
   const religySyncPackageId = useNetworkVariable("religySyncPackageId");
   const {
     data: eventsData,
-    isFetchingNextPage,
+    isFetching,
     fetchNextPage,
     hasNextPage,
   } = useSuiClientInfiniteQuery(
@@ -44,117 +43,25 @@ const Questions = () => {
     }
   );
 
-  const { data: questionListData, isPending } = useSuiClientQuery(
-    "multiGetObjects",
-    {
-      ids: objectIds,
-      options: {
-        showType: true,
-        showOwner: true,
-        showPreviousTransaction: false,
-        showDisplay: false,
-        showContent: true,
-        showBcs: false,
-        showStorageRebate: false,
+  const { contentList: questionList, isPending } =
+    useContentFromEvents(eventsData);
+
+  useEffect(() => {
+    if (!questionList || questionList.length === 0) return;
+
+    // Use helper function to filter and sort content
+    const filtered = filterAndSortContent(
+      questionList,
+      {
+        faithTradition,
+        tags: activeTag ? [activeTag] : [],
+        status,
       },
-      cursor: null,
-    },
-    {
-      enabled: objectIds.length > 0,
-    }
-  );
-
-  useEffect(() => {
-    if (isFetchingNextPage) {
-      console.log("Loading...");
-    } else if (eventsData) {
-      const ids = eventsData.flatMap((event) => event.parsedJson.content_id);
-      const timestampMs = eventsData.flatMap((event) => event.timestampMs);
-      setObjectIds(ids);
-      setTimeStampMs(timestampMs);
-    }
-  }, [eventsData, isFetchingNextPage]);
-
-  useEffect(() => {
-    if (questionListData) {
-      const questionListWithTimestamp = questionListData.map(
-        (question, index) => {
-          return {
-            ...question,
-            timestampMs: timestampMs[index],
-          };
-        }
-      );
-      setQuestionList(questionListWithTimestamp);
-      console.log("Question List Data:", questionListWithTimestamp);
-    }
-  }, [questionListData, timestampMs]);
-
-  // Apply filters and sorting whenever relevant state changes
-  useEffect(() => {
-    if (!questionList) return;
-
-    let filtered = [...questionList];
-
-    // Apply faith tradition filter
-    if (faithTradition) {
-      filtered = filtered.filter((question) => {
-        const tradition = JSON.parse(
-          question.data?.content?.fields?.metadata
-        ).tradition;
-        return (
-          tradition && tradition.toLowerCase() === faithTradition.toLowerCase()
-        );
-      });
-    }
-
-    // Apply tag filters
-    if (activeTag) {
-      filtered = filtered.filter((question) => {
-        const questionTags =
-          JSON.parse(question.data?.content?.fields?.metadata).tags || [];
-        return questionTags.some(
-          (qTag) => qTag.toLowerCase() === activeTag.toLowerCase()
-        );
-      });
-    }
-
-    // Apply status filter
-    if (status) {
-      filtered = filtered.filter((question) => {
-        const questionStatus = question.data?.content?.fields?.status;
-        if (status === "answered") {
-          return questionStatus === "answered";
-        } else if (status === "pending") {
-          return questionStatus === "pending" || !questionStatus;
-        }
-        return true;
-      });
-    }
-
-    // Apply sorting
-    filtered.sort((a, b) => {
-      switch (sortBy) {
-        case "newest":
-          return b.timestampMs - a.timestampMs;
-        case "oldest":
-          return a.timestampMs - b.timestampMs;
-        case "most_votes": {
-          const votesA = a.data?.content?.fields?.votes || 0;
-          const votesB = b.data?.content?.fields?.votes || 0;
-          return votesB - votesA;
-        }
-        case "most_answers": {
-          const answersA = a.data?.content?.fields?.answer_count || 0;
-          const answersB = b.data?.content?.fields?.answer_count || 0;
-          return answersB - answersA;
-        }
-        default:
-          return 0;
-      }
-    });
+      sortBy
+    );
 
     setFilteredQuestions(filtered);
+    console.log("Filtered Questions:", filtered);
   }, [questionList, faithTradition, status, sortBy, activeTag]);
 
   // Handle filter changes
@@ -283,11 +190,11 @@ const Questions = () => {
         </div>
       )}
 
-      {hasNextPage && !isFetchingNextPage && (
+      {hasNextPage && !isFetching && (
         <button
           className={styles.loadMore}
           onClick={fetchNextPage}
-          disabled={!hasNextPage || isFetchingNextPage}
+          disabled={!hasNextPage || isFetching}
         >
           Load more...
         </button>

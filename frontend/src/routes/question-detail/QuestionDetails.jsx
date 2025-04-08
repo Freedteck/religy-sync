@@ -6,15 +6,29 @@ import RelatedQuestions from "../../components/related-questions/RelatedQuestion
 import YourAnswer from "../../components/your-answer/YourAnswer";
 import styles from "./QuestionDetails.module.css";
 import { useParams } from "react-router-dom";
-import { useSuiClientInfiniteQuery, useSuiClientQuery } from "@mysten/dapp-kit";
-import { useNetworkVariable } from "../../config/networkConfig";
+import {
+  useSignAndExecuteTransaction,
+  useSuiClient,
+  useSuiClientInfiniteQuery,
+  useSuiClientQuery,
+} from "@mysten/dapp-kit";
+import { useNetworkVariables } from "../../config/networkConfig";
 
 const QuestionDetails = () => {
   const { id } = useParams();
   const [objectIds, setObjectIds] = useState([id]);
   const [timestampMs, setTimeStampMs] = useState([]);
   const [answers, setAnswers] = useState([]);
-  const religySyncPackageId = useNetworkVariable("religySyncPackageId");
+  const { religySyncPackageId, platformId } = useNetworkVariables(
+    "religySyncPackageId",
+    "platformId",
+    "adminCapId"
+  );
+
+  const suiClient = useSuiClient();
+
+  const { mutate: signAndExecute } = useSignAndExecuteTransaction();
+
   const {
     data: eventsData,
     // isFetchingNextPage,
@@ -34,7 +48,10 @@ const QuestionDetails = () => {
       select: (data) =>
         data.pages
           .flatMap((page) => page.data)
-          .filter((x) => x.parsedJson.content_type === 1),
+          .filter(
+            (x) =>
+              x.parsedJson.content_type === 1 && x.parsedJson.related_to === id
+          ),
     }
   );
 
@@ -129,7 +146,6 @@ const QuestionDetails = () => {
   ];
 
   const [sortOrder, setSortOrder] = useState("votes");
-  const [answerText, setAnswerText] = useState("");
 
   const handleSortChange = (e) => {
     setSortOrder(e.target.value);
@@ -139,11 +155,11 @@ const QuestionDetails = () => {
   //   setAnswerText(e.target.value);
   // };
 
-  const handleSubmitAnswer = () => {
-    // Logic to submit answer to backend
-    console.log("Submitting answer:", answerText);
-    setAnswerText("");
-  };
+  // const handleSubmitAnswer = () => {
+  //   // Logic to submit answer to backend
+  //   console.log("Submitting answer:", answerText);
+  //   setAnswerText("");
+  // };
 
   return (
     <main className={styles["question-details"]}>
@@ -158,7 +174,13 @@ const QuestionDetails = () => {
         sortOrder={sortOrder}
         handleSortChange={handleSortChange}
       />
-      <YourAnswer handleSubmitAnswer={handleSubmitAnswer} />
+      <YourAnswer
+        religySyncPackageId={religySyncPackageId}
+        platformId={platformId}
+        suiClient={suiClient}
+        signAndExecute={signAndExecute}
+        questionId={id}
+      />
       <RelatedQuestions relatedQuestions={relatedQuestions} />
     </main>
   );

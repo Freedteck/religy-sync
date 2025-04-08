@@ -2,10 +2,9 @@ import { useSignAndExecuteTransaction, useSuiClient } from "@mysten/dapp-kit";
 import { useNetworkVariables } from "../../config/networkConfig";
 import Button from "../button/Button";
 import styles from "./QuestionForm.module.css";
-import { Transaction } from "@mysten/sui/transactions";
 import { useState } from "react";
 import { Form, useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import useCreateContent from "../../hooks/useCreateContent";
 
 const QuestionForm = () => {
   const { religySyncPackageId, platformId } = useNetworkVariables(
@@ -21,14 +20,16 @@ const QuestionForm = () => {
   const [preferredScholar, setPreferredScholar] = useState("");
 
   const navigate = useNavigate();
-
   const suiClient = useSuiClient();
+  const { mutate: signAndExecute, isPending } = useSignAndExecuteTransaction();
 
-  const {
-    mutate: signAndExecute,
-    isSuccess,
-    isPending,
-  } = useSignAndExecuteTransaction();
+  // Use our custom hook for content creation
+  const { createQuestion } = useCreateContent(
+    religySyncPackageId,
+    platformId,
+    suiClient,
+    signAndExecute
+  );
 
   const addTag = () => {
     if (newTag && tags.length < 5 && !tags.includes(newTag)) {
@@ -44,52 +45,20 @@ const QuestionForm = () => {
   function submitQuestion(e) {
     e.preventDefault();
 
-    // Create metadata JSON string
-    const metadata = JSON.stringify({
+    // Create metadata object
+    const metadata = {
       tags: tags,
       tradition: tradition,
       preferredScholar: preferredScholar,
       tokenOffering: tokenAmount,
-    });
+    };
 
-    const tx = new Transaction();
-
-    tx.moveCall({
-      arguments: [
-        tx.object(platformId),
-        tx.pure.string(title),
-        tx.pure.string(details),
-        tx.pure.string(metadata), // Convert JSON object to string for metadata
-      ],
-      target: `${religySyncPackageId}::religy_sync::create_question`,
-    });
-
-    signAndExecute(
-      {
-        transaction: tx,
-      },
-      {
-        onSuccess: async ({ digest }) => {
-          const { effects } = await suiClient.waitForTransaction({
-            digest: digest,
-            options: {
-              showEffects: true,
-            },
-          });
-
-          // console.log(
-          //   "Created object ID:",
-          //   effects?.created?.[0]?.reference?.objectId
-          // );
-          // console.log("Question submitted successfully!");
-          toast.success("Question submitted successfully!");
-          navigate("/questions");
-        },
-        onError: (error) => {
-          // console.error("Error submitting question:", error);
-          toast.error("Error submitting question. Please try again.");
-        },
-      }
+    // Use our createQuestion function from the hook
+    createQuestion(
+      title,
+      details,
+      metadata,
+      () => navigate("/questions") // Navigate on success
     );
   }
 
@@ -263,7 +232,6 @@ const QuestionForm = () => {
             text={isPending ? "Submitting..." : "Submit Question"}
             btnClass={"primary"}
             disabled={isPending}
-            // onClick={submitQuestion}
           />
         </div>
       </div>
