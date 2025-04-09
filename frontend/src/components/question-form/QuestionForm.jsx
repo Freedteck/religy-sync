@@ -1,4 +1,8 @@
-import { useSignAndExecuteTransaction, useSuiClient } from "@mysten/dapp-kit";
+import {
+  useCurrentAccount,
+  useSignAndExecuteTransaction,
+  useSuiClient,
+} from "@mysten/dapp-kit";
 import { useNetworkVariables } from "../../config/networkConfig";
 import Button from "../button/Button";
 import styles from "./QuestionForm.module.css";
@@ -18,10 +22,12 @@ const QuestionForm = () => {
   const [newTag, setNewTag] = useState("");
   const [tokenAmount, setTokenAmount] = useState(0);
   const [preferredScholar, setPreferredScholar] = useState("");
+  const [balance, setBalance] = useState(0);
 
   const navigate = useNavigate();
   const suiClient = useSuiClient();
   const { mutate: signAndExecute, isPending } = useSignAndExecuteTransaction();
+  const account = useCurrentAccount();
 
   // Use our custom hook for content creation
   const { createQuestion } = useCreateContent(
@@ -62,6 +68,28 @@ const QuestionForm = () => {
     );
   }
 
+  useState(() => {
+    const fetchBalance = async () => {
+      if (account && suiClient) {
+        try {
+          // Fetch the user's SUI coin balance
+          const { totalBalance } = await suiClient.getBalance({
+            owner: account.address,
+          });
+
+          // Format the balance (e.g., convert from MIST to SUI)
+          const formattedBalance = Number(totalBalance) / 1_000_000_000;
+
+          setBalance(formattedBalance.toFixed(2));
+        } catch (err) {
+          console.error("Error fetching balance:", err);
+        }
+      }
+    };
+
+    fetchBalance();
+  }, [account, suiClient]);
+
   return (
     <Form
       method="post"
@@ -71,7 +99,7 @@ const QuestionForm = () => {
       <div className={styles["token-info"]}>
         <div className={styles["token-balance"]}>
           <div className={styles["token-icon"]}></div>
-          <span>Balance: 245 SUI</span>
+          <span>Balance: {balance} SUI</span>
         </div>
       </div>
 

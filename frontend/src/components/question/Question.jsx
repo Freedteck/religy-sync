@@ -1,7 +1,7 @@
 import { truncateAddress } from "../../utils/truncateAddress";
 import styles from "./Question.module.css";
 
-const Question = ({ question }) => {
+const Question = ({ question, likeQuestion }) => {
   return (
     <section className={styles["question-container"]}>
       <div className={styles["question-header"]}>
@@ -24,7 +24,9 @@ const Question = ({ question }) => {
       </div>
       <div className={styles["question-meta"]}>
         <div className={styles["vote-buttons"]}>
-          <button className={styles["vote-btn"]}>↑</button>
+          <button className={styles["vote-btn"]} onClick={likeQuestion}>
+            ↑
+          </button>
           <span className={styles["vote-count"]}>{question.likes}</span>
           <button className={styles["vote-btn"]}>↓</button>
         </div>

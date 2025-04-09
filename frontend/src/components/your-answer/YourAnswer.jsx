@@ -13,11 +13,11 @@ const YourAnswer = ({
   suiClient,
   signAndExecute,
   questionId,
+  refetchAnswers,
 }) => {
   const [answerText, setAnswerText] = useState("");
   const account = useCurrentAccount();
 
-  // Use our custom hooks
   const { isScholar, scholarCapId, loading } = useScholarStatus(
     suiClient,
     religySyncPackageId,
@@ -31,6 +31,11 @@ const YourAnswer = ({
     suiClient,
     signAndExecute
   );
+
+  const onSuccess = () => {
+    setAnswerText("");
+    refetchAnswers();
+  };
 
   const handleSubmitAnswer = (answer) => {
     if (!answer.trim()) {
@@ -55,7 +60,7 @@ const YourAnswer = ({
       "Answer to question",
       answer,
       metadata,
-      () => setAnswerText("")
+      onSuccess
     );
   };
 
@@ -77,13 +82,13 @@ const YourAnswer = ({
     <div className={styles["your-answer"]}>
       <div className={styles["scholar-status"]}>
         {loading ? (
-          <p>Checking scholar status...</p>
+          <p>Checking status...</p>
         ) : isScholar ? (
           <div>
-            <p className={styles["scholar-badge"]}>✓ Verified Scholar</p>
+            <p className={styles["scholar-badge"]}>✓ Verified</p>
             {scholarCapId ? (
               <p className={styles["cap-id"]}>
-                Scholar Cap ID: {formatObjectId(scholarCapId)}
+                Cap ID: {formatObjectId(scholarCapId)}
               </p>
             ) : (
               <p className={styles["warning"]}>

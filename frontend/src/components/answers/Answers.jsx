@@ -2,7 +2,13 @@ import { formatTime } from "../../utils/timeFormatter";
 import { truncateAddress } from "../../utils/truncateAddress";
 import styles from "./Answers.module.css";
 
-const Answers = ({ answers, sortOrder, handleSortChange }) => {
+const Answers = ({
+  answers,
+  sortOrder,
+  handleSortChange,
+  likeAnswer,
+  sendReward,
+}) => {
   return (
     <div className={styles["answers-section"]}>
       <div className={styles["section-header"]}>
@@ -39,11 +45,17 @@ const Answers = ({ answers, sortOrder, handleSortChange }) => {
             </div>
 
             <div className={styles["answer-stats"]}>
-              <button className={styles["helpful-btn"]}>
+              <button
+                className={styles["helpful-btn"]}
+                onClick={() => likeAnswer(answer.data.objectId, "answer")}
+              >
                 <span>✓</span>
                 <span>Helpful ({answer.data.content.fields.likes})</span>
               </button>
-              <button className={styles["tip-btn"]}>
+              <button
+                className={styles["tip-btn"]}
+                onClick={() => sendReward(answer.data.objectId, 2)}
+              >
                 <span className={styles["tip-icon"]}>🪙</span>
                 <span>Tip Scholar</span>
               </button>

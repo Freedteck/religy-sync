@@ -581,7 +581,7 @@ fun create_content_internal(
     let content_id = object::id(&content);
     
     // Transfer content as NFT to creator
-    transfer::transfer(content, tx_context::sender(ctx));
+    transfer::share_object(content);
     
     // Emit content creation event
     event::emit(ContentCreated {

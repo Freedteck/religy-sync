@@ -13,21 +13,28 @@ import {
   useSuiClientQuery,
 } from "@mysten/dapp-kit";
 import { useNetworkVariables } from "../../config/networkConfig";
+import useCreateContent from "../../hooks/useCreateContent";
 
 const QuestionDetails = () => {
   const { id } = useParams();
   const [objectIds, setObjectIds] = useState([id]);
   const [timestampMs, setTimeStampMs] = useState([]);
   const [answers, setAnswers] = useState([]);
+  const [sortOrder, setSortOrder] = useState("votes");
   const { religySyncPackageId, platformId } = useNetworkVariables(
     "religySyncPackageId",
     "platformId",
     "adminCapId"
   );
-
   const suiClient = useSuiClient();
-
   const { mutate: signAndExecute } = useSignAndExecuteTransaction();
+
+  const { likeContent, sendReward } = useCreateContent(
+    religySyncPackageId,
+    platformId,
+    suiClient,
+    signAndExecute
+  );
 
   const {
     data: eventsData,
@@ -55,7 +62,7 @@ const QuestionDetails = () => {
     }
   );
 
-  const { data: answerListData } = useSuiClientQuery(
+  const { data: answerListData, refetch: refreshAnswers } = useSuiClientQuery(
     "multiGetObjects",
     {
       ids: objectIds,
@@ -75,7 +82,11 @@ const QuestionDetails = () => {
     }
   );
 
-  const { data: question, isPending } = useSuiClientQuery(
+  const {
+    data: question,
+    isPending,
+    refetch: refreshQuestion,
+  } = useSuiClientQuery(
     "getObject",
     {
       id: id,
@@ -95,7 +106,6 @@ const QuestionDetails = () => {
   );
 
   useEffect(() => {
-    console.log("Answers", eventsData);
     if (eventsData) {
       const ids = eventsData.flatMap((event) => event.parsedJson.content_id);
       const timestampMs = eventsData.flatMap((event) => event.timestampMs);
@@ -145,27 +155,26 @@ const QuestionDetails = () => {
     },
   ];
 
-  const [sortOrder, setSortOrder] = useState("votes");
-
   const handleSortChange = (e) => {
     setSortOrder(e.target.value);
   };
 
-  // const handleAnswerChange = (e) => {
-  //   setAnswerText(e.target.value);
-  // };
-
-  // const handleSubmitAnswer = () => {
-  //   // Logic to submit answer to backend
-  //   console.log("Submitting answer:", answerText);
-  //   setAnswerText("");
-  // };
+  const handleLike = (contentId, contentType) => {
+    if (contentType === "question") {
+      likeContent(contentId, refreshQuestion);
+    } else if (contentType === "answer") {
+      likeContent(contentId, refreshAnswers);
+    }
+  };
 
   return (
     <main className={styles["question-details"]}>
       <Breadcrumb />
       {!isPending ? (
-        <Question question={question?.fields} />
+        <Question
+          question={question?.fields}
+          likeQuestion={() => handleLike(id, "question")}
+        />
       ) : (
         <div className={styles["loading"]}>Loading...</div>
       )}
@@ -173,6 +182,12 @@ const QuestionDetails = () => {
         answers={answers}
         sortOrder={sortOrder}
         handleSortChange={handleSortChange}
+        religySyncPackageId={religySyncPackageId}
+        platformId={platformId}
+        suiClient={suiClient}
+        signAndExecute={signAndExecute}
+        likeAnswer={handleLike}
+        sendReward={sendReward}
       />
       <YourAnswer
         religySyncPackageId={religySyncPackageId}
@@ -180,6 +195,7 @@ const QuestionDetails = () => {
         suiClient={suiClient}
         signAndExecute={signAndExecute}
         questionId={id}
+        refetchAnswers={refreshAnswers}
       />
       <RelatedQuestions relatedQuestions={relatedQuestions} />
     </main>

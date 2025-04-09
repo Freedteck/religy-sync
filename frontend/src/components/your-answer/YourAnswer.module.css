@@ -10,6 +10,83 @@
   margin-top: 40px;
 }
 
+.scholar-status {
+  background: linear-gradient(
+    to right,
+    rgba(58, 134, 255, 0.06),
+    rgba(114, 9, 183, 0.06)
+  );
+  border: 1px solid rgba(67, 97, 238, 0.3);
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.scholar-badge {
+  color: var(--accent-blue);
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.cap-id {
+  color: var(--text-gray-light);
+  font-size: 14px;
+  opacity: 0.8;
+  margin-bottom: 0;
+}
+
+.not-scholar {
+  color: var(--text-gray);
+  margin-bottom: 12px;
+}
+
+.warning {
+  color: #ff7b54;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.scholar-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.apply-button {
+  background: linear-gradient(
+    to right,
+    var(--accent-blue-light),
+    var(--accent-purple)
+  );
+  color: var(--text-white);
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: fit-content;
+}
+
+.apply-button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(67, 97, 238, 0.3);
+}
+
+.scholar-required {
+  color: var(--text-gray);
+  font-size: 14px;
+  margin-top: 10px;
+  font-style: italic;
+  padding-left: 5px;
+  border-left: 2px solid var(--accent-purple);
+}
+
 .answer-form-title {
   font-size: 20px;
   color: var(--text-light);

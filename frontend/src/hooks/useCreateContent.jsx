@@ -71,6 +71,41 @@ const useCreateContent = (
     });
   };
 
+  const likeContent = async (contentId, onSuccess) => {
+    const tx = new Transaction();
+
+    tx.moveCall({
+      arguments: [tx.object(contentId)],
+      target: `${religySyncPackageId}::religy_sync::like_content`,
+    });
+
+    return executeTransaction(tx, {
+      successMessage: "Like sent successfully!",
+      errorMessage: "Error sending likes. Please try again.",
+      loadingMessage: "Sending likes...",
+      onSuccess,
+    });
+  };
+
+  const sendReward = async (contentId, amount, onSuccess) => {
+    const amountMist = BigInt(Math.floor(amount * 1_000_000_000));
+    const tx = new Transaction();
+
+    const [coin] = tx.splitCoins(tx.gas, [tx.pure("u64", amountMist)]);
+
+    tx.moveCall({
+      arguments: [tx.object(contentId), coin],
+      target: `${religySyncPackageId}::religy_sync::send_reward`,
+    });
+
+    return executeTransaction(tx, {
+      successMessage: "Reward sent successfully!",
+      errorMessage: "Error sending reward. Please try again.",
+      loadingMessage: "Sending reward...",
+      onSuccess,
+    });
+  };
+
   const applyForScholar = async (
     name,
     credential,
@@ -128,6 +163,8 @@ const useCreateContent = (
   return {
     createQuestion,
     createAnswer,
+    likeContent,
+    sendReward,
     applyForScholar,
     approveScholar,
   };
