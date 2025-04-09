@@ -71,6 +71,76 @@ const useCreateContent = (
     });
   };
 
+  const createFollowup = async (
+    answerId,
+    questionId,
+    title,
+    content,
+    metadata,
+    onSuccess
+  ) => {
+    const tx = new Transaction();
+
+    // Convert metadata to string if it's an object
+    const metadataStr =
+      typeof metadata === "object" ? JSON.stringify(metadata) : metadata;
+
+    tx.moveCall({
+      arguments: [
+        tx.object(platformId),
+        tx.object(answerId),
+        tx.object(questionId),
+        tx.pure.string(title),
+        tx.pure.string(content),
+        tx.pure.string(metadataStr),
+      ],
+      target: `${religySyncPackageId}::religy_sync::create_followup`,
+    });
+
+    return executeTransaction(tx, {
+      successMessage: "Follow-up submitted successfully!",
+      errorMessage: "Error submitting follow-up. Please try again.",
+      loadingMessage: "Submitting follow-up...",
+      onSuccess,
+    });
+  };
+
+  const createClarification = async (
+    scholarCapId,
+    followupId,
+    answerId,
+    title,
+    content,
+    metadata,
+    onSuccess
+  ) => {
+    const tx = new Transaction();
+
+    // Convert metadata to string if it's an object
+    const metadataStr =
+      typeof metadata === "object" ? JSON.stringify(metadata) : metadata;
+
+    tx.moveCall({
+      arguments: [
+        tx.object(scholarCapId),
+        tx.object(platformId),
+        tx.object(followupId),
+        tx.object(answerId),
+        tx.pure.string(title),
+        tx.pure.string(content),
+        tx.pure.string(metadataStr),
+      ],
+      target: `${religySyncPackageId}::religy_sync::create_clarification`,
+    });
+
+    return executeTransaction(tx, {
+      successMessage: "Clarification submitted successfully!",
+      errorMessage: "Error submitting clarification. Please try again.",
+      loadingMessage: "Submitting clarification...",
+      onSuccess,
+    });
+  };
+
   const likeContent = async (contentId, onSuccess) => {
     const tx = new Transaction();
 
@@ -163,6 +233,8 @@ const useCreateContent = (
   return {
     createQuestion,
     createAnswer,
+    createFollowup,
+    createClarification,
     likeContent,
     sendReward,
     applyForScholar,
