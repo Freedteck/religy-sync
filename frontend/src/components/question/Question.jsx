@@ -1,5 +1,6 @@
 import { truncateAddress } from "../../utils/truncateAddress";
 import styles from "./Question.module.css";
+import Jazzicon from "react-jazzicon";
 
 const Question = ({ question, likeQuestion }) => {
   return (
@@ -43,9 +44,13 @@ const Question = ({ question, likeQuestion }) => {
         </div>
 
         <div className={styles["user-info"]}>
-          <div className={styles["user-avatar"]}>
-            {question.askedByInitials}
-          </div>
+          {/* <div className={styles["user-avatar"]}> */}
+          <Jazzicon
+            diameter={30}
+            seed={parseInt(question.creator.slice(2, 8), 16)}
+          />
+          {/* {question.askedByInitials}
+          </div> */}
           <div>
             <h3>Asked by {truncateAddress(question.creator)}</h3>
             <p>{question.askedAt}</p>

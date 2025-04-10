@@ -25,6 +25,7 @@ const QuestionDetails = () => {
   const [followups, setFollowups] = useState({});
   const [clarifications, setClarifications] = useState({});
   const [sortOrder, setSortOrder] = useState("votes");
+  const [rewardSent, setRewardSent] = useState(false);
 
   const { religySyncPackageId, platformId } = useNetworkVariables(
     "religySyncPackageId",
@@ -56,7 +57,6 @@ const QuestionDetails = () => {
       query: {
         MoveEventType: `${religySyncPackageId}::religy_sync::ContentCreated`,
       },
-      limit: 8,
       cursor: null,
     },
     {
@@ -79,7 +79,6 @@ const QuestionDetails = () => {
         query: {
           MoveEventType: `${religySyncPackageId}::religy_sync::ContentCreated`,
         },
-        limit: 20,
         cursor: null,
       },
       {
@@ -118,7 +117,6 @@ const QuestionDetails = () => {
         query: {
           MoveEventType: `${religySyncPackageId}::religy_sync::ContentCreated`,
         },
-        limit: 20,
         cursor: null,
       },
       {
@@ -366,6 +364,18 @@ const QuestionDetails = () => {
     }
   };
 
+  // Updated handleSendReward function in QuestionDetails.jsx
+  const handleSendReward = (objectId, amount) => {
+    setRewardSent(false); // Reset before sending new reward
+    sendReward(objectId, amount, () => {
+      setRewardSent(true);
+
+      setTimeout(() => {
+        setRewardSent(false);
+      }, 1000);
+    });
+  };
+
   // Function to handle follow-up creation
   const handleCreateFollowup = (
     answerId,
@@ -425,7 +435,8 @@ const QuestionDetails = () => {
         suiClient={suiClient}
         signAndExecute={signAndExecute}
         likeAnswer={handleLike}
-        sendReward={sendReward}
+        sendReward={handleSendReward}
+        isRewardSent={rewardSent}
         createClarification={handleCreateClarification}
         createFollowup={handleCreateFollowup}
         // scholarCapId={scholarCapId}

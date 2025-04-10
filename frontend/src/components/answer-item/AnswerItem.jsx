@@ -1,24 +1,73 @@
-import { formatTime } from "../../utils/timeFormatter";
-import { truncateAddress } from "../../utils/truncateAddress";
+import { useCurrentAccount } from "@mysten/dapp-kit";
+import { useState } from "react";
 import styles from "./AnswerItem.module.css";
+import { truncateAddress } from "../../utils/truncateAddress";
+import { formatTime } from "../../utils/timeFormatter";
+import ThreadContainer from "../answer-thread/ThreadContainer";
+import ResponseForm from "../response-form/ResponseForm";
+import Jazzicon from "react-jazzicon";
+import TipModal from "../../modals/tip-modal/TipModal";
 
-const AnswerItem = ({ 
-  answer, 
-  likeAnswer, 
+const AnswerItem = ({
+  answer,
+  likeAnswer,
   sendReward,
-  onCreateFollowUp,
-  currentUserIsOriginalAsker
+  createFollowup,
+  createClarification,
+  isRewardSent,
 }) => {
+  const [showFollowupForm, setShowFollowupForm] = useState(false);
+  const [expandedAnswer, setExpandedAnswer] = useState(false);
+  const [openTipModal, setOpenTipModal] = useState(false);
+  const account = useCurrentAccount();
+
+  const toggleFollowupForm = () => {
+    setShowFollowupForm((prev) => !prev);
+  };
+
+  const handleFollowupSubmit = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const title = "Follow up to question";
+    const content = form.content.value;
+    const metadata = JSON.stringify({ timestamp: new Date().toISOString() });
+
+    createFollowup(
+      answer.data.objectId,
+      answer.data.content.fields.related_to,
+      title,
+      content,
+      metadata,
+      () => {
+        form.reset();
+        toggleFollowupForm();
+      }
+    );
+  };
+
+  // Open and close the tip modal
+  const openTipModalHandler = () => {
+    setOpenTipModal(true);
+  };
+
+  const closeTipModalHandler = () => {
+    setOpenTipModal(false);
+  };
+
   return (
     <div className={styles["answer-item"]}>
       <p className={styles["answer-content"]}>
         {answer.data.content.fields.body}
       </p>
+
       <div className={styles["answer-meta"]}>
         <div className={styles["scholar-info"]}>
-          <div className={styles["scholar-avatar"]}>
-            {answer.scholarInitials}
-          </div>
+          {/* <div className={styles["scholar-avatar"]}> */}
+          <Jazzicon
+            diameter={40}
+            seed={parseInt(answer.data.content.fields.creator.slice(2, 8), 16)}
+          />
+          {/* </div> */}
           <div className={styles["scholar-details"]}>
             <h3 className={styles["scholar-name"]}>
               {truncateAddress(answer.data.content.fields.creator)}
@@ -35,27 +84,66 @@ const AnswerItem = ({
             <span>✓</span>
             <span>Helpful ({answer.data.content.fields.likes})</span>
           </button>
-          <button
-            className={styles["tip-btn"]}
-            onClick={() => sendReward(answer.data.objectId, 2)}
-          >
+          <button className={styles["tip-btn"]} onClick={openTipModalHandler}>
             <span className={styles["tip-icon"]}>🪙</span>
             <span>Tip Scholar</span>
           </button>
-          {currentUserIsOriginalAsker && (
-            <button
-              className={styles["followup-btn"]}
-              onClick={() => onCreateFollowUp(answer.data.objectId)}
-            >
-              <span>➕</span>
-              <span>Add Follow-up</span>
-            </button>
-          )}
           <div className={styles["answer-date"]}>
             {formatTime(answer.timestampMs)}
           </div>
         </div>
       </div>
+
+      <div className={styles["answer-actions"]}>
+        <div className={styles["action-buttons"]}>
+          {answer.data.content.fields.creator !== account?.address && (
+            <button
+              className={styles["reply-btn"]}
+              onClick={toggleFollowupForm}
+            >
+              Reply
+            </button>
+          )}
+
+          {answer.followups && answer.followups.length > 0 && (
+            <button
+              className={styles["toggle-thread-btn"]}
+              onClick={() => setExpandedAnswer((prev) => !prev)}
+            >
+              {expandedAnswer
+                ? "Hide replies"
+                : `Show replies (${answer.followups.length})`}
+            </button>
+          )}
+        </div>
+
+        {showFollowupForm && (
+          <ResponseForm
+            onSubmit={handleFollowupSubmit}
+            onCancel={toggleFollowupForm}
+            placeholder="Your follow-up question..."
+          />
+        )}
+      </div>
+
+      {/* Thread with followups and clarifications */}
+      {answer.followups && answer.followups.length > 0 && expandedAnswer && (
+        <ThreadContainer
+          followups={answer.followups}
+          answerId={answer.data.objectId}
+          creatorAddress={answer.data.content.fields.creator}
+          createClarification={createClarification}
+        />
+      )}
+
+      {/* Tip Modal */}
+      <TipModal
+        isOpen={openTipModal}
+        onClose={closeTipModalHandler}
+        answerId={answer.data.objectId}
+        sendReward={sendReward}
+        isRewardSent={isRewardSent}
+      />
     </div>
   );
 };

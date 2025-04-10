@@ -31,7 +31,6 @@ const Questions = () => {
       query: {
         MoveEventType: `${religySyncPackageId}::religy_sync::ContentCreated`,
       },
-      limit: 8,
       cursor: null,
     },
     {
@@ -61,7 +60,6 @@ const Questions = () => {
     );
 
     setFilteredQuestions(filtered);
-    console.log("Filtered Questions:", filtered);
   }, [questionList, faithTradition, status, sortBy, activeTag]);
 
   // Handle filter changes

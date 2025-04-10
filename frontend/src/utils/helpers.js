@@ -121,8 +121,8 @@ export const filterAndSortContent = (
       case "oldest":
         return a.timestampMs - b.timestampMs;
       case "most_votes": {
-        const votesA = a.data?.content?.fields?.votes || 0;
-        const votesB = b.data?.content?.fields?.votes || 0;
+        const votesA = a.data?.content?.fields?.likes || 0;
+        const votesB = b.data?.content?.fields?.likes || 0;
         return votesB - votesA;
       }
       case "most_answers": {
