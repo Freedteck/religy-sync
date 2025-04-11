@@ -5,6 +5,7 @@ import Questions from "./routes/questions/Questions";
 import QuestionDetails from "./routes/question-detail/QuestionDetails";
 import About from "./routes/about/About";
 import AskQuestion from "./routes/ask-question/AskQuestion";
+import Profile from "./routes/profile/Profile";
 
 export const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ export const router = createBrowserRouter([
       {
         path: "ask-question",
         Component: AskQuestion,
+      },
+      {
+        path: "profile",
+        Component: Profile,
       },
     ],
   },

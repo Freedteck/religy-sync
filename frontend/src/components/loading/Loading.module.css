@@ -1,0 +1,221 @@
+/* LoadingState.module.css */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 300px;
+  width: 100%;
+  background-color: var(--dark-blue-3);
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at center,
+    rgba(58, 134, 255, 0.05) 0%,
+    rgba(26, 26, 46, 0) 70%
+  );
+  z-index: 0;
+}
+
+.loadingWrapper {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin-bottom: 2rem;
+}
+
+.hexagonGrid {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  animation: rotate 12s infinite linear;
+}
+
+.hexagon {
+  position: absolute;
+  width: 30px;
+  height: 36px;
+  background-color: var(--accent-blue-light);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.hex1 {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: pulse 2s infinite alternate;
+  background-color: var(--accent-blue);
+}
+
+.hex2 {
+  top: 25%;
+  right: 15%;
+  animation: pulse 2s infinite alternate 0.3s;
+  background-color: var(--accent-blue-light);
+}
+
+.hex3 {
+  bottom: 25%;
+  right: 15%;
+  animation: pulse 2s infinite alternate 0.6s;
+  background-color: var(--accent-blue-lightest);
+}
+
+.hex4 {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: pulse 2s infinite alternate 0.9s;
+  background-color: var(--accent-purple);
+}
+
+.hex5 {
+  bottom: 25%;
+  left: 15%;
+  animation: pulse 2s infinite alternate 1.2s;
+  background-color: var(--accent-purple-dark);
+}
+
+.hex6 {
+  top: 25%;
+  left: 15%;
+  animation: pulse 2s infinite alternate 1.5s;
+  background-color: var(--accent-blue-light);
+}
+
+.hex7 {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: pulse 2s infinite alternate 1.8s;
+  background-color: var(--accent-blue-lightest);
+  width: 20px;
+  height: 24px;
+}
+
+.pulseCircle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(76, 201, 240, 0.3) 0%,
+    rgba(58, 134, 255, 0) 70%
+  );
+  animation: pulse-glow 3s infinite ease-in-out;
+}
+
+.message {
+  color: var(--text-light);
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 1rem 0;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.progressBar {
+  width: 100%;
+  max-width: 250px;
+  height: 4px;
+  background-color: var(--dark-blue-5);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+  margin-top: 1rem;
+}
+
+.progress {
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    var(--accent-blue),
+    var(--accent-blue-lightest)
+  );
+  border-radius: 2px;
+  animation: loading 2s infinite ease-in-out;
+  box-shadow: 0 0 10px rgba(76, 201, 240, 0.5);
+}
+
+@keyframes rotate {
+  from {
+    transform: rotateY(0) rotateX(0);
+  }
+  to {
+    transform: rotateY(360deg) rotateX(360deg);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.5;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 0.9;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes pulse-glow {
+  0% {
+    opacity: 0.4;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  100% {
+    opacity: 0.4;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+}
+
+@keyframes loading {
+  0% {
+    width: 0%;
+    transform: translateX(-100%);
+  }
+  50% {
+    width: 100%;
+    transform: translateX(0);
+  }
+  100% {
+    width: 100%;
+    transform: translateX(100%);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .loadingWrapper {
+    width: 100px;
+    height: 100px;
+  }
+
+  .message {
+    font-size: 0.9rem;
+  }
+}

@@ -16,6 +16,7 @@ import {
 import { useNetworkVariables } from "../../config/networkConfig";
 import useCreateContent from "../../hooks/useCreateContent";
 import useScholarStatus from "../../hooks/useScholarStatus";
+import Loading from "../../components/loading/Loading";
 
 const QuestionDetails = () => {
   const { id } = useParams();
@@ -100,7 +101,6 @@ const QuestionDetails = () => {
   const [followupIds, setFollowupIds] = useState([]);
 
   useEffect(() => {
-    console.log("Follow-up events data:", followupEventsData);
     if (followupEventsData && followupEventsData.length > 0) {
       const ids = followupEventsData.map(
         (event) => event.parsedJson.content_id
@@ -419,37 +419,40 @@ const QuestionDetails = () => {
     <main className={styles["question-details"]}>
       <Breadcrumb />
       {!isPending ? (
-        <Question
-          question={question?.fields}
-          likeQuestion={() => handleLike(id, "question")}
-        />
+        <>
+          <Question
+            question={question?.fields}
+            likeQuestion={() => handleLike(id, "question")}
+          />
+
+          <Answers
+            answers={answers}
+            sortOrder={sortOrder}
+            handleSortChange={handleSortChange}
+            religySyncPackageId={religySyncPackageId}
+            platformId={platformId}
+            suiClient={suiClient}
+            signAndExecute={signAndExecute}
+            likeAnswer={handleLike}
+            sendReward={handleSendReward}
+            isRewardSent={rewardSent}
+            createClarification={handleCreateClarification}
+            createFollowup={handleCreateFollowup}
+            // scholarCapId={scholarCapId}
+          />
+          <YourAnswer
+            religySyncPackageId={religySyncPackageId}
+            platformId={platformId}
+            suiClient={suiClient}
+            signAndExecute={signAndExecute}
+            questionId={id}
+            refetchAnswers={refreshAnswers}
+          />
+          <RelatedQuestions relatedQuestions={relatedQuestions} />
+        </>
       ) : (
-        <div className={styles["loading"]}>Loading...</div>
+        <Loading message="Loading question details..." />
       )}
-      <Answers
-        answers={answers}
-        sortOrder={sortOrder}
-        handleSortChange={handleSortChange}
-        religySyncPackageId={religySyncPackageId}
-        platformId={platformId}
-        suiClient={suiClient}
-        signAndExecute={signAndExecute}
-        likeAnswer={handleLike}
-        sendReward={handleSendReward}
-        isRewardSent={rewardSent}
-        createClarification={handleCreateClarification}
-        createFollowup={handleCreateFollowup}
-        // scholarCapId={scholarCapId}
-      />
-      <YourAnswer
-        religySyncPackageId={religySyncPackageId}
-        platformId={platformId}
-        suiClient={suiClient}
-        signAndExecute={signAndExecute}
-        questionId={id}
-        refetchAnswers={refreshAnswers}
-      />
-      <RelatedQuestions relatedQuestions={relatedQuestions} />
     </main>
   );
 };

@@ -19,10 +19,10 @@ const Header = () => {
           </li>
           <li>
             <NavLink
-              to="/scholars"
+              to="/profile"
               className={({ isActive }) => (isActive ? styles.active : "")}
             >
-              Scholars
+              Profile
             </NavLink>
           </li>
           <li>

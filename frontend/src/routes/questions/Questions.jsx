@@ -8,6 +8,7 @@ import { useNetworkVariable } from "../../config/networkConfig";
 import { useEffect, useState } from "react";
 import useContentFromEvents from "../../hooks/useContentFromEvent";
 import { filterAndSortContent } from "../../utils/helpers";
+import Loading from "../../components/loading/Loading";
 
 const Questions = () => {
   const [filteredQuestions, setFilteredQuestions] = useState([]);
@@ -164,7 +165,7 @@ const Questions = () => {
 
       {isPending ? (
         <div className={styles.loading}>
-          <h2>Loading...</h2>
+          <Loading message="Loading questions..." />
         </div>
       ) : filteredQuestions.length > 0 ? (
         <QuestionList questionList={filteredQuestions} />
