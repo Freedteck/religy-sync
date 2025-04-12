@@ -1,0 +1,60 @@
+.stepsProgress {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  position: relative;
+}
+
+.step:not(:last-child):after {
+  content: "";
+  position: absolute;
+  top: 20px;
+  right: -50%;
+  width: 100%;
+  height: 2px;
+  background-color: var(--dark-blue-5);
+  z-index: 1;
+}
+
+.step.active:not(:last-child):after {
+  background-color: var(--accent-blue-light);
+}
+
+.stepNumber {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--dark-blue-5);
+  color: var(--text-gray);
+  font-weight: bold;
+  margin-bottom: 8px;
+  z-index: 2;
+}
+
+.active .stepNumber {
+  background: linear-gradient(
+    to bottom right,
+    var(--accent-blue-light),
+    var(--accent-purple-dark)
+  );
+  color: var(--text-white);
+}
+
+.stepLabel {
+  color: var(--text-gray);
+  font-size: 14px;
+}
+
+.active .stepLabel {
+  color: var(--text-light);
+}

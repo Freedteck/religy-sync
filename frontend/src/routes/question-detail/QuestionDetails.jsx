@@ -286,16 +286,12 @@ const QuestionDetails = () => {
 
   // Merge answers with their follow-ups and clarifications
   useEffect(() => {
-    console.log("Answer list data:", answerListData);
-
     if (answerListData) {
       const processedAnswers = answerListData.map((answer, index) => {
         const answerId = answer.data.objectId;
         const answerFollowups = followups[answerId] || [];
 
         // Add clarifications to each follow-up
-        console.log("Answer followups:", answerFollowups);
-
         const processedFollowups = answerFollowups.map((followup) => {
           const followupId = followup.data.data.objectId;
           return {
@@ -308,12 +304,9 @@ const QuestionDetails = () => {
           ...answer,
           timestampMs: timestampMs[index],
           followups: processedFollowups,
-          scholarInitials: "SC", // Placeholder - you might want to compute this
-          scholarTitle: "Scholar", // Placeholder - you might want to get real data
+          scholarTitle: "Scholar",
         };
       });
-
-      console.log("Processed answers:", processedAnswers);
 
       setAnswers(processedAnswers);
     }
@@ -364,7 +357,6 @@ const QuestionDetails = () => {
     }
   };
 
-  // Updated handleSendReward function in QuestionDetails.jsx
   const handleSendReward = (objectId, amount) => {
     setRewardSent(false); // Reset before sending new reward
     sendReward(objectId, amount, () => {

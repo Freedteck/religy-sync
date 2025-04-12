@@ -1,0 +1,67 @@
+.formSection {
+  margin-bottom: 30px;
+}
+
+.formSectionTitle {
+  font-size: 20px;
+  color: var(--text-light);
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--accent-blue-light);
+}
+
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.formLabel {
+  display: block;
+  color: var(--text-gray-light);
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.required:after {
+  content: " *";
+  color: var(--accent-blue-lightest);
+}
+
+.formInput,
+.formSelect,
+.formTextarea {
+  width: 100%;
+  background-color: var(--dark-blue-4);
+  color: var(--text-light);
+  border: 1px solid var(--accent-blue-light);
+  border-radius: 4px;
+  padding: 12px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.formInput:focus,
+.formSelect:focus,
+.formTextarea:focus {
+  border-color: var(--accent-purple);
+  outline: none;
+}
+
+.formTextarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.formRow {
+  display: flex;
+  gap: 20px;
+}
+
+.formRow .formGroup {
+  flex: 1;
+}
+
+.formHint {
+  font-size: 14px;
+  color: var(--text-gray);
+  margin-top: 6px;
+}

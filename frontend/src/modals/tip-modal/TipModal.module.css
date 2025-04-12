@@ -14,7 +14,7 @@
 }
 
 .modalContent {
-  background-color: #121212;
+  background-color: var(--dark-blue-2);
   border-radius: 12px;
   width: 90%;
   max-width: 450px;
@@ -41,8 +41,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  background: linear-gradient(90deg, #2d2d2d, #1a1a1a);
+  border-bottom: 1px solid var(--dark-blue-5);
+  background: var(--dark-blue-3);
 }
 
 .modalHeader h2 {

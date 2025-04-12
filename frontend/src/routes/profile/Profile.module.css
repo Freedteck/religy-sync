@@ -4,10 +4,10 @@
   flex-direction: column;
   gap: 30px;
 }
+
 .profileHeader {
   display: flex;
   align-items: center;
-  margin-bottom: 40px;
 }
 
 .profileAvatar {
@@ -261,6 +261,7 @@
   display: inline-flex;
   align-items: center;
   margin-left: auto;
+  margin-top: 20px;
 }
 
 .rewardButton:hover {

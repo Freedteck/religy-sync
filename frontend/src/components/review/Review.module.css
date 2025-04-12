@@ -1,0 +1,42 @@
+.formSection {
+  margin-bottom: 30px;
+}
+
+.formSectionTitle {
+  font-size: 20px;
+  color: var(--text-light);
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--accent-blue-light);
+}
+
+.reviewSection {
+  background: linear-gradient(
+    to bottom right,
+    var(--dark-blue-5),
+    var(--dark-blue-6)
+  );
+  border: 1px solid var(--accent-purple);
+  border-radius: 8px;
+  padding: 30px;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.checkboxItem {
+  display: flex;
+  align-items: center;
+}
+
+.formCheckbox {
+  margin-right: 10px;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent-blue-light);
+}

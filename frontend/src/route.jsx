@@ -6,6 +6,7 @@ import QuestionDetails from "./routes/question-detail/QuestionDetails";
 import About from "./routes/about/About";
 import AskQuestion from "./routes/ask-question/AskQuestion";
 import Profile from "./routes/profile/Profile";
+import ScholarApplication from "./routes/scholar-application/ScholarApplication";
 
 export const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ export const router = createBrowserRouter([
       {
         path: "profile",
         Component: Profile,
+      },
+      {
+        path: "applications",
+        Component: ScholarApplication,
       },
     ],
   },

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styles from "./Profile.module.css";
 
 // Mock data for the profile
