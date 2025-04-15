@@ -133,7 +133,7 @@ const ScholarApplication = () => {
       formData.credentials,
       formData.faithTradition,
       additionalInfo,
-      navigate("/questions")
+      () => navigate("/questions")
     );
   };
 
