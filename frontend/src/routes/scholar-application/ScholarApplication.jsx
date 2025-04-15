@@ -5,9 +5,19 @@ import PersonalInfo from "../../components/personal-info/PersonalInfo";
 import Credentials from "../../components/credentials/Credentials";
 import Tradition from "../../components/tradition/Tradition";
 import Review from "../../components/review/Review";
+import { useNetworkVariables } from "../../config/networkConfig";
+import {
+  useCurrentAccount,
+  useSignAndExecuteTransaction,
+  useSuiClient,
+} from "@mysten/dapp-kit";
+import useCreateContent from "../../hooks/useCreateContent";
+import { useNavigate } from "react-router-dom";
 
 const ScholarApplication = () => {
   const [currentStep, setCurrentStep] = useState(1);
+  const account = useCurrentAccount();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     // Personal Information
     name: "",
@@ -35,7 +45,7 @@ const ScholarApplication = () => {
 
     // Verification & Wallet
     credentialsDoc: null,
-    walletAddress: "",
+    walletAddress: account?.address || "",
 
     // Terms
     agreeTerms: false,
@@ -69,6 +79,21 @@ const ScholarApplication = () => {
     }
   };
 
+  const { religySyncPackageId, platformId } = useNetworkVariables(
+    "religySyncPackageId",
+    "platformId",
+    "adminCapId"
+  );
+  const suiClient = useSuiClient();
+  const { mutate: signAndExecute } = useSignAndExecuteTransaction();
+
+  const { applyForScholar } = useCreateContent(
+    religySyncPackageId,
+    platformId,
+    suiClient,
+    signAndExecute
+  );
+
   // Handle file uploads
   const handleFileUpload = (e) => {
     const { name, files } = e.target;
@@ -93,33 +118,23 @@ const ScholarApplication = () => {
   // Submit the form to the blockchain
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Preparing to submit to blockchain:", formData);
 
-    try {
-      // Format data for blockchain submission
-      const blockchainData = {
-        name: formData.name,
-        credentials: formData.credentials,
-        faithTradition: formData.faithTradition,
-        additionalInfo: JSON.stringify({
-          email: formData.email,
-          denomination: formData.denomination,
-          expertise: Object.keys(formData.expertise).filter(
-            (key) => formData.expertise[key]
-          ),
-          otherExpertise: formData.otherExpertise,
-        }),
-      };
+    const additionalInfo = JSON.stringify({
+      email: formData.email,
+      denomination: formData.denomination,
+      expertise: Object.keys(formData.expertise).filter(
+        (key) => formData.expertise[key]
+      ),
+      otherExpertise: formData.otherExpertise,
+    });
 
-      console.log("Submitting to blockchain:", blockchainData);
-      // Here you would call the Sui blockchain function:
-      // apply_for_scholar(platform, name, credentials, faithTradition, additionalInfo)
-
-      alert("Application submitted successfully!");
-    } catch (error) {
-      console.error("Error submitting application:", error);
-      alert("Error submitting application. Please try again.");
-    }
+    applyForScholar(
+      formData.name,
+      formData.credentials,
+      formData.faithTradition,
+      additionalInfo,
+      navigate("/questions")
+    );
   };
 
   return (

@@ -137,3 +137,50 @@ export const filterAndSortContent = (
 
   return filtered;
 };
+
+// Utility function to decode Move strings
+export const decodeMoveString = (moveStringArray) => {
+  if (
+    !moveStringArray ||
+    !Array.isArray(moveStringArray) ||
+    moveStringArray.length === 0
+  ) {
+    return "";
+  }
+
+  // In Move's string representation, the first element is the length
+  // The remaining elements are the UTF-8 code points
+  try {
+    // Skip the first element (length) and convert the rest to characters
+    return String.fromCharCode(...moveStringArray.slice(1));
+  } catch (error) {
+    console.error("Error decoding Move string:", error);
+    return "";
+  }
+};
+
+// Helper to process application details returned from the Move contract
+export const processApplicationDetails = (returnValues) => {
+  if (
+    !returnValues ||
+    !Array.isArray(returnValues) ||
+    returnValues.length < 7
+  ) {
+    return null;
+  }
+
+  try {
+    return {
+      name: decodeMoveString(returnValues[0][0]),
+      credentials: decodeMoveString(returnValues[1][0]),
+      faithTradition: decodeMoveString(returnValues[2][0]),
+      additionalInfo: decodeMoveString(returnValues[3][0]),
+      status: Number(returnValues[4][0]),
+      appliedAt: Number(returnValues[5][0]),
+      reviewedAt: returnValues[6][0] ? Number(returnValues[6][0][0]) : null,
+    };
+  } catch (error) {
+    console.error("Error processing application details:", error);
+    return null;
+  }
+};

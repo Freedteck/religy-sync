@@ -1,0 +1,288 @@
+import { Link } from "react-router-dom";
+import styles from "./Dashboard.module.css";
+import {
+  useSignAndExecuteTransaction,
+  useSuiClient,
+  useSuiClientQuery,
+} from "@mysten/dapp-kit";
+import { useEffect, useState } from "react";
+import { useNetworkVariables } from "../../../../config/networkConfig";
+import useScholarApplications from "../../../../hooks/useScholarApplications";
+import { truncateAddress } from "../../../../utils/truncateAddress";
+import { formatTime } from "../../../../utils/timeFormatter";
+import useCreateContent from "../../../../hooks/useCreateContent";
+
+const Dashboard = () => {
+  const [scholars, setScholars] = useState([]);
+
+  const suiClient = useSuiClient();
+  const { religySyncPackageId, platformId, adminCapId } = useNetworkVariables(
+    "religySyncPackageId",
+    "platformId",
+    "adminCapId"
+  );
+
+  const {
+    applications,
+    loading: applicationsLoading,
+    error: applicationsError,
+    refreshApplications,
+  } = useScholarApplications(suiClient, religySyncPackageId, platformId);
+  const { mutate: signAndExecute } = useSignAndExecuteTransaction();
+
+  const { approveScholar, revokeScholar } = useCreateContent(
+    religySyncPackageId,
+    platformId,
+    suiClient,
+    signAndExecute
+  );
+
+  const { data: scholarEvents, refetch: refetchScholars } = useSuiClientQuery(
+    "queryEvents",
+    {
+      query: {
+        MoveEventType: `${religySyncPackageId}::religy_sync::ScholarVerified`,
+      },
+      order: "descending",
+    }
+  );
+
+  useEffect(() => {
+    if (scholarEvents?.data) {
+      const scholarData = scholarEvents.data.map((event) => ({
+        scholar: event.parsedJson.scholar,
+        faith_tradition: event.parsedJson.faith_tradition,
+        timestamp: event.timestampMs,
+      }));
+
+      setScholars(scholarData);
+    }
+  }, [scholarEvents, applications]);
+
+  const handleApproveReject = (applicant, shouldApprove) => {
+    shouldApprove
+      ? approveScholar(adminCapId, applicant, true, refreshApplications)
+      : revokeScholar(adminCapId, applicant, refreshApplications);
+
+    refetchScholars();
+  };
+
+  // Get pending applications (those with status pending)
+  const pendingApplications = applications.filter(
+    (app) => app.status === "pending"
+  );
+
+  return (
+    <div className={styles.container}>
+      <main className={styles.mainContent}>
+        {applicationsError && (
+          <div className={styles.errorMessage}>
+            Error loading applications: {applicationsError}
+          </div>
+        )}
+
+        <div className={styles.dashboardCards}>
+          <StatCard
+            value={applicationsLoading ? "..." : pendingApplications.length}
+            label="Pending Applications"
+          />
+          <StatCard value={scholars.length} label="Verified Scholars" />
+          <StatCard value="27,453" label="Total Content Items" />
+          <StatCard value="175,896" label="SUI Rewards Given" />
+        </div>
+
+        <div className={styles.quickActions}>
+          <h2 className={styles.quickActionsTitle}>Quick Actions</h2>
+          <div className={styles.quickActionsGrid}>
+            <QuickActionCard
+              icon="fas fa-user-plus"
+              text="Verify New Scholar"
+            />
+            <QuickActionCard
+              icon="fas fa-user-times"
+              text="Revoke Scholar Access"
+            />
+            <QuickActionCard
+              icon="fas fa-list-check"
+              text="Review Applications"
+            />
+            <QuickActionCard
+              icon="fas fa-chart-bar"
+              text="View Platform Stats"
+            />
+          </div>
+        </div>
+
+        <div className={styles.sectionTitle}>
+          <span>Recent Scholar Applications</span>
+          <Link
+            to="/admin/applications"
+            className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSm}`}
+          >
+            View All
+          </Link>
+        </div>
+        <table className={styles.dataTable}>
+          <thead>
+            <tr>
+              <th>Applicant</th>
+              <th>Faith Tradition</th>
+              <th>Name</th>
+              <th>Applied On</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {applicationsLoading ? (
+              <tr>
+                <td colSpan="6" className={styles.loadingText}>
+                  Loading applications...
+                </td>
+              </tr>
+            ) : applications.length === 0 ? (
+              <tr>
+                <td colSpan="6" className={styles.emptyText}>
+                  No applications found
+                </td>
+              </tr>
+            ) : (
+              applications
+                .slice(0, 5)
+                .map((app) => (
+                  <ApplicationRow
+                    key={app.applicant}
+                    address={app.applicant}
+                    name={app.name || "N/A"}
+                    tradition={app.faith_tradition}
+                    date={formatTime(app.timestamp)}
+                    status={app.status}
+                    onApprove={() => handleApproveReject(app.applicant, true)}
+                    onReject={() => handleApproveReject(app.applicant, false)}
+                  />
+                ))
+            )}
+          </tbody>
+        </table>
+
+        <div className={styles.sectionTitle}>
+          <span>Recently Verified Scholars</span>
+          <Link
+            to="/admin/scholars"
+            className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSm}`}
+          >
+            View All
+          </Link>
+        </div>
+        <table className={styles.dataTable}>
+          <thead>
+            <tr>
+              <th>Scholar Address</th>
+              <th>Faith Tradition</th>
+              <th>Verified On</th>
+            </tr>
+          </thead>
+          <tbody>
+            {scholars.length === 0 ? (
+              <tr>
+                <td colSpan="4" className={styles.emptyText}>
+                  No verified scholars found
+                </td>
+              </tr>
+            ) : (
+              scholars.slice(0, 5).map((scholar) => (
+                <tr key={scholar.scholar}>
+                  <td>{truncateAddress(scholar.scholar)}</td>
+                  <td>{scholar.faith_tradition}</td>
+                  <td>{formatTime(scholar.timestamp)}</td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+
+        {/* Debug button to check data in console
+        <button
+          onClick={() => {
+            console.log("Applications from hook:", applications);
+            console.log("Scholars:", scholars);
+          }}
+          className={`${styles.btn} ${styles.btnPrimary}`}
+          style={{ marginTop: "20px" }}
+        >
+          Log Data to Console
+        </button> */}
+      </main>
+    </div>
+  );
+};
+
+// Supporting smaller components
+const StatCard = ({ value, label }) => (
+  <div className={`${styles.card} ${styles.statCard}`}>
+    <div className={styles.statValue}>{value}</div>
+    <div className={styles.statLabel}>{label}</div>
+  </div>
+);
+
+const QuickActionCard = ({ icon, text }) => (
+  <div className={styles.quickActionCard}>
+    <div className={styles.quickActionIcon}>
+      <i className={icon}></i>
+    </div>
+    <div className={styles.quickActionText}>{text}</div>
+  </div>
+);
+
+const ApplicationRow = ({
+  address,
+  name,
+  tradition,
+  date,
+  status,
+  onApprove,
+  onReject,
+}) => {
+  const badgeClass =
+    status === "approved"
+      ? styles.badgeApproved
+      : status === "rejected"
+      ? styles.badgeRejected
+      : styles.badgePending;
+
+  return (
+    <tr>
+      <td>{truncateAddress(address)}</td>
+      <td>{tradition}</td>
+      <td>{name}</td>
+      <td>{date}</td>
+      <td>
+        <span className={`${styles.badge} ${badgeClass}`}>{status}</span>
+      </td>
+      <td className={styles.actionButtons}>
+        {status === "pending" ? (
+          <>
+            <button
+              className={`${styles.btn} ${styles.btnSuccess} ${styles.btnSm}`}
+              onClick={onApprove}
+            >
+              Approve
+            </button>
+            <button
+              className={`${styles.btn} ${styles.btnDanger} ${styles.btnSm}`}
+              onClick={onReject}
+            >
+              Reject
+            </button>
+          </>
+        ) : status === "approved" ? (
+          "Approved"
+        ) : (
+          "Rejected"
+        )}
+      </td>
+    </tr>
+  );
+};
+
+export default Dashboard;

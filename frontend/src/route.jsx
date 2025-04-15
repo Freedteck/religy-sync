@@ -7,11 +7,18 @@ import About from "./routes/about/About";
 import AskQuestion from "./routes/ask-question/AskQuestion";
 import Profile from "./routes/profile/Profile";
 import ScholarApplication from "./routes/scholar-application/ScholarApplication";
+import Admin from "./routes/admin/Admin";
+import Dashboard from "./routes/admin/pages/dashboard/Dashboard";
+import AuthGuard from "./auth/AuthGuard";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    Component: Root,
+    element: (
+      <AuthGuard>
+        <Root />
+      </AuthGuard>
+    ),
     errorElement: <div>Oops! Something went wrong.</div>,
     children: [
       {
@@ -20,7 +27,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "connect",
-        // Component: div>Connect/div>,
+        // Component: <div>Connect</div>,
       },
       {
         path: "questions",
@@ -43,9 +50,25 @@ export const router = createBrowserRouter([
         Component: Profile,
       },
       {
-        path: "applications",
+        path: "scholar-application",
         Component: ScholarApplication,
       },
+    ],
+  },
+  {
+    path: "/admin",
+    element: (
+      <AuthGuard requireAdmin={true}>
+        <Admin />
+      </AuthGuard>
+    ),
+    errorElement: <div>Oops! Something went wrong.</div>,
+    children: [
+      {
+        path: "dashboard",
+        Component: Dashboard,
+      },
+      // Add other admin routes here
     ],
   },
 ]);

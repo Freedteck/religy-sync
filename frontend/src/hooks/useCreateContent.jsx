@@ -230,6 +230,26 @@ const useCreateContent = (
     });
   };
 
+  const revokeScholar = async (adminCapId, scholarAddress, onSuccess) => {
+    const tx = new Transaction();
+
+    tx.moveCall({
+      arguments: [
+        tx.object(adminCapId),
+        tx.object(platformId),
+        tx.pure.address(scholarAddress),
+      ],
+      target: `${religySyncPackageId}::religy_sync::revoke_scholar`,
+    });
+
+    return executeTransaction(tx, {
+      successMessage: "Scholar status updated successfully!",
+      errorMessage: "Error updating scholar status. Please try again.",
+      loadingMessage: "Updating scholar status...",
+      onSuccess,
+    });
+  };
+
   return {
     createQuestion,
     createAnswer,
@@ -239,6 +259,7 @@ const useCreateContent = (
     sendReward,
     applyForScholar,
     approveScholar,
+    revokeScholar,
   };
 };
 

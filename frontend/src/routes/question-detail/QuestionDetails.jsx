@@ -265,8 +265,6 @@ const QuestionDetails = () => {
   useEffect(() => {
     if (clarificationListData && clarificationEventsData) {
       const clarificationsMap = {};
-      console.log("Clarification events data:", clarificationEventsData);
-      console.log("Clarification list data:", clarificationListData);
 
       clarificationListData.forEach((clarification, index) => {
         const relatedFollowupId = clarification.data.content.fields.related_to;

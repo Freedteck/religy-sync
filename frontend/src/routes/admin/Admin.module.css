@@ -1,0 +1,44 @@
+.adminContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+  padding: 20px;
+  margin-left: 250px;
+}
+
+.mainHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 15px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pageTitle {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--text-light);
+}
+
+.adminProfile {
+  display: flex;
+  align-items: center;
+}
+
+.adminAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--accent-purple);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.adminName {
+  color: var(--text-light);
+}

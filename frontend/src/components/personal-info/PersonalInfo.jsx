@@ -61,6 +61,7 @@ const PersonalInfo = ({ formData, handleInputChange }) => {
           className={styles.formInput}
           value={formData.walletAddress}
           onChange={handleInputChange}
+          disabled
           required
         />
         <div className={styles.formHint}>

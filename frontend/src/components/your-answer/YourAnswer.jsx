@@ -6,6 +6,7 @@ import { useCurrentAccount } from "@mysten/dapp-kit";
 import useScholarStatus from "../../hooks/useScholarStatus";
 import useCreateContent from "../../hooks/useCreateContent";
 import { formatObjectId } from "../../utils/helpers";
+import { useNavigate } from "react-router-dom";
 
 const YourAnswer = ({
   religySyncPackageId,
@@ -17,6 +18,7 @@ const YourAnswer = ({
 }) => {
   const [answerText, setAnswerText] = useState("");
   const account = useCurrentAccount();
+  const navigate = useNavigate();
 
   const { isScholar, scholarCapId, loading } = useScholarStatus(
     suiClient,
@@ -25,7 +27,7 @@ const YourAnswer = ({
     account
   );
 
-  const { createAnswer, applyForScholar } = useCreateContent(
+  const { createAnswer } = useCreateContent(
     religySyncPackageId,
     platformId,
     suiClient,
@@ -69,13 +71,7 @@ const YourAnswer = ({
       toast.error("Please connect your wallet first");
       return;
     }
-
-    applyForScholar(
-      "Mubarak Freed", // Name
-      "A Nice Credential", // Credential
-      "Islam", // Tradition
-      "Muslim Boy" // Description
-    );
+    navigate("/scholar-application");
   };
 
   return (

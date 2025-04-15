@@ -3,6 +3,7 @@ import Header from "../../components/header/Header";
 import styles from "./Root.module.css";
 import Footer from "../../components/footer/Footer";
 import { Toaster } from "react-hot-toast";
+
 const Root = () => {
   return (
     <div className={styles.root}>
