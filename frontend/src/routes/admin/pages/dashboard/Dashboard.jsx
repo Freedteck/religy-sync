@@ -4,7 +4,7 @@ import { useSignAndExecuteTransaction, useSuiClient } from "@mysten/dapp-kit";
 import { useState } from "react";
 import { useNetworkVariables } from "../../../../config/networkConfig";
 import useScholarApplications from "../../../../hooks/useScholarApplications";
-import useVerifiedScholars from "../../../../hooks/useVerifiedScholars"; // Import the new hook
+import useVerifiedScholars from "../../../../hooks/useVerifiedScholars";
 import { truncateAddress } from "../../../../utils/truncateAddress";
 import { formatTime } from "../../../../utils/timeFormatter";
 import useCreateContent from "../../../../hooks/useCreateContent";

@@ -27,14 +27,6 @@ const Header = () => {
           </li>
           <li>
             <NavLink
-              to="/applications"
-              className={({ isActive }) => (isActive ? styles.active : "")}
-            >
-              Application
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
               to="/about"
               className={({ isActive }) => (isActive ? styles.active : "")}
             >

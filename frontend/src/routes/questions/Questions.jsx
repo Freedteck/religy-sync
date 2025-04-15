@@ -99,7 +99,7 @@ const Questions = () => {
   return (
     <main className={styles.questions}>
       <section className={styles["top-header"]}>
-        <h1>Questions & Answers</h1>
+        <h1>Divine Dialogue</h1>
         <Button text={"Ask a Question"} onClick={askQuestion} />
       </section>
       <section className={styles.filters}>
