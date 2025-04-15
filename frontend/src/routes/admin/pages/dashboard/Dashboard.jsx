@@ -1,19 +1,16 @@
 import { Link } from "react-router-dom";
 import styles from "./Dashboard.module.css";
-import {
-  useSignAndExecuteTransaction,
-  useSuiClient,
-  useSuiClientQuery,
-} from "@mysten/dapp-kit";
-import { useEffect, useState } from "react";
+import { useSignAndExecuteTransaction, useSuiClient } from "@mysten/dapp-kit";
+import { useState } from "react";
 import { useNetworkVariables } from "../../../../config/networkConfig";
 import useScholarApplications from "../../../../hooks/useScholarApplications";
+import useVerifiedScholars from "../../../../hooks/useVerifiedScholars"; // Import the new hook
 import { truncateAddress } from "../../../../utils/truncateAddress";
 import { formatTime } from "../../../../utils/timeFormatter";
 import useCreateContent from "../../../../hooks/useCreateContent";
 
 const Dashboard = () => {
-  const [scholars, setScholars] = useState([]);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   const suiClient = useSuiClient();
   const { religySyncPackageId, platformId, adminCapId } = useNetworkVariables(
@@ -28,6 +25,15 @@ const Dashboard = () => {
     error: applicationsError,
     refreshApplications,
   } = useScholarApplications(suiClient, religySyncPackageId, platformId);
+
+  // Use the new hook for scholars
+  const {
+    scholars,
+    loading: scholarsLoading,
+    error: scholarsError,
+    // refreshScholars,
+  } = useVerifiedScholars(religySyncPackageId, refreshTrigger);
+
   const { mutate: signAndExecute } = useSignAndExecuteTransaction();
 
   const { approveScholar, revokeScholar } = useCreateContent(
@@ -37,34 +43,13 @@ const Dashboard = () => {
     signAndExecute
   );
 
-  const { data: scholarEvents, refetch: refetchScholars } = useSuiClientQuery(
-    "queryEvents",
-    {
-      query: {
-        MoveEventType: `${religySyncPackageId}::religy_sync::ScholarVerified`,
-      },
-      order: "descending",
-    }
-  );
-
-  useEffect(() => {
-    if (scholarEvents?.data) {
-      const scholarData = scholarEvents.data.map((event) => ({
-        scholar: event.parsedJson.scholar,
-        faith_tradition: event.parsedJson.faith_tradition,
-        timestamp: event.timestampMs,
-      }));
-
-      setScholars(scholarData);
-    }
-  }, [scholarEvents, applications]);
-
   const handleApproveReject = (applicant, shouldApprove) => {
     shouldApprove
       ? approveScholar(adminCapId, applicant, true, refreshApplications)
       : revokeScholar(adminCapId, applicant, refreshApplications);
 
-    refetchScholars();
+    // Increment refresh trigger to force scholar data to refresh
+    setRefreshTrigger((prev) => prev + 1);
   };
 
   // Get pending applications (those with status pending)
@@ -81,12 +66,21 @@ const Dashboard = () => {
           </div>
         )}
 
+        {scholarsError && (
+          <div className={styles.errorMessage}>
+            Error loading scholars: {scholarsError}
+          </div>
+        )}
+
         <div className={styles.dashboardCards}>
           <StatCard
             value={applicationsLoading ? "..." : pendingApplications.length}
             label="Pending Applications"
           />
-          <StatCard value={scholars.length} label="Verified Scholars" />
+          <StatCard
+            value={scholarsLoading ? "..." : scholars.length}
+            label="Verified Scholars"
+          />
           <StatCard value="27,453" label="Total Content Items" />
           <StatCard value="175,896" label="SUI Rewards Given" />
         </div>
@@ -183,9 +177,15 @@ const Dashboard = () => {
             </tr>
           </thead>
           <tbody>
-            {scholars.length === 0 ? (
+            {scholarsLoading ? (
               <tr>
-                <td colSpan="4" className={styles.emptyText}>
+                <td colSpan="3" className={styles.loadingText}>
+                  Loading scholars...
+                </td>
+              </tr>
+            ) : scholars.length === 0 ? (
+              <tr>
+                <td colSpan="3" className={styles.emptyText}>
                   No verified scholars found
                 </td>
               </tr>
@@ -200,18 +200,6 @@ const Dashboard = () => {
             )}
           </tbody>
         </table>
-
-        {/* Debug button to check data in console
-        <button
-          onClick={() => {
-            console.log("Applications from hook:", applications);
-            console.log("Scholars:", scholars);
-          }}
-          className={`${styles.btn} ${styles.btnPrimary}`}
-          style={{ marginTop: "20px" }}
-        >
-          Log Data to Console
-        </button> */}
       </main>
     </div>
   );
