@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import styles from "./Sidebar.module.css";
 
 const Sidebar = () => {
@@ -9,39 +9,45 @@ const Sidebar = () => {
       </Link>
       <ul className={styles.sidebarMenu}>
         <li>
-          <Link to="#" className={styles.active}>
+          <NavLink
+            to="dashboard"
+            className={({ isActive }) => (isActive ? styles.active : "")}
+          >
             <i className="fas fa-tachometer-alt"></i> Dashboard
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link to="#">
+          <NavLink
+            to="applications"
+            className={({ isActive }) => (isActive ? styles.active : "")}
+          >
             <i className="fas fa-user-graduate"></i> Scholar Applications
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link to="#">
+          <NavLink to="#">
             <i className="fas fa-check-circle"></i> Verified Scholars
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link to="#">
+          <NavLink to="#">
             <i className="fas fa-question-circle"></i> Content Management
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link to="#">
+          <NavLink to="#">
             <i className="fas fa-chart-line"></i> Analytics
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link to="#">
+          <NavLink to="#">
             <i className="fas fa-cog"></i> Settings
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link to="#">
+          <NavLink to="#">
             <i className="fas fa-sign-out-alt"></i> Logout
-          </Link>
+          </NavLink>
         </li>
       </ul>
     </aside>

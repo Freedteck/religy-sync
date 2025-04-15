@@ -1,0 +1,62 @@
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.badgePending {
+  background-color: rgba(255, 209, 102, 0.2);
+  color: var(--warning-yellow);
+}
+
+.badgeApproved {
+  background-color: rgba(6, 214, 160, 0.2);
+  color: var(--success-green);
+}
+
+.badgeRejected {
+  background-color: rgba(239, 71, 111, 0.2);
+  color: var(--danger-red);
+}
+
+.btn {
+  padding: 8px 15px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btnPrimary {
+  background: linear-gradient(
+    to bottom right,
+    var(--accent-blue-light),
+    var(--accent-purple-dark)
+  );
+  color: var(--text-white);
+}
+
+.btnSuccess {
+  background-color: var(--success-green);
+  color: var(--text-white);
+}
+
+.btnDanger {
+  background-color: var(--danger-red);
+  color: var(--text-white);
+}
+
+.btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.actionButtons {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}

@@ -10,6 +10,7 @@ import ScholarApplication from "./routes/scholar-application/ScholarApplication"
 import Admin from "./routes/admin/Admin";
 import Dashboard from "./routes/admin/pages/dashboard/Dashboard";
 import AuthGuard from "./auth/AuthGuard";
+import Applications from "./routes/admin/pages/applications/Applications";
 
 export const router = createBrowserRouter([
   {
@@ -68,7 +69,10 @@ export const router = createBrowserRouter([
         path: "dashboard",
         Component: Dashboard,
       },
-      // Add other admin routes here
+      {
+        path: "applications",
+        Component: Applications,
+      },
     ],
   },
 ]);

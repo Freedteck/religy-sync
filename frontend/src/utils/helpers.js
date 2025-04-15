@@ -54,7 +54,9 @@ export const parseMetadata = (metadataStr, defaultValue = {}) => {
   if (!metadataStr) return defaultValue;
 
   try {
-    return JSON.parse(metadataStr);
+    // Remove everything before the first '{' to clean up bad characters like \u0001
+    const cleanedStr = metadataStr.slice(metadataStr.indexOf("{")).trim();
+    return JSON.parse(cleanedStr);
   } catch (error) {
     console.error("Error parsing metadata:", error);
     return defaultValue;

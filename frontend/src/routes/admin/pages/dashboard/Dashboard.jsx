@@ -8,6 +8,7 @@ import useVerifiedScholars from "../../../../hooks/useVerifiedScholars";
 import { truncateAddress } from "../../../../utils/truncateAddress";
 import { formatTime } from "../../../../utils/timeFormatter";
 import useCreateContent from "../../../../hooks/useCreateContent";
+import ApplicationRow from "../../../../components/application-row/ApplicationRow";
 
 const Dashboard = () => {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -148,7 +149,7 @@ const Dashboard = () => {
                     key={app.applicant}
                     address={app.applicant}
                     name={app.name || "N/A"}
-                    tradition={app.faith_tradition}
+                    tradition={app.faith_tradition || "N/A"}
                     date={formatTime(app.timestamp)}
                     status={app.status}
                     onApprove={() => handleApproveReject(app.applicant, true)}
@@ -193,7 +194,7 @@ const Dashboard = () => {
               scholars.slice(0, 5).map((scholar) => (
                 <tr key={scholar.scholar}>
                   <td>{truncateAddress(scholar.scholar)}</td>
-                  <td>{scholar.faith_tradition}</td>
+                  <td>{scholar.faith_tradition || "N/A"}</td>
                   <td>{formatTime(scholar.timestamp)}</td>
                 </tr>
               ))
@@ -221,56 +222,5 @@ const QuickActionCard = ({ icon, text }) => (
     <div className={styles.quickActionText}>{text}</div>
   </div>
 );
-
-const ApplicationRow = ({
-  address,
-  name,
-  tradition,
-  date,
-  status,
-  onApprove,
-  onReject,
-}) => {
-  const badgeClass =
-    status === "approved"
-      ? styles.badgeApproved
-      : status === "rejected"
-      ? styles.badgeRejected
-      : styles.badgePending;
-
-  return (
-    <tr>
-      <td>{truncateAddress(address)}</td>
-      <td>{tradition}</td>
-      <td>{name}</td>
-      <td>{date}</td>
-      <td>
-        <span className={`${styles.badge} ${badgeClass}`}>{status}</span>
-      </td>
-      <td className={styles.actionButtons}>
-        {status === "pending" ? (
-          <>
-            <button
-              className={`${styles.btn} ${styles.btnSuccess} ${styles.btnSm}`}
-              onClick={onApprove}
-            >
-              Approve
-            </button>
-            <button
-              className={`${styles.btn} ${styles.btnDanger} ${styles.btnSm}`}
-              onClick={onReject}
-            >
-              Reject
-            </button>
-          </>
-        ) : status === "approved" ? (
-          "Approved"
-        ) : (
-          "Rejected"
-        )}
-      </td>
-    </tr>
-  );
-};
 
 export default Dashboard;
