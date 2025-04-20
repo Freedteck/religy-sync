@@ -5,77 +5,202 @@
   gap: 30px;
 }
 
+/* Profile Header Redesign */
 .profileHeader {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  gap: 30px;
+  padding: 30px;
+  background: linear-gradient(to right, var(--dark-blue-3), var(--dark-blue-4));
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.profileHeader::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(114, 9, 183, 0.1),
+    rgba(58, 134, 255, 0.1)
+  );
+  clip-path: polygon(30% 0, 100% 0, 100% 100%, 0% 100%);
 }
 
 .profileAvatar {
-  width: 150px;
-  height: 150px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
-  background-color: rgba(114, 9, 183, 0.3);
+  background: linear-gradient(
+    135deg,
+    var(--accent-purple),
+    var(--accent-blue-light)
+  );
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 60px;
+  font-size: 48px;
   font-weight: bold;
   color: var(--text-white);
-  margin-right: 40px;
+  margin-right: 0;
+  flex-shrink: 0;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 1;
+}
+
+.profileInfo {
+  flex: 1;
+  position: relative;
+  z-index: 1;
 }
 
 .profileInfo h1 {
-  margin: 0 0 10px 0;
-  font-size: 36px;
+  margin: 0 0 8px 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-white);
+  line-height: 1.2;
 }
 
 .profileMeta {
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
 }
 
 .verifiedBadge {
-  background-color: rgba(114, 9, 183, 0.2);
-  color: var(--accent-purple);
-  border: 1px solid var(--accent-purple);
-  border-radius: 15px;
-  padding: 5px 15px;
-  font-size: 14px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-white);
+  border: none;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
   display: inline-flex;
   align-items: center;
-  margin-right: 15px;
+  backdrop-filter: blur(5px);
 }
 
 .verifiedBadge::before {
   content: "✓";
-  margin-right: 5px;
+  margin-right: 6px;
+  font-size: 12px;
+}
+
+.verified {
+  background-color: rgba(5, 145, 107, 0.2);
+  color: var(--success-green);
+}
+
+.unverified {
+  background-color: rgba(239, 71, 111, 0.2);
+  color: var(--danger-red);
 }
 
 .profileWallet {
-  color: var(--text-gray);
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--text-gray-light);
+  font-size: 13px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.profileWallet::before {
+  content: "🔗";
+  font-size: 12px;
+}
+
+.email {
+  color: var(--accent-blue-lightest);
+  margin: 0 0 12px 0;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.email::before {
+  content: "✉️";
   font-size: 14px;
+}
+
+.specialty {
+  color: var(--text-light);
+  font-size: 16px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.specialty::before {
+  content: "🕊️";
+  font-size: 14px;
+}
+
+.expertise {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.expertiseTag {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: var(--accent-blue-lightest);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+}
+
+.expertiseTag:hover {
+  background-color: rgba(58, 134, 255, 0.2);
+  transform: translateY(-1px);
 }
 
 .profileStats {
   display: flex;
+  gap: 25px;
   margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .statItem {
-  margin-right: 40px;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
 }
 
 .statValue {
-  font-size: 32px;
-  font-weight: bold;
-  color: var(--accent-blue-light);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-white);
+  margin-bottom: 4px;
 }
 
 .statLabel {
-  color: var(--text-gray);
-  font-size: 14px;
+  color: var(--text-gray-light);
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0.8;
 }
 
 /* Tabs */
@@ -242,6 +367,12 @@
 .verifyText {
   color: var(--accent-blue-light);
   font-size: 14px;
+}
+
+.insights {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
 }
 
 /* Reward button */

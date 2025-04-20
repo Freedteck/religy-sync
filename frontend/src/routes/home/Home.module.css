@@ -1,5 +1,5 @@
 .section {
-  padding-block: 80px;
+  padding-block: 30px;
 }
 
 .section h2 {
@@ -50,4 +50,27 @@
 .stat-description {
   color: var(--text-gray-light);
   font-size: 16px;
+}
+
+/* Home.module.css */
+
+.home {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.emptyState {
+  color: var(--text-gray-light);
+  font-style: italic;
+  padding: 20px;
+  background-color: var(--dark-blue-3);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.religionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
 }

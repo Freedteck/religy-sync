@@ -1,23 +1,32 @@
 import styles from "./ProfileCard.module.css";
 import PropTypes from "prop-types";
+import { truncateAddress } from "../../utils/truncateAddress";
+import { Link } from "react-router-dom";
 
 const ProfileCard = ({ data }) => {
-  const { name, tradition, answers, votes } = data;
+  const { name, faithTradition, status, applicant } = data;
+
   return (
     <li className={styles.card}>
-      <div className={styles.avatar}>VS</div>
-      <h3 className={styles.name}>{name}</h3>
-      <p className={styles.tradition}>{tradition}</p>
-      <div className={styles.stats}>
-        <div className={styles.stat}>
-          <div className={styles.value}>{answers}</div>
-          <div>Answers</div>
+      <Link to={`profile/${applicant}`}>
+        <div className={styles.avatar}>
+          {name
+            .split(" ")
+            .map((part) => part[0])
+            .join("")
+            .toUpperCase()}
         </div>
-        <div className={styles.stat}>
-          <div className={styles.value}>{votes}</div>
-          <div>Votes</div>
+        <h3 className={styles.name}>{name}</h3>
+        <p className={styles.tradition}>{faithTradition || "N/A"}</p>
+        <div className={styles.stats}>
+          <div className={styles.status}>
+            <p className={styles.verified}>{status}</p>
+          </div>
+          <div className={styles.stat}>
+            <div className={styles.value}>{truncateAddress(applicant)}</div>
+          </div>
         </div>
-      </div>
+      </Link>
     </li>
   );
 };

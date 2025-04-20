@@ -1,7 +1,8 @@
-import { ConnectButton } from "@mysten/dapp-kit";
+import { ConnectButton, useCurrentAccount } from "@mysten/dapp-kit";
 import styles from "./Header.module.css";
 import { Link, NavLink } from "react-router-dom";
 const Header = () => {
+  const account = useCurrentAccount();
   return (
     <header className={styles.header}>
       <Link to="/" className={styles.logo}>
@@ -19,7 +20,7 @@ const Header = () => {
           </li>
           <li>
             <NavLink
-              to="/profile"
+              to={"/profile" + "/" + account?.address}
               className={({ isActive }) => (isActive ? styles.active : "")}
             >
               Profile
@@ -33,14 +34,14 @@ const Header = () => {
               About/FAQ
             </NavLink>
           </li>
-          {/* <li className={styles.connect}>
+          <li>
             <NavLink
-              to="/connect"
+              to="/teachings"
               className={({ isActive }) => (isActive ? styles.active : "")}
             >
-              Connect
+              Teachings
             </NavLink>
-          </li> */}
+          </li>
           <ConnectButton />
         </ul>
       </nav>

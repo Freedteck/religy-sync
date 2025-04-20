@@ -1,269 +1,438 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Profile.module.css";
-
-// Mock data for the profile
-const scholarData = {
-  name: "Venerable Sumedho",
-  initials: "VS",
-  wallet: "0x6f32...8a9b",
-  specialty: "Buddhism • Theravada Tradition • Ajahn Chah Lineage",
-  stats: {
-    answers: 143,
-    votes: "2.8k",
-    rewards: 528,
-  },
-};
-
-// Mock data for answers
-const answersData = [
-  {
-    id: 1,
-    question: "What is the significance of meditation in Buddhist practice?",
-    answer:
-      "In Buddhism, meditation (bhāvanā) is not merely about stress reduction but is a core practice for developing wisdom and compassion. There are two main types: Samatha (concentration) which calms the mind, and Vipassana (insight) which develops clear seeing into the nature of reality. Unlike secular mindfulness, Buddhist meditation is part of the Noble Eightfold Path, specifically Right Mindfulness and Right Concentration. The ultimate aim is to see the three characteristics of existence: impermanence (anicca), unsatisfactoriness (dukkha), and non-self (anatta), which leads to Nibbana (liberation).",
-    votes: 24,
-    time: "1 hour ago",
-  },
-  {
-    id: 2,
-    question: "How does Theravada Buddhism differ from Mahayana Buddhism?",
-    answer:
-      "Theravada Buddhism focuses on the individual's path to liberation through becoming an arahant, while Mahayana emphasizes the bodhisattva ideal of helping all beings attain liberation. Theravada adheres closely to the Pali Canon as its primary scripture, considering it to contain the original teachings of the Buddha, while Mahayana includes additional sutras. Regarding practice, Theravada emphasizes meditation and monastic discipline as the primary path, while Mahayana encompasses a wider range of practices including visualization, mantra recitation, and devotional practices.",
-    votes: 32,
-    time: "2 days ago",
-  },
-  {
-    id: 3,
-    question: "What is the Buddhist perspective on suffering?",
-    answer:
-      'In Buddhism, suffering (dukkha) is the first of the Four Noble Truths taught by the Buddha. The term dukkha encompasses a broader meaning than the English word "suffering" - it includes dissatisfaction, stress, and the inherent unsatisfactoriness of conditioned existence. The Buddha taught that suffering arises from craving (tanha) and ignorance (avijja) about the true nature of reality. By understanding the causes of suffering through wisdom and mindfulness, we can follow the Eightfold Path to its cessation, leading to Nibbana.',
-    votes: 47,
-    time: "5 days ago",
-  },
-];
-
-// Mock data for credentials
-const credentialsData = [
-  {
-    title: "Monastic Ordination",
-    issuer: "Wat Pah Nanachat, Thailand",
-    content:
-      "Full bhikkhu ordination in the Theravada tradition under the lineage of Ajahn Chah. Has maintained unbroken precepts for over 25 years as a fully ordained monk in the Thai Forest Tradition.",
-    verifications: 3,
-  },
-  {
-    title: "Dharma Teaching Qualification",
-    issuer: "International Buddhist Council",
-    content:
-      "Authorized to teach the Dhamma according to the Theravada tradition. Has completed the required study of Vinaya, Suttas, and Abhidhamma, and has demonstrated proficiency in guiding meditation retreats and giving Dhamma talks.",
-    verifications: 5,
-  },
-  {
-    title: "Pali Language Proficiency",
-    issuer: "Mahachulalongkornrajavidyalaya University",
-    content:
-      "Advanced proficiency in Pali language, the canonical language of Theravada Buddhism. Capable of working directly with original Pali texts and providing nuanced translations and interpretations of the Buddha's teachings.",
-    verifications: 2,
-  },
-];
-
-// Additional academic credentials
-const additionalCredentials = [
-  {
-    title: "PhD in Buddhist Studies",
-    issuer: "University of Oxford",
-    content:
-      "Doctoral research focused on the comparative analysis of early Buddhist texts and their practical applications in contemporary mindfulness practices. Dissertation received commendation for bridging scholarly research with applied contemplative techniques.",
-    verifications: 4,
-  },
-  {
-    title: "Visiting Scholar",
-    issuer: "Mind & Life Institute",
-    content:
-      "Contributed to interdisciplinary research on the effects of long-term meditation practice on neuroplasticity and emotional regulation. Participated in dialogue sessions with neuroscientists and contemplative practitioners.",
-    verifications: 3,
-  },
-];
-
-// Mock data for about section
-const aboutData = {
-  biography: [
-    "Venerable Sumedho has been a Buddhist monk in the Theravada tradition for over 25 years. Originally from the United States, he traveled to Thailand in his twenties and was ordained at Wat Pah Nanachat, the International Forest Monastery established by Ajahn Chah for non-Thai disciples.",
-    "After spending 15 years training in various forest monasteries throughout Thailand, he established a small meditation center in the western United States where he teaches meditation and Buddhist philosophy. His approach emphasizes practical application of the Buddha's teachings in daily life, with a focus on mindfulness, ethical conduct, and direct investigation of experience.",
-    "Venerable Sumedho is known for his accessible teaching style that bridges traditional Theravada Buddhism with contemporary Western understanding. He has authored three books on Buddhist practice and leads regular meditation retreats both online and in-person.",
-  ],
-  focus: [
-    "Vipassana (Insight) Meditation",
-    "Early Buddhist Suttas",
-    "Integrating Buddhist practice into lay life",
-    "Buddhist ethics in the modern world",
-    "Environmental awareness through Buddhist principles",
-  ],
-  publications: [
-    "The Middle Way: Finding Balance in an Age of Extremes (2018)",
-    "Mindfulness: Ancient Wisdom for Modern Times (2015)",
-    "The Four Noble Truths in Daily Life (2010)",
-  ],
-  languages: [
-    "English (native)",
-    "Thai (fluent)",
-    "Pali (scholarly proficiency)",
-    "Sanskrit (reading knowledge)",
-  ],
-};
+import {
+  useSuiClient,
+  useSuiClientInfiniteQuery,
+  useSuiClientQuery,
+  useCurrentAccount,
+} from "@mysten/dapp-kit";
+import { useParams } from "react-router-dom";
+import { useNetworkVariables } from "../../config/networkConfig";
+import useScholarApplications from "../../hooks/useScholarApplications";
+import { truncateAddress } from "../../utils/truncateAddress";
+import { parseMetadata } from "../../utils/helpers";
+import ContentList from "../../components/content-list/ContentList";
+import Loading from "../../components/loading/Loading";
+import useScholarStatus from "../../hooks/useScholarStatus";
+import TeachingCard from "../../components/teaching-card/TeachingCard";
 
 const Profile = () => {
-  const [activeTab, setActiveTab] = useState("answers");
+  const [activeTab, setActiveTab] = useState("questions");
+  const [currentUser, setCurrentUser] = useState(undefined);
+  const [userData, setUserData] = useState(undefined);
+  const [userContent, setUserContent] = useState({
+    questions: [],
+    answers: [],
+    insights: [],
+  });
+  const { id: userAddress } = useParams();
+  const suiClient = useSuiClient();
+  const account = useCurrentAccount();
+
+  const { religySyncPackageId, platformId } = useNetworkVariables(
+    "religySyncPackageId",
+    "platformId",
+    "adminCapId"
+  );
+
+  // Check if the viewed profile belongs to a scholar
+  const { _isScholar, loading: isScholarLoading } = useScholarStatus(
+    suiClient,
+    religySyncPackageId,
+    platformId,
+    account,
+    userAddress
+  );
+
+  // Fetch all content created by this user
+  const { data: userContentEvents } = useSuiClientInfiniteQuery(
+    "queryEvents",
+    {
+      query: {
+        MoveEventType: `${religySyncPackageId}::religy_sync::ContentCreated`,
+      },
+      cursor: null,
+    },
+    {
+      enabled: !!userAddress,
+      select: (data) =>
+        data.pages
+          .flatMap((page) => page.data)
+          .filter((x) => x.sender === userAddress),
+    }
+  );
+
+  // Fetch the actual content objects
+  const contentIds =
+    userContentEvents?.map((event) => event.parsedJson.content_id) || [];
+  const { data: contentObjects } = useSuiClientQuery(
+    "multiGetObjects",
+    {
+      ids: contentIds,
+      options: {
+        showContent: true,
+        showDisplay: true,
+        showOwner: true,
+        showPreviousTransaction: false,
+        showStorageReward: false,
+      },
+    },
+    {
+      enabled: contentIds.length > 0,
+    }
+  );
+
+  // Organize content by type when we get the data
+  useEffect(() => {
+    if (contentObjects) {
+      const questions = [];
+      const answers = [];
+      const insights = [];
+
+      contentObjects.forEach((obj, index) => {
+        const event = userContentEvents[index];
+        const contentType = event.parsedJson.content_type;
+        const contentWithTimestamp = {
+          ...obj,
+          timestampMs: event.timestampMs,
+        };
+
+        if (contentType === 0) {
+          questions.push(contentWithTimestamp);
+        } else if (contentType === 1) {
+          answers.push(contentWithTimestamp);
+        } else if (contentType === 2) {
+          insights.push(contentWithTimestamp);
+        }
+      });
+
+      setUserContent({
+        questions,
+        answers,
+        insights,
+      });
+    }
+  }, [contentObjects, userContentEvents]);
+
+  const { applications } = useScholarApplications(
+    suiClient,
+    religySyncPackageId,
+    platformId
+  );
+
+  useEffect(() => {
+    if (applications) {
+      const user = applications?.find((app) => app.applicant === userAddress);
+      setCurrentUser(user || null);
+
+      if (user) {
+        const parsedInfo = parseMetadata(user.additionalInfo);
+        setUserData({
+          name: user.name,
+          email: parsedInfo.email,
+          denomination: parsedInfo.denomination,
+          expertise: parsedInfo.expertise,
+          otherExpertise: parsedInfo.otherExpertise,
+          credentials: user.credentials,
+          faithTradition: user.faith_tradition,
+          status: user.status,
+          wallet: user.applicant,
+        });
+      } else {
+        // Explicitly set as non-scholar
+        setUserData({
+          wallet: userAddress,
+          status: "not-approved",
+        });
+      }
+    } else {
+      // Handle case where applications couldn't be loaded
+      setUserData({
+        wallet: userAddress,
+        status: "unknown",
+      });
+    }
+  }, [applications, userAddress]);
+
+  // Show loading state until all data is loaded
+  if (isScholarLoading || currentUser === undefined || userData === undefined) {
+    return <Loading message="Loading profile..." />;
+  }
+
+  const isApprovedScholar = userData?.status === "approved";
+
+  const getInitials = (name) => {
+    if (!name)
+      return truncateAddress(userAddress).substring(0, 2).toUpperCase();
+    const names = name.split(" ");
+    return names
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase();
+  };
+
+  // Calculate stats from actual content
+  const scholarStats = {
+    answers: userContent.answers.length,
+    questions: userContent.questions.length,
+    insights: userContent.insights.length,
+  };
+
+  // Mock about data
+  const aboutData = {
+    biography: [
+      `${userData.name} is a ${
+        userData.faithTradition
+      } scholar specializing in ${userData.expertise?.join(", ")}.`,
+      `With credentials in ${userData.credentials}, they bring deep knowledge to the community.`,
+    ],
+    focus: userData.expertise || [],
+    languages: ["English"],
+  };
 
   return (
     <main className={styles.profile}>
       {/* Profile Header */}
-      <div className={styles.profileHeader}>
-        <div className={styles.profileAvatar}>{scholarData.initials}</div>
+      <div
+        className={`${styles.profileHeader} ${
+          userData === undefined ? styles.loading : ""
+        }`}
+      >
+        <div
+          className={`${styles.profileAvatar} ${
+            userData === undefined ? styles.loading : ""
+          }`}
+        >
+          {getInitials(userData?.name)}
+        </div>
         <div className={styles.profileInfo}>
-          <h1>{scholarData.name}</h1>
+          <h1>{userData?.name || truncateAddress(userAddress)}</h1>
           <div className={styles.profileMeta}>
-            <div className={styles.verifiedBadge}>Verified Scholar</div>
-            <div className={styles.profileWallet}>{scholarData.wallet}</div>
+            {userData?.status !== undefined && (
+              <div
+                className={`${styles.verifiedBadge} ${
+                  isApprovedScholar ? styles.verified : styles.unverified
+                }`}
+              >
+                {isApprovedScholar ? "Verified Scholar" : "Not Verified"}
+              </div>
+            )}
+            <div className={styles.profileWallet}>
+              {truncateAddress(userAddress)}
+            </div>
           </div>
-          <p>{scholarData.specialty}</p>
+          {userData?.email && <p className={styles.email}>{userData.email}</p>}
+          {(userData?.faithTradition || userData?.denomination) && (
+            <p className={styles.specialty}>
+              {userData.faithTradition}{" "}
+              {userData.denomination && `• ${userData.denomination}`}
+            </p>
+          )}
+          {(userData?.expertise?.length > 0 || userData?.otherExpertise) && (
+            <div className={styles.expertise}>
+              {userData.expertise?.map((exp, i) => (
+                <span key={i} className={styles.expertiseTag}>
+                  {exp}
+                </span>
+              ))}
+              {userData.otherExpertise && (
+                <span className={styles.expertiseTag}>
+                  {userData.otherExpertise}
+                </span>
+              )}
+            </div>
+          )}
           <div className={styles.profileStats}>
-            <div className={styles.statItem}>
-              <div className={styles.statValue}>
-                {scholarData.stats.answers}
+            {isApprovedScholar && (
+              <div
+                className={`${styles.statItem} ${
+                  userData === undefined ? styles.loading : ""
+                }`}
+              >
+                <div className={styles.statValue}>{scholarStats.answers}</div>
+                <div className={styles.statLabel}>Answers</div>
               </div>
-              <div className={styles.statLabel}>Answers</div>
+            )}
+            <div
+              className={`${styles.statItem} ${
+                userData === undefined ? styles.loading : ""
+              }`}
+            >
+              <div className={styles.statValue}>{scholarStats.questions}</div>
+              <div className={styles.statLabel}>Questions</div>
             </div>
-            <div className={styles.statItem}>
-              <div className={styles.statValue}>{scholarData.stats.votes}</div>
-              <div className={styles.statLabel}>Helpful Votes</div>
-            </div>
-            <div className={styles.statItem}>
-              <div className={styles.statValue}>
-                {scholarData.stats.rewards}
+            {isApprovedScholar && (
+              <div
+                className={`${styles.statItem} ${
+                  userData === undefined ? styles.loading : ""
+                }`}
+              >
+                <div className={styles.statValue}>{scholarStats.insights}</div>
+                <div className={styles.statLabel}>Insights/Teachings</div>
               </div>
-              <div className={styles.statLabel}>SUI Rewards</div>
-            </div>
+            )}
           </div>
-          <button className={styles.rewardButton}>
-            <span className={styles.rewardIcon}>🎁</span> Reward Scholar
-          </button>
         </div>
       </div>
 
       {/* Profile Tabs */}
       <div className={styles.profileTabs}>
         <ul className={styles.tabList}>
+          {isApprovedScholar && (
+            <li
+              className={`${styles.tabItem} ${
+                activeTab === "answers" ? styles.active : ""
+              }`}
+              onClick={() => setActiveTab("answers")}
+            >
+              Answers ({scholarStats.answers})
+            </li>
+          )}
           <li
             className={`${styles.tabItem} ${
-              activeTab === "answers" ? styles.active : ""
+              activeTab === "questions" ? styles.active : ""
             }`}
-            onClick={() => setActiveTab("answers")}
+            onClick={() => setActiveTab("questions")}
           >
-            Answers ({scholarData.stats.answers})
+            Questions ({scholarStats.questions})
           </li>
-          <li
-            className={`${styles.tabItem} ${
-              activeTab === "credentials" ? styles.active : ""
-            }`}
-            onClick={() => setActiveTab("credentials")}
-          >
-            Credentials
-          </li>
-          <li
-            className={`${styles.tabItem} ${
-              activeTab === "about" ? styles.active : ""
-            }`}
-            onClick={() => setActiveTab("about")}
-          >
-            About
-          </li>
+          {isApprovedScholar && (
+            <>
+              <li
+                className={`${styles.tabItem} ${
+                  activeTab === "insights" ? styles.active : ""
+                }`}
+                onClick={() => setActiveTab("insights")}
+              >
+                Insights/Teachings ({scholarStats.insights})
+              </li>
+              <li
+                className={`${styles.tabItem} ${
+                  activeTab === "credentials" ? styles.active : ""
+                }`}
+                onClick={() => setActiveTab("credentials")}
+              >
+                Credentials
+              </li>
+              <li
+                className={`${styles.tabItem} ${
+                  activeTab === "about" ? styles.active : ""
+                }`}
+                onClick={() => setActiveTab("about")}
+              >
+                About
+              </li>
+            </>
+          )}
         </ul>
       </div>
 
       {/* Answers Tab Content */}
-      <div
-        className={`${styles.answersContainer} ${
-          activeTab !== "answers" ? styles.hidden : ""
-        }`}
-      >
-        {answersData.map((answer) => (
-          <div key={answer.id} className={styles.answerCard}>
-            <a href="#" className={styles.questionLink}>
-              {answer.question}
-            </a>
-            <div className={styles.answerContent}>{answer.answer}</div>
-            <div className={styles.answerMeta}>
-              <div className={styles.metaActions}>
-                <div className={styles.voteCircle}>{answer.votes}</div>
-                <span className={styles.actionButton}>Like</span>
-                <span className={styles.actionButton}>Reward</span>
-                <span className={styles.actionButton}>Follow-up Question</span>
-              </div>
-              <div>{answer.time}</div>
+      {isApprovedScholar && (
+        <div
+          className={`${styles.contentContainer} ${
+            activeTab !== "answers" ? styles.hidden : ""
+          }`}
+        >
+          {userContent.answers.length > 0 ? (
+            <ContentList
+              items={userContent.answers}
+              type="answer"
+              showQuestionLink={true}
+            />
+          ) : (
+            <div className={styles.emptyState}>
+              <p>No answers yet.</p>
             </div>
-          </div>
-        ))}
-      </div>
+          )}
+        </div>
+      )}
 
-      {/* Credentials Tab Content */}
+      {/* Questions Tab Content */}
       <div
-        className={`${styles.credentialsContainer} ${
-          activeTab !== "credentials" ? styles.hidden : ""
+        className={`${styles.contentContainer} ${
+          activeTab !== "questions" ? styles.hidden : ""
         }`}
       >
-        {[...credentialsData, ...additionalCredentials].map(
-          (credential, index) => (
-            <div key={index} className={styles.credentialCard}>
-              <div className={styles.credentialTitle}>{credential.title}</div>
-              <div className={styles.credentialMeta}>
-                <div className={styles.credentialIssuer}>
-                  {credential.issuer}
-                </div>
-                <div>Verified on-chain</div>
-              </div>
-              <div className={styles.credentialContent}>
-                {credential.content}
-              </div>
-              <div className={styles.credentialVerify}>
-                <div className={styles.verifyIcon}>✓</div>
-                <div className={styles.verifyText}>
-                  Verified by {credential.verifications} attestation authorities
-                </div>
-              </div>
-            </div>
-          )
+        {userContent.questions.length > 0 ? (
+          <ContentList items={userContent.questions} type="question" />
+        ) : (
+          <div className={styles.emptyState}>
+            <p>No questions yet.</p>
+          </div>
         )}
       </div>
 
-      {/* About Tab Content */}
-      <div
-        className={`${styles.aboutContainer} ${
-          activeTab !== "about" ? styles.hidden : ""
-        }`}
-      >
-        <div className={styles.aboutContent}>
-          <h3>Biography</h3>
-          {aboutData.biography.map((paragraph, index) => (
-            <p key={index}>{paragraph}</p>
-          ))}
-
-          <h3>Teaching Focus</h3>
-          {aboutData.focus.map((item, index) => (
-            <p key={index}>• {item}</p>
-          ))}
-
-          <h3>Publications</h3>
-          {aboutData.publications.map((publication, index) => (
-            <p key={index}>• {publication}</p>
-          ))}
-
-          <h3>Languages</h3>
-          {aboutData.languages.map((language, index) => (
-            <p key={index}>• {language}</p>
-          ))}
+      {/* Insights Tab Content - Only visible for scholars */}
+      {isApprovedScholar && (
+        <div
+          className={`${styles.contentContainer} ${
+            activeTab !== "insights" ? styles.hidden : styles.insights
+          }`}
+        >
+          {userContent.insights.length > 0 ? (
+            userContent.insights.map((insight) => (
+              <TeachingCard key={insight.data?.objectId} teaching={insight} />
+            ))
+          ) : (
+            <div className={styles.emptyState}>
+              <p>No insights/teachings yet.</p>
+            </div>
+          )}
         </div>
-      </div>
+      )}
+
+      {/* Credentials Tab Content */}
+      {isApprovedScholar && (
+        <div
+          className={`${styles.credentialsContainer} ${
+            activeTab !== "credentials" ? styles.hidden : ""
+          }`}
+        >
+          <div className={styles.credentialCard}>
+            <div className={styles.credentialTitle}>Religious Credentials</div>
+            <div className={styles.credentialMeta}>
+              <div className={styles.credentialIssuer}>Self-attested</div>
+            </div>
+            <div className={styles.credentialContent}>
+              {userData.credentials || "No detailed credentials provided"}
+            </div>
+          </div>
+
+          <div className={styles.credentialCard}>
+            <div className={styles.credentialTitle}>Faith Tradition</div>
+            <div className={styles.credentialContent}>
+              {userData.faithTradition}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* About Tab Content */}
+      {isApprovedScholar && (
+        <div
+          className={`${styles.aboutContainer} ${
+            activeTab !== "about" ? styles.hidden : ""
+          }`}
+        >
+          <div className={styles.aboutContent}>
+            <h3>Biography</h3>
+            {aboutData.biography.map((paragraph, index) => (
+              <p key={index}>{paragraph}</p>
+            ))}
+
+            <h3>Focus Areas</h3>
+            {aboutData.focus.map((item, index) => (
+              <p key={index}>• {item}</p>
+            ))}
+
+            <h3>Languages</h3>
+            {aboutData.languages.map((language, index) => (
+              <p key={index}>• {language}</p>
+            ))}
+          </div>
+        </div>
+      )}
     </main>
   );
 };

@@ -54,6 +54,19 @@
   align-items: center;
 }
 
+.status {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  background-color: rgba(6, 214, 160, 0.2);
+}
+
+.verified {
+  color: var(--success-green);
+}
+
 .value {
   color: var(--accent-blue-light);
   font-weight: bold;

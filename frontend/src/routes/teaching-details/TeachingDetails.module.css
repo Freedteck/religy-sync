@@ -1,0 +1,272 @@
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 20px 40px;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-gray-light);
+  margin-bottom: 30px;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+  text-decoration: none;
+}
+
+.backBtn:hover {
+  color: var(--accent-blue);
+}
+
+.insightHeader {
+  margin-bottom: 40px;
+}
+
+.insightTypeBadge {
+  display: inline-block;
+  padding: 6px 12px;
+  background-color: var(--accent-purple);
+  color: white;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.videoBadge {
+  background-color: var(--danger-red);
+}
+
+.insightTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  line-height: 1.2;
+  color: var(--text-white);
+}
+
+.insightMeta {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.scholarInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.scholarInfo img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.scholarName {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-light);
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-gray);
+  font-size: 0.95rem;
+}
+
+.insightHero {
+  width: 100%;
+  height: 500px;
+  border-radius: 15px;
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+
+.insightHero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.insightContent {
+  margin: 0 auto;
+}
+
+.contentBlock {
+  margin-bottom: 40px;
+  line-height: 1.8;
+  font-size: 1.1rem;
+}
+
+.contentBlock h2 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: var(--text-white);
+  position: relative;
+  padding-left: 15px;
+}
+
+.contentBlock h2::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 5px;
+  background: linear-gradient(
+    to bottom,
+    var(--accent-blue),
+    var(--accent-purple)
+  );
+  border-radius: 10px;
+}
+
+.contentBlock p {
+  color: var(--text-gray-light);
+  margin-bottom: 20px;
+  line-height: 1.8;
+  font-size: 1.1rem;
+}
+
+.contentBlock img {
+  width: 100%;
+  border-radius: 10px;
+  margin: 25px 0;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.contentList {
+  margin-left: 20px;
+  margin-bottom: 20px;
+  color: var(--text-gray-light);
+  line-height: 1.8;
+}
+
+.quoteBlock {
+  padding: 30px;
+  background-color: var(--dark-blue-4);
+  border-left: 4px solid var(--accent-blue);
+  border-radius: 0 8px 8px 0;
+  margin: 30px 0;
+}
+
+.quoteText {
+  font-size: 1.3rem;
+  font-style: italic;
+  color: var(--text-light);
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.quoteAuthor {
+  color: var(--text-gray);
+  font-weight: 600;
+}
+
+.below {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.tagsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tag {
+  padding: 6px 12px;
+  background-color: var(--dark-blue-5);
+  color: var(--text-light);
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+.actionsGroup {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.actionBtn {
+  display: flex;
+  align-items: center;
+  padding: 6px 12px;
+  background-color: var(--dark-blue-5);
+  color: var(--text-light);
+  border-radius: 20px;
+  font-size: 0.9rem;
+  gap: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.actionBtn:hover {
+  background-color: var(--accent-blue);
+  color: var(--text-white);
+  transform: translateY(-1px);
+}
+
+.actionBtn:hover .actionIcon {
+  fill: var(--text-white);
+}
+
+.actionIcon {
+  width: 18px;
+  height: 18px;
+  fill: var(--accent-blue);
+  transition: all 0.2s ease;
+}
+
+.actionText {
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .insightTitle {
+    font-size: 2rem;
+  }
+
+  .insightHero {
+    height: 350px;
+  }
+
+  .contentBlock h2 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .insightTitle {
+    font-size: 1.8rem;
+  }
+
+  .insightMeta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .insightHero {
+    height: 250px;
+  }
+
+  .actionsContainer {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+}

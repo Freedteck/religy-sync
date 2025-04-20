@@ -11,6 +11,9 @@ import Admin from "./routes/admin/Admin";
 import Dashboard from "./routes/admin/pages/dashboard/Dashboard";
 import AuthGuard from "./auth/AuthGuard";
 import Applications from "./routes/admin/pages/applications/Applications";
+import Teachings from "./routes/teachings/Teachings";
+import TeachingDetails from "./routes/teaching-details/TeachingDetails";
+import CreateInsight from "./routes/create-insight/CreateInsight";
 
 export const router = createBrowserRouter([
   {
@@ -31,6 +34,18 @@ export const router = createBrowserRouter([
         // Component: <div>Connect</div>,
       },
       {
+        path: "teachings",
+        Component: Teachings,
+      },
+      {
+        path: "teachings/:id",
+        Component: TeachingDetails,
+      },
+      {
+        path: "create-insight",
+        Component: CreateInsight,
+      },
+      {
         path: "questions",
         Component: Questions,
       },
@@ -47,7 +62,7 @@ export const router = createBrowserRouter([
         Component: AskQuestion,
       },
       {
-        path: "profile",
+        path: "profile/:id",
         Component: Profile,
       },
       {

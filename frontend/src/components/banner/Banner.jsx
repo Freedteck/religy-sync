@@ -16,7 +16,11 @@ const Banner = () => {
           text={"Ask a Question"}
           onClick={() => navigate("ask-question")}
         />
-        <Button text={"Explore Teachings"} btnClass="secondary" />
+        <Button
+          text={"Explore Teachings"}
+          btnClass="secondary"
+          onClick={() => navigate("teachings")}
+        />
       </div>
     </section>
   );

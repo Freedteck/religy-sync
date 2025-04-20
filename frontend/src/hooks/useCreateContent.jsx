@@ -141,6 +141,38 @@ const useCreateContent = (
     });
   };
 
+  const createInsight = async (
+    scholarCapId,
+    title,
+    details,
+    metadata,
+    onSuccess
+  ) => {
+    const tx = new Transaction();
+
+    // Convert metadata to string if it's an object
+    const metadataStr =
+      typeof metadata === "object" ? JSON.stringify(metadata) : metadata;
+
+    tx.moveCall({
+      arguments: [
+        tx.object(scholarCapId),
+        tx.object(platformId),
+        tx.pure.string(title),
+        tx.pure.string(details),
+        tx.pure.string(metadataStr),
+      ],
+      target: `${religySyncPackageId}::religy_sync::create_insight`,
+    });
+
+    return executeTransaction(tx, {
+      successMessage: "Insight submitted successfully!",
+      errorMessage: "Error submitting insight. Please try again.",
+      loadingMessage: "Submitting insight...",
+      onSuccess,
+    });
+  };
+
   const likeContent = async (contentId, onSuccess) => {
     const tx = new Transaction();
 
@@ -260,6 +292,7 @@ const useCreateContent = (
     applyForScholar,
     approveScholar,
     revokeScholar,
+    createInsight,
   };
 };
 

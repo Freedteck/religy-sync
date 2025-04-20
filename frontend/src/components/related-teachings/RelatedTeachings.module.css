@@ -1,0 +1,32 @@
+.relatedSection {
+  margin-top: 80px;
+}
+
+.sectionHeading {
+  font-size: 1.75rem;
+  margin-bottom: 30px;
+  color: var(--text-white);
+  position: relative;
+  padding-left: 15px;
+}
+
+.sectionHeading::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 5px;
+  background: linear-gradient(
+    to bottom,
+    var(--accent-blue),
+    var(--accent-purple)
+  );
+  border-radius: 10px;
+}
+
+.relatedGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+}
