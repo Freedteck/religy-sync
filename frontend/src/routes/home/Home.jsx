@@ -54,7 +54,6 @@ const Home = () => {
       .filter((content) => content.data.content.fields.content_type === 2)
       .sort((a, b) => b.timestamp - a.timestamp)
       .slice(0, 4); // Get 4 most recent
-    console.log("insights", insights);
 
     // Get questions (type 0)
     const questions = allContent

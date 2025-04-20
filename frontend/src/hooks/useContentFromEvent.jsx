@@ -17,7 +17,11 @@ const useContentFromEvents = (eventsData) => {
   }, [eventsData]);
 
   // Fetch the actual content objects
-  const { data: contentData, isPending } = useSuiClientQuery(
+  const {
+    data: contentData,
+    isPending,
+    refetch,
+  } = useSuiClientQuery(
     "multiGetObjects",
     {
       ids: objectIds,
@@ -49,7 +53,7 @@ const useContentFromEvents = (eventsData) => {
     }
   }, [contentData, timestampMs]);
 
-  return { contentList, isPending, objectIds, timestampMs };
+  return { contentList, isPending, objectIds, timestampMs, refetch };
 };
 
 export default useContentFromEvents;

@@ -17,11 +17,13 @@ import { useNetworkVariables } from "../../config/networkConfig";
 import TipModal from "../../modals/tip-modal/TipModal";
 import useContentFromEvents from "../../hooks/useContentFromEvent";
 import { formatTime } from "../../utils/timeFormatter";
+import Loading from "../../components/loading/Loading";
 
 const TeachingDetails = () => {
   const { id } = useParams();
   const [openTipModal, setOpenTipModal] = useState(false);
   const [insightData, setInsightData] = useState(null);
+  const [loading, setLoading] = useState(true);
   const { religySyncPackageId, platformId } = useNetworkVariables(
     "religySyncPackageId",
     "platformId"
@@ -42,30 +44,26 @@ const TeachingDetails = () => {
     signAndExecute
   );
 
-  const {
-    data: eventsData,
-    refetch: refetchData,
-    // isFetching,
-    // fetchNextPage,
-    // hasNextPage,
-  } = useSuiClientInfiniteQuery(
-    "queryEvents",
-    {
-      query: {
-        MoveEventType: `${religySyncPackageId}::religy_sync::ContentCreated`,
+  const { data: eventsData, isLoading: eventsLoading } =
+    useSuiClientInfiniteQuery(
+      "queryEvents",
+      {
+        query: {
+          MoveEventType: `${religySyncPackageId}::religy_sync::ContentCreated`,
+        },
+        cursor: null,
       },
-      cursor: null,
-    },
-    {
-      enabled: true,
-      select: (data) =>
-        data.pages
-          .flatMap((page) => page.data)
-          .filter((x) => x.parsedJson.content_type === 2),
-    }
-  );
+      {
+        enabled: true,
+        select: (data) =>
+          data.pages
+            .flatMap((page) => page.data)
+            .filter((x) => x.parsedJson.content_type === 2),
+      }
+    );
 
-  const { contentList: insightList } = useContentFromEvents(eventsData);
+  const { contentList: insightList, refetch: refetchData } =
+    useContentFromEvents(eventsData);
 
   const handleLike = () => {
     if (account) {
@@ -92,13 +90,47 @@ const TeachingDetails = () => {
   };
 
   useEffect(() => {
-    const filteredInsights = insightList.filter(
-      (insight) => insight.data.objectId === id
-    );
-    setInsightData(filteredInsights[0]);
+    if (insightList) {
+      const filteredInsights = insightList.filter(
+        (insight) => insight.data.objectId === id
+      );
+      setInsightData(filteredInsights[0]);
+      setLoading(false);
+    }
   }, [insightList, id]);
 
+  if (loading || eventsLoading) {
+    return <Loading message="Loading teaching details..." />;
+  }
+
   if (!insight) return <div>Insight not found</div>;
+
+  const extractYouTubeId = (url) => {
+    if (!url) return null;
+    try {
+      const parsedUrl = new URL(url);
+      if (parsedUrl.hostname === "youtu.be") {
+        return parsedUrl.pathname.slice(1);
+      }
+      if (parsedUrl.hostname.includes("youtube.com")) {
+        return (
+          parsedUrl.searchParams.get("v") ||
+          parsedUrl.pathname.split("/embed/")[1]
+        );
+      }
+      return null;
+    } catch (e) {
+      console.log(e);
+
+      return null;
+    }
+  };
+
+  const metadata = insightData
+    ? parseMetadata(insightData.data.content.fields.metadata)
+    : {};
+  const isVideo = metadata.type === "video";
+  const youtubeId = extractYouTubeId(metadata.videoUrl);
 
   return (
     <div className={styles.container}>
@@ -109,13 +141,10 @@ const TeachingDetails = () => {
       <div className={styles.insightHeader}>
         <span
           className={`${styles.insightTypeBadge} ${
-            parseMetadata(insightData?.data.content.fields.metadata).type ===
-            "video"
-              ? styles.videoBadge
-              : ""
+            isVideo ? styles.videoBadge : ""
           }`}
         >
-          {parseMetadata(insightData?.data.content.fields.metadata).type}
+          {metadata.type}
         </span>
         <h1 className={styles.insightTitle}>
           {insightData?.data.content.fields.title}
@@ -137,31 +166,52 @@ const TeachingDetails = () => {
           <div className={styles.metaItem}>
             📅 {formatTime(insightData?.timestampMs)}
           </div>
-          {/* <div className={styles.metaItem}>⏱️ 8 min read</div> */}
           <div className={styles.metaItem}>
             👍 {insightData?.data.content.fields.likes} Likes
           </div>
         </div>
       </div>
 
-      <div className={styles.insightHero}>
-        <img
-          src={
-            parseMetadata(insightData?.data.content.fields.metadata)
-              .thumbnailUrl
-          }
-          alt={insightData?.data.content.fields.title}
-        />
-      </div>
+      {isVideo ? (
+        <div className={styles.videoContainer}>
+          {youtubeId ? (
+            // YouTube embed
+            <div className={styles.videoWrapper}>
+              <iframe
+                src={`https://www.youtube.com/embed/qJARfWkQyH4`}
+                className={styles.videoPlayer}
+                // frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title={insightData?.data.content.fields.title}
+              ></iframe>
+            </div>
+          ) : (
+            // Native video player for direct video files
+            <video
+              className={styles.videoPlayer}
+              controls
+              playsInline
+              poster={metadata.thumbnailUrl}
+            >
+              <source src={metadata.videoUrl} type="video/mp4" />
+              Your browser does not support HTML5 video.
+            </video>
+          )}
+        </div>
+      ) : (
+        <div className={styles.insightHero}>
+          <img
+            src={metadata.thumbnailUrl}
+            alt={insightData?.data.content.fields.title}
+            loading="lazy"
+          />
+        </div>
+      )}
 
       <div className={styles.insightContent}>
         <div className={styles.contentBlock}>
-          <p>
-            {
-              parseMetadata(insightData?.data.content.fields.metadata)
-                .description
-            }
-          </p>
+          <p>{metadata.description}</p>
         </div>
 
         <div className={styles.contentBlock}>
@@ -170,9 +220,7 @@ const TeachingDetails = () => {
 
         <section className={styles.below}>
           <div className={styles.tagsContainer}>
-            {parseMetadata(
-              insightData?.data.content.fields.metadata
-            )?.tags?.map((tag, index) => (
+            {metadata?.tags?.map((tag, index) => (
               <span className={styles.tag} key={index}>
                 {tag}
               </span>
@@ -186,11 +234,9 @@ const TeachingDetails = () => {
                 </svg>
                 <span className={styles.actionText}>
                   {insightData?.data.content.fields.likes}{" "}
-                  <span className={styles.actionText}>
-                    {insightData?.data.content.fields?.likes > 1
-                      ? "Likes"
-                      : "Like"}
-                  </span>
+                  {insightData?.data.content.fields?.likes > 1
+                    ? "Likes"
+                    : "Like"}
                 </span>
               </button>
               <button className={styles.actionBtn}>
