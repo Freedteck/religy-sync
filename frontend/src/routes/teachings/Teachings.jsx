@@ -7,6 +7,8 @@ import { useNetworkVariable } from "../../config/networkConfig";
 import { useSuiClientInfiniteQuery } from "@mysten/dapp-kit";
 import useContentFromEvents from "../../hooks/useContentFromEvent";
 import Loading from "../../components/loading/Loading";
+import ErrorState from "../../components/error/ErrorState";
+import EmptyState from "../../components/empty/EmptyState";
 
 const Teachings = () => {
   const navigate = useNavigate();
@@ -25,6 +27,7 @@ const Teachings = () => {
     isFetching,
     fetchNextPage,
     hasNextPage,
+    isError,
   } = useSuiClientInfiniteQuery(
     "queryEvents",
     {
@@ -43,8 +46,7 @@ const Teachings = () => {
     }
   );
 
-  const { contentList: teachings, isPending } =
-    useContentFromEvents(eventsData);
+  const { contentList: teachings } = useContentFromEvents(eventsData);
 
   // Process and filter teachings
   const filteredTeachings = useMemo(() => {
@@ -149,9 +151,14 @@ const Teachings = () => {
     setSearchQuery(e.target.value);
   };
 
-  if (isPending && !teachings?.length) {
-    return <Loading message="Loading teachings..." />;
-  }
+  const showEmptyState = !isError && !teachings?.length && !isFetching;
+
+  const showErrorState = isError;
+
+  const initialLoading = isFetching && !teachings?.length;
+
+  const noResultsAfterFiltering =
+    filteredTeachings.length === 0 && teachings?.length > 0;
 
   return (
     <main className={styles.container}>
@@ -166,12 +173,15 @@ const Teachings = () => {
         />
       </section>
 
-      {featuredTeaching && (
-        <section className={styles.featuredSection}>
-          <h2 className={styles.sectionHeading}>Featured</h2>
-          <TeachingCard teaching={featuredTeaching} featured />
-        </section>
-      )}
+      {!initialLoading &&
+        !showErrorState &&
+        !showEmptyState &&
+        featuredTeaching && (
+          <section className={styles.featuredSection}>
+            <h2 className={styles.sectionHeading}>Featured</h2>
+            <TeachingCard teaching={featuredTeaching} featured />
+          </section>
+        )}
 
       <div className={styles.filterBar}>
         <div className={styles.filterGroup}>
@@ -227,70 +237,78 @@ const Teachings = () => {
         </div>
       </div>
 
-      {isPending && !paginatedTeachings.length ? (
-        <Loading message="Loading teachings..." />
-      ) : (
-        <>
-          <section className={styles.insightsGrid}>
-            {paginatedTeachings.map((teaching) => (
-              <TeachingCard key={teaching.data.objectId} teaching={teaching} />
-            ))}
-          </section>
+      {/* Content Area - conditionally render different states */}
+      <div className={styles.contentArea}>
+        {initialLoading && <Loading message="Loading teachings..." />}
 
-          {filteredTeachings.length === 0 && (
-            <div className={styles.emptyState}>
-              <p>No teachings found matching your criteria</p>
-            </div>
-          )}
+        {showErrorState && <ErrorState />}
 
-          {totalPages > 1 && (
-            <div className={styles.pagination}>
-              <button
-                className={`${styles.pageBtn} ${styles.navBtn}`}
-                disabled={currentPage === 1}
-                onClick={() => handlePageChange(currentPage - 1)}
-              >
-                ◀
-              </button>
+        {showEmptyState && <EmptyState />}
 
-              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                let pageNum;
-                if (totalPages <= 5) {
-                  pageNum = i + 1;
-                } else if (currentPage <= 3) {
-                  pageNum = i + 1;
-                } else if (currentPage >= totalPages - 2) {
-                  pageNum = totalPages - 4 + i;
-                } else {
-                  pageNum = currentPage - 2 + i;
-                }
+        {!initialLoading && !showErrorState && !showEmptyState && (
+          <>
+            <section className={styles.insightsGrid}>
+              {paginatedTeachings.map((teaching) => (
+                <TeachingCard
+                  key={teaching.data.objectId}
+                  teaching={teaching}
+                />
+              ))}
+            </section>
 
-                return (
-                  <button
-                    key={pageNum}
-                    className={`${styles.pageBtn} ${
-                      currentPage === pageNum ? styles.active : ""
-                    }`}
-                    onClick={() => handlePageChange(pageNum)}
-                  >
-                    {pageNum}
-                  </button>
-                );
-              })}
+            {noResultsAfterFiltering && (
+              <EmptyState message="No insights match your filters" />
+            )}
 
-              {totalPages > 5 && <span className={styles.ellipsis}>...</span>}
+            {totalPages > 1 && (
+              <div className={styles.pagination}>
+                <button
+                  className={`${styles.pageBtn} ${styles.navBtn}`}
+                  disabled={currentPage === 1}
+                  onClick={() => handlePageChange(currentPage - 1)}
+                >
+                  ◀
+                </button>
 
-              <button
-                className={`${styles.pageBtn} ${styles.navBtn}`}
-                disabled={currentPage === totalPages}
-                onClick={() => handlePageChange(currentPage + 1)}
-              >
-                ▶
-              </button>
-            </div>
-          )}
-        </>
-      )}
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNum;
+                  if (totalPages <= 5) {
+                    pageNum = i + 1;
+                  } else if (currentPage <= 3) {
+                    pageNum = i + 1;
+                  } else if (currentPage >= totalPages - 2) {
+                    pageNum = totalPages - 4 + i;
+                  } else {
+                    pageNum = currentPage - 2 + i;
+                  }
+
+                  return (
+                    <button
+                      key={pageNum}
+                      className={`${styles.pageBtn} ${
+                        currentPage === pageNum ? styles.active : ""
+                      }`}
+                      onClick={() => handlePageChange(pageNum)}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+
+                {totalPages > 5 && <span className={styles.ellipsis}>...</span>}
+
+                <button
+                  className={`${styles.pageBtn} ${styles.navBtn}`}
+                  disabled={currentPage === totalPages}
+                  onClick={() => handlePageChange(currentPage + 1)}
+                >
+                  ▶
+                </button>
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </main>
   );
 };

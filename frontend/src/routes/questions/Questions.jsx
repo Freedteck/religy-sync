@@ -9,6 +9,8 @@ import { useEffect, useState } from "react";
 import useContentFromEvents from "../../hooks/useContentFromEvent";
 import { filterAndSortContent } from "../../utils/helpers";
 import Loading from "../../components/loading/Loading";
+import EmptyState from "../../components/empty/EmptyState";
+import ErrorState from "../../components/error/ErrorState";
 
 const Questions = () => {
   const [filteredQuestions, setFilteredQuestions] = useState([]);
@@ -18,7 +20,7 @@ const Questions = () => {
   const [faithTradition, setFaithTradition] = useState("");
   const [status, setStatus] = useState("");
   const [sortBy, setSortBy] = useState("newest");
-  const [activeTag, setActiveTag] = useState(""); // Initial tags
+  const [activeTag, setActiveTag] = useState("");
 
   const religySyncPackageId = useNetworkVariable("religySyncPackageId");
   const {
@@ -26,6 +28,7 @@ const Questions = () => {
     isFetching,
     fetchNextPage,
     hasNextPage,
+    isError,
   } = useSuiClientInfiniteQuery(
     "queryEvents",
     {
@@ -39,17 +42,15 @@ const Questions = () => {
       select: (data) =>
         data.pages
           .flatMap((page) => page.data)
-          .filter((x) => x.parsedJson.content_type === 0),
+          .filter((x) => x.parsedJson.content_type === 0), // 0 = question
     }
   );
 
-  const { contentList: questionList, isPending } =
-    useContentFromEvents(eventsData);
+  const { contentList: questionList } = useContentFromEvents(eventsData);
 
   useEffect(() => {
     if (!questionList || questionList.length === 0) return;
 
-    // Use helper function to filter and sort content
     const filtered = filterAndSortContent(
       questionList,
       {
@@ -77,13 +78,11 @@ const Questions = () => {
     setSortBy(e.target.value);
   };
 
-  // Remove a tag from active filters
   const removeTag = () => {
     setActiveTag("");
     setFaithTradition("");
   };
 
-  // Add a new tag to filters (could be used for a future "Add Tag" feature)
   const addTag = (newTag) => {
     if (newTag === "") {
       setActiveTag("");
@@ -96,12 +95,19 @@ const Questions = () => {
     navigate("/ask-question");
   };
 
+  const initialLoading = isFetching && !questionList?.length;
+  const showErrorState = isError;
+  const showEmptyState = !isError && !questionList?.length && !isFetching;
+  const noResultsAfterFiltering =
+    filteredQuestions.length === 0 && questionList?.length > 0;
+
   return (
     <main className={styles.questions}>
       <section className={styles["top-header"]}>
         <h1>Divine Dialogue</h1>
         <Button text={"Ask a Question"} onClick={askQuestion} />
       </section>
+
       <section className={styles.filters}>
         <h3 className={styles.title}>Filter Questions</h3>
         <div className={styles.options}>
@@ -163,41 +169,46 @@ const Questions = () => {
         )}
       </section>
 
-      {isPending ? (
-        <div className={styles.loading}>
-          <Loading message="Loading questions..." />
-        </div>
-      ) : filteredQuestions.length > 0 ? (
-        <QuestionList questionList={filteredQuestions} />
-      ) : (
-        <div className={styles.noResults}>
-          <h2>No questions match your filters</h2>
-          <p>
-            Try adjusting your filter criteria or{" "}
-            <span
-              className={styles.clearFilters}
-              onClick={() => {
-                setFaithTradition("");
-                setStatus("");
-                setSortBy("newest");
-                setActiveTag("");
-              }}
-            >
-              clear all filters
-            </span>
-          </p>
-        </div>
-      )}
+      <section className={styles.contentArea}>
+        {initialLoading && <Loading message="Loading questions..." />}
+        {showErrorState && <ErrorState />}
+        {showEmptyState && <EmptyState />}
+        {!initialLoading && !showErrorState && !showEmptyState && (
+          <>
+            <QuestionList questionList={filteredQuestions} />
 
-      {hasNextPage && !isFetching && (
-        <button
-          className={styles.loadMore}
-          onClick={fetchNextPage}
-          disabled={!hasNextPage || isFetching}
-        >
-          Load more...
-        </button>
-      )}
+            {noResultsAfterFiltering && (
+              <div className={styles.noResults}>
+                <h2>No questions match your filters</h2>
+                <p>
+                  Try adjusting your filter criteria or{" "}
+                  <span
+                    className={styles.clearFilters}
+                    onClick={() => {
+                      setFaithTradition("");
+                      setStatus("");
+                      setSortBy("newest");
+                      setActiveTag("");
+                    }}
+                  >
+                    clear all filters
+                  </span>
+                </p>
+              </div>
+            )}
+
+            {hasNextPage && !isFetching && (
+              <button
+                className={styles.loadMore}
+                onClick={fetchNextPage}
+                disabled={!hasNextPage || isFetching}
+              >
+                Load more...
+              </button>
+            )}
+          </>
+        )}
+      </section>
     </main>
   );
 };
