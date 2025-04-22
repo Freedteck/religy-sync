@@ -33,6 +33,24 @@
   clip-path: polygon(30% 0, 100% 0, 100% 100%, 0% 100%);
 }
 
+.apply-button {
+  background: linear-gradient(
+    to right,
+    var(--accent-blue-light),
+    var(--accent-purple)
+  );
+  color: var(--text-white);
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: fit-content;
+  align-self: center;
+}
+
 .profileAvatar {
   width: 120px;
   height: 120px;

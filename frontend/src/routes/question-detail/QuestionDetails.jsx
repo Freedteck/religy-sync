@@ -17,6 +17,8 @@ import { useNetworkVariables } from "../../config/networkConfig";
 import useCreateContent from "../../hooks/useCreateContent";
 import useScholarStatus from "../../hooks/useScholarStatus";
 import Loading from "../../components/loading/Loading";
+import useContentFromEvents from "../../hooks/useContentFromEvent";
+import { parseMetadata } from "../../utils/helpers";
 
 const QuestionDetails = () => {
   const { id } = useParams();
@@ -27,6 +29,7 @@ const QuestionDetails = () => {
   const [clarifications, setClarifications] = useState({});
   const [sortOrder, setSortOrder] = useState("votes");
   const [rewardSent, setRewardSent] = useState(false);
+  const [relatedQuestions, setRelatedQuestions] = useState([]);
 
   const { religySyncPackageId, platformId } = useNetworkVariables(
     "religySyncPackageId",
@@ -230,6 +233,26 @@ const QuestionDetails = () => {
     }
   );
 
+  const { data: questinsEventsData, isFetching } = useSuiClientInfiniteQuery(
+    "queryEvents",
+    {
+      query: {
+        MoveEventType: `${religySyncPackageId}::religy_sync::ContentCreated`,
+      },
+      cursor: null,
+    },
+    {
+      enabled: true,
+      select: (data) =>
+        data.pages
+          .flatMap((page) => page.data)
+          .filter((x) => x.parsedJson.content_type === 0), // 0 = question
+    }
+  );
+
+  const { contentList: questionList } =
+    useContentFromEvents(questinsEventsData);
+
   // Process answers
   useEffect(() => {
     if (eventsData) {
@@ -310,34 +333,24 @@ const QuestionDetails = () => {
     }
   }, [answerListData, timestampMs, followups, clarifications]);
 
-  const relatedQuestions = [
-    {
-      id: "q1",
-      title: "What are the key differences between Zen and Tibetan Buddhism?",
-      answers: 15,
-      views: 476,
-    },
-    {
-      id: "q2",
-      title:
-        "How does the concept of rebirth differ between Hindu and Buddhist traditions?",
-      answers: 8,
-      views: 312,
-    },
-    {
-      id: "q3",
-      title:
-        "What is the significance of the Lotus Sutra in Mahayana Buddhism?",
-      answers: 6,
-      views: 189,
-    },
-    {
-      id: "q4",
-      title: "How do Buddhist traditions approach meditation differently?",
-      answers: 12,
-      views: 527,
-    },
-  ];
+  useEffect(() => {
+    if (!isFetching && questionList) {
+      const filtered = questionList.filter(
+        (q) =>
+          q.data.objectId !== id &&
+          parseMetadata(q.data.content.fields.metadata).tradition ===
+            parseMetadata(question?.fields.metadata).tradition
+      );
+
+      const sortedQuestions = filtered.sort((a, b) => {
+        return (
+          b.data.content.fields.timestampMs - a.data.content.fields.timestampMs
+        );
+      });
+
+      setRelatedQuestions(sortedQuestions.slice(0, 4));
+    }
+  }, [isFetching, questionList, id, question]);
 
   const handleSortChange = (e) => {
     setSortOrder(e.target.value);

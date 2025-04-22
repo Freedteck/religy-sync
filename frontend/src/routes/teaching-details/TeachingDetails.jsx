@@ -1,6 +1,5 @@
 import { Link, useParams } from "react-router-dom";
 import styles from "./TeachingDetails.module.css";
-import { teachings } from "../../samples/teachings";
 import RelatedTeachings from "../../components/related-teachings/RelatedTeachings";
 import {
   useCurrentAccount,
@@ -22,6 +21,7 @@ import Loading from "../../components/loading/Loading";
 const TeachingDetails = () => {
   const { id } = useParams();
   const [openTipModal, setOpenTipModal] = useState(false);
+  const [relatedInsights, setRelatedInsights] = useState([]);
   const [insightData, setInsightData] = useState(null);
   const [loading, setLoading] = useState(true);
   const { religySyncPackageId, platformId } = useNetworkVariables(
@@ -31,11 +31,6 @@ const TeachingDetails = () => {
   const suiClient = useSuiClient();
   const { mutate: signAndExecute } = useSignAndExecuteTransaction();
   const account = useCurrentAccount();
-
-  const insight = teachings.find((teaching) => teaching.id === parseInt(1));
-  const relatedInsights = teachings
-    .filter((t) => t.id !== insight.id)
-    .slice(0, 3);
 
   const { likeContent, sendReward } = useCreateContent(
     religySyncPackageId,
@@ -95,6 +90,15 @@ const TeachingDetails = () => {
         (insight) => insight.data.objectId === id
       );
       setInsightData(filteredInsights[0]);
+      const related = insightList
+        .filter(
+          (insight) =>
+            insight.data.content.fields.creator ===
+              filteredInsights[0].data.content.fields.creator &&
+            insight.data.objectId !== id
+        )
+        .slice(0, 3);
+      setRelatedInsights(related);
       setLoading(false);
     }
   }, [insightList, id]);
@@ -102,8 +106,6 @@ const TeachingDetails = () => {
   if (loading || eventsLoading) {
     return <Loading message="Loading teaching details..." />;
   }
-
-  if (!insight) return <div>Insight not found</div>;
 
   const extractYouTubeId = (url) => {
     if (!url) return null;

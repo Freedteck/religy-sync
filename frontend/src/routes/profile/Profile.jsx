@@ -6,7 +6,7 @@ import {
   useSuiClientQuery,
   useCurrentAccount,
 } from "@mysten/dapp-kit";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useNetworkVariables } from "../../config/networkConfig";
 import useScholarApplications from "../../hooks/useScholarApplications";
 import { truncateAddress } from "../../utils/truncateAddress";
@@ -15,6 +15,7 @@ import ContentList from "../../components/content-list/ContentList";
 import Loading from "../../components/loading/Loading";
 import useScholarStatus from "../../hooks/useScholarStatus";
 import TeachingCard from "../../components/teaching-card/TeachingCard";
+import Button from "../../components/button/Button";
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("questions");
@@ -27,6 +28,7 @@ const Profile = () => {
   });
   const { id: userAddress } = useParams();
   const suiClient = useSuiClient();
+  const navigate = useNavigate();
   const account = useCurrentAccount();
 
   const { religySyncPackageId, platformId } = useNetworkVariables(
@@ -261,6 +263,16 @@ const Profile = () => {
               <div className={styles.statValue}>{scholarStats.questions}</div>
               <div className={styles.statLabel}>Questions</div>
             </div>
+            {!isApprovedScholar && (
+              <button
+                className={styles["apply-button"]}
+                onClick={() => {
+                  navigate("/scholar-application");
+                }}
+              >
+                Apply for scholar
+              </button>
+            )}
             {isApprovedScholar && (
               <div
                 className={`${styles.statItem} ${
