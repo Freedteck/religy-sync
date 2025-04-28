@@ -238,6 +238,27 @@
   letter-spacing: 0.05em;
 }
 
+.documentLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--primary-color);
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.documentLink:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  text-decoration: underline;
+}
+
+.documentLink i {
+  font-size: 0.9em;
+}
+
 /* Add responsiveness for smaller screens */
 @media (max-width: 768px) {
   .detailContent {

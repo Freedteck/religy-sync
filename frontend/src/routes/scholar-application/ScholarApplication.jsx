@@ -13,11 +13,18 @@ import {
 } from "@mysten/dapp-kit";
 import useCreateContent from "../../hooks/useCreateContent";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { uploadToPinata } from "../../utils/pinataService";
+
+const MAX_FILE_SIZE_MB = 10;
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
 const ScholarApplication = () => {
   const [currentStep, setCurrentStep] = useState(1);
+  const [isUploading, setIsUploading] = useState(false);
   const account = useCurrentAccount();
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     // Personal Information
     name: "",
@@ -45,13 +52,21 @@ const ScholarApplication = () => {
 
     // Verification & Wallet
     credentialsDoc: null,
+    credentialsDocUrl: "", // New field for Pinata URL
     walletAddress: account?.address || "",
 
     // Terms
     agreeTerms: false,
   });
 
-  // Handle input changes
+  const validateFileSize = (file) => {
+    if (file.size > MAX_FILE_SIZE_BYTES) {
+      toast.error(`File size exceeds ${MAX_FILE_SIZE_MB}MB limit`);
+      return false;
+    }
+    return true;
+  };
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
 
@@ -94,47 +109,65 @@ const ScholarApplication = () => {
     signAndExecute
   );
 
-  // Handle file uploads
-  const handleFileUpload = (e) => {
+  const handleFileUpload = async (e) => {
     const { name, files } = e.target;
     if (files && files[0]) {
+      if (!validateFileSize(files[0])) {
+        e.target.value = ""; // Clear the invalid file
+        return;
+      }
+
       setFormData({
         ...formData,
         [name]: files[0],
+        credentialsDocUrl: "", // Clear previous URL if changing file
       });
     }
   };
 
-  // Next step
   const nextStep = () => {
     setCurrentStep(currentStep + 1);
   };
 
-  // Previous step
   const prevStep = () => {
     setCurrentStep(currentStep - 1);
   };
 
-  // Submit the form to the blockchain
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsUploading(true);
 
-    const additionalInfo = JSON.stringify({
-      email: formData.email,
-      denomination: formData.denomination,
-      expertise: Object.keys(formData.expertise).filter(
-        (key) => formData.expertise[key]
-      ),
-      otherExpertise: formData.otherExpertise,
-    });
+    try {
+      let credentialsDocUrl = formData.credentialsDocUrl;
 
-    applyForScholar(
-      formData.name,
-      formData.credentials,
-      formData.faithTradition,
-      additionalInfo,
-      () => navigate("/questions")
-    );
+      // Upload credentials document if it exists and hasn't been uploaded yet
+      if (formData.credentialsDoc && !credentialsDocUrl) {
+        credentialsDocUrl = await uploadToPinata(formData.credentialsDoc);
+      }
+
+      const additionalInfo = JSON.stringify({
+        email: formData.email,
+        denomination: formData.denomination,
+        expertise: Object.keys(formData.expertise).filter(
+          (key) => formData.expertise[key]
+        ),
+        otherExpertise: formData.otherExpertise,
+        credentialsDocUrl: credentialsDocUrl || null,
+      });
+
+      applyForScholar(
+        formData.name,
+        formData.credentials,
+        formData.faithTradition,
+        additionalInfo,
+        () => navigate("/questions")
+      );
+    } catch (error) {
+      toast.error("Failed to upload document or submit application");
+      console.error("Submission error:", error);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -187,6 +220,7 @@ const ScholarApplication = () => {
                 type="button"
                 className={styles.secondaryButton}
                 onClick={prevStep}
+                disabled={isUploading}
               >
                 Previous
               </button>
@@ -196,12 +230,17 @@ const ScholarApplication = () => {
                 type="button"
                 className={styles.primaryButton}
                 onClick={nextStep}
+                disabled={isUploading}
               >
                 Next
               </button>
             ) : (
-              <button type="submit" className={styles.primaryButton}>
-                Submit Application
+              <button
+                type="submit"
+                className={styles.primaryButton}
+                disabled={isUploading}
+              >
+                {isUploading ? "Submitting..." : "Submit Application"}
               </button>
             )}
           </div>

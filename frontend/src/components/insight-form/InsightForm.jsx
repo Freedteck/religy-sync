@@ -11,6 +11,11 @@ import { useNavigate } from "react-router-dom";
 import useCreateContent from "../../hooks/useCreateContent";
 import InsightPreview from "../../modals/insight-preview/InsightPreview";
 import useScholarStatus from "../../hooks/useScholarStatus";
+import toast from "react-hot-toast";
+import { uploadMultiple } from "../../utils/pinataService";
+
+const MAX_FILE_SIZE_MB = 10;
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
 const InsightForm = () => {
   const { religySyncPackageId, platformId } = useNetworkVariables(
@@ -25,12 +30,15 @@ const InsightForm = () => {
   const [tags, setTags] = useState(["Spirituality"]);
   const [newTag, setNewTag] = useState("");
   const [thumbnailUrl, setThumbnailUrl] = useState("");
+  const [thumbnailFile, setThumbnailFile] = useState(null);
   const [videoUrl, setVideoUrl] = useState("");
   const [videoFile, setVideoFile] = useState(null);
   const [tokenAmount, setTokenAmount] = useState(0);
   const [balance, setBalance] = useState(0);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-  const [videoInputMethod, setVideoInputMethod] = useState("file"); // 'file' or 'url'
+  const [videoInputMethod, setVideoInputMethod] = useState("file");
+  const [thumbnailInputMethod, setThumbnailInputMethod] = useState("file");
+  const [isUploading, setIsUploading] = useState(false);
 
   const navigate = useNavigate();
   const suiClient = useSuiClient();
@@ -50,6 +58,27 @@ const InsightForm = () => {
     platformId,
     account
   );
+
+  const validateFileSize = (file) => {
+    if (file.size > MAX_FILE_SIZE_BYTES) {
+      toast.error(`File size exceeds ${MAX_FILE_SIZE_MB}MB limit`);
+      return false;
+    }
+    return true;
+  };
+
+  const handleFileChange = (file, setFileFunction, fileType) => {
+    if (!file) return;
+
+    if (!validateFileSize(file)) {
+      const fileInput = document.getElementById(`${fileType}-upload`);
+      if (fileInput) fileInput.value = "";
+      return;
+    }
+
+    setFileFunction(file);
+  };
+
   const addTag = () => {
     if (newTag && tags.length < 5 && !tags.includes(newTag)) {
       setTags([...tags, newTag]);
@@ -61,27 +90,74 @@ const InsightForm = () => {
     setTags(tags.filter((tag) => tag !== tagToRemove));
   };
 
-  const submitInsight = (e) => {
+  const submitInsight = async (e) => {
     e.preventDefault();
 
-    const metadata = {
-      type,
-      tradition,
-      tags,
-      thumbnailUrl,
-      description,
-      videoUrl:
-        type === "video"
-          ? videoInputMethod === "url"
-            ? videoUrl
-            : URL.createObjectURL(videoFile)
-          : undefined,
-      tokenOffering: tokenAmount,
-    };
+    if (
+      thumbnailInputMethod === "file" &&
+      thumbnailFile &&
+      !validateFileSize(thumbnailFile)
+    )
+      return;
+    if (
+      type === "video" &&
+      videoInputMethod === "file" &&
+      videoFile &&
+      !validateFileSize(videoFile)
+    )
+      return;
 
-    createInsight(scholarCapId, title, content, metadata, () =>
-      navigate("/teachings")
-    );
+    setIsUploading(true);
+
+    try {
+      let finalThumbnailUrl = thumbnailUrl;
+      let finalVideoUrl = videoUrl;
+
+      const filesToUpload = [];
+      const fileTypes = [];
+
+      if (thumbnailInputMethod === "file" && thumbnailFile) {
+        filesToUpload.push(thumbnailFile);
+        fileTypes.push("thumbnail");
+      }
+
+      if (type === "video" && videoInputMethod === "file" && videoFile) {
+        filesToUpload.push(videoFile);
+        fileTypes.push("video");
+      }
+
+      if (filesToUpload.length > 0) {
+        const uploadedUrls = await uploadMultiple(filesToUpload);
+
+        // Assign URLs based on their original order
+        fileTypes.forEach((type, index) => {
+          if (type === "thumbnail") {
+            finalThumbnailUrl = uploadedUrls[index];
+          } else if (type === "video") {
+            finalVideoUrl = uploadedUrls[index];
+          }
+        });
+      }
+
+      const metadata = {
+        type,
+        tradition,
+        tags,
+        thumbnailUrl: finalThumbnailUrl,
+        description,
+        videoUrl: type === "video" ? finalVideoUrl : undefined,
+        tokenOffering: tokenAmount,
+      };
+
+      createInsight(scholarCapId, title, content, metadata, () =>
+        navigate("/teachings")
+      );
+    } catch (error) {
+      toast.error("Failed to upload files or publish insight");
+      console.error("Submission error:", error);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const handleOpenPreview = (e) => {
@@ -115,11 +191,11 @@ const InsightForm = () => {
     description &&
     content &&
     tradition &&
+    (thumbnailInputMethod === "url" ? thumbnailUrl : thumbnailFile) &&
     (type === "article" ||
       (type === "video" &&
         ((videoInputMethod === "file" && videoFile) ||
-          (videoInputMethod === "url" && videoUrl)))) &&
-    thumbnailUrl;
+          (videoInputMethod === "url" && videoUrl))));
 
   return (
     <>
@@ -211,7 +287,9 @@ const InsightForm = () => {
                     type="file"
                     id="video-upload"
                     accept="video/*"
-                    onChange={(e) => setVideoFile(e.target.files[0])}
+                    onChange={(e) =>
+                      handleFileChange(e.target.files[0], setVideoFile, "video")
+                    }
                     className={styles["file-input"]}
                     required={videoInputMethod === "file"}
                   />
@@ -233,7 +311,7 @@ const InsightForm = () => {
                         <span className={styles["upload-icon"]}>📁</span>
                         <span>Click to select video file</span>
                         <span className={styles["file-hint"]}>
-                          (MP4, WebM, max 100MB)
+                          (MP4, WebM, max {MAX_FILE_SIZE_MB}MB)
                         </span>
                       </>
                     )}
@@ -252,7 +330,7 @@ const InsightForm = () => {
             </label>
             <div className={styles["form-helper"]}>
               {videoInputMethod === "file"
-                ? "Upload your video file (max 100MB)"
+                ? `Upload your video file (max ${MAX_FILE_SIZE_MB}MB)`
                 : "Paste a video embed URL (YouTube, Vimeo, etc.)"}
             </div>
           </div>
@@ -260,18 +338,82 @@ const InsightForm = () => {
 
         <div className={styles["form-group"]}>
           <label className={styles["form-label"]}>
-            Thumbnail Image URL
-            <input
-              type="url"
-              className={styles["form-input"]}
-              placeholder="https://example.com/image.jpg"
-              value={thumbnailUrl}
-              onChange={(e) => setThumbnailUrl(e.target.value)}
-              required
-            />
+            Thumbnail Image
+            <div className={styles["video-method-toggle"]}>
+              <button
+                type="button"
+                className={`${styles["toggle-option"]} ${
+                  thumbnailInputMethod === "file" ? styles["active"] : ""
+                }`}
+                onClick={() => setThumbnailInputMethod("file")}
+              >
+                Upload Image
+              </button>
+              <button
+                type="button"
+                className={`${styles["toggle-option"]} ${
+                  thumbnailInputMethod === "url" ? styles["active"] : ""
+                }`}
+                onClick={() => setThumbnailInputMethod("url")}
+              >
+                Use URL
+              </button>
+            </div>
+            {thumbnailInputMethod === "file" ? (
+              <div className={styles["file-upload-container"]}>
+                <input
+                  type="file"
+                  id="thumbnail-upload"
+                  accept="image/*"
+                  onChange={(e) =>
+                    handleFileChange(
+                      e.target.files[0],
+                      setThumbnailFile,
+                      "thumbnail"
+                    )
+                  }
+                  className={styles["file-input"]}
+                  required={thumbnailInputMethod === "file"}
+                />
+                <label
+                  htmlFor="thumbnail-upload"
+                  className={styles["file-upload-label"]}
+                >
+                  {thumbnailFile ? (
+                    <>
+                      <span className={styles["file-name"]}>
+                        {thumbnailFile.name}
+                      </span>
+                      <span className={styles["file-size"]}>
+                        {(thumbnailFile.size / (1024 * 1024)).toFixed(2)} MB
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span className={styles["upload-icon"]}>📁</span>
+                      <span>Click to select image file</span>
+                      <span className={styles["file-hint"]}>
+                        (JPG, PNG, max {MAX_FILE_SIZE_MB}MB)
+                      </span>
+                    </>
+                  )}
+                </label>
+              </div>
+            ) : (
+              <input
+                type="url"
+                placeholder="https://example.com/image.jpg"
+                value={thumbnailUrl}
+                onChange={(e) => setThumbnailUrl(e.target.value)}
+                className={styles["url-input"]}
+                required={thumbnailInputMethod === "url"}
+              />
+            )}
           </label>
           <div className={styles["form-helper"]}>
-            Provide a high-quality image URL that represents your insight
+            {thumbnailInputMethod === "file"
+              ? `Upload your thumbnail image (max ${MAX_FILE_SIZE_MB}MB)`
+              : "Paste an image URL"}
           </div>
         </div>
 
@@ -386,13 +528,19 @@ const InsightForm = () => {
               text={"Preview"}
               btnClass={"secondary"}
               onClick={handleOpenPreview}
-              disabled={!isFormValid}
+              disabled={!isFormValid || isUploading}
             />
             <Button
               type="submit"
-              text={isPending ? "Publishing..." : "Publish Insight"}
+              text={
+                isUploading
+                  ? "Uploading files..."
+                  : isPending
+                  ? "Publishing..."
+                  : "Publish Insight"
+              }
               btnClass={"primary"}
-              disabled={isPending || !isFormValid}
+              disabled={isPending || !isFormValid || isUploading}
             />
           </div>
         </div>
@@ -407,8 +555,16 @@ const InsightForm = () => {
         type={type}
         tradition={tradition}
         tags={tags}
-        thumbnailUrl={thumbnailUrl}
-        videoUrl={videoUrl}
+        thumbnailUrl={
+          thumbnailInputMethod === "file" && thumbnailFile
+            ? URL.createObjectURL(thumbnailFile)
+            : thumbnailUrl
+        }
+        videoUrl={
+          type === "video" && videoInputMethod === "file" && videoFile
+            ? URL.createObjectURL(videoFile)
+            : videoUrl
+        }
       />
     </>
   );

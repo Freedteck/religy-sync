@@ -1,603 +1,349 @@
+<!--
+  Copyright (c) Walrus Foundation
+  SPDX-License-Identifier: Apache-2.0
+-->
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TuneFlow - Empowering Artists through Blockchain</title>
+  <head>
+    <meta charset="utf-8" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      rel="stylesheet"
+      crossorigin="anonymous"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Upload Blobs</title>
+
     <style>
-        /* Reset and Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: #0a0a16;
-            color: #f5f5f7;
-            line-height: 1.6;
-        }
-        
-        /* Navigation */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 5%;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 100;
-            background-color: rgba(10, 10, 22, 0.85);
-            backdrop-filter: blur(10px);
-        }
-        
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #6366f1;
-            text-decoration: none;
-        }
-        
-        .logo span {
-            color: #f5f5f7;
-        }
-        
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-        
-        .nav-links li {
-            margin-left: 2rem;
-        }
-        
-        .nav-links a {
-            color: #f5f5f7;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        
-        .nav-links a:hover {
-            color: #6366f1;
-        }
-        
-        .btn {
-            background-color: #6366f1;
-            color: white;
-            padding: 0.7rem 1.5rem;
-            border-radius: 30px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-        }
-        
-        .btn:hover {
-            background-color: #4f46e5;
-            transform: translateY(-2px);
-        }
-        
-        /* Hero Section */
-        .hero {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 0 5%;
-            background: linear-gradient(to right, rgba(10, 10, 22, 0.9), rgba(10, 10, 22, 0.7)), url('https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center;
-            background-size: cover;
-        }
-        
-        .hero-content {
-            max-width: 650px;
-        }
-        
-        .hero-title {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            line-height: 1.2;
-        }
-        
-        .hero-subtitle {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-        
-        .hero-cta {
-            display: flex;
-            gap: 1rem;
-        }
-        
-        .btn-secondary {
-            background-color: transparent;
-            border: 2px solid #6366f1;
-            color: #6366f1;
-        }
-        
-        .btn-secondary:hover {
-            background-color: rgba(99, 102, 241, 0.1);
-        }
-        
-        /* Features Section */
-        .features {
-            padding: 6rem 5%;
-            background-color: #0d0d1d;
-        }
-        
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            position: relative;
-        }
-        
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 4px;
-            background-color: #6366f1;
-            border-radius: 2px;
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        
-        .feature-card {
-            background-color: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 2rem;
-            transition: transform 0.3s;
-            height: 100%;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .feature-icon {
-            font-size: 2.5rem;
-            color: #6366f1;
-            margin-bottom: 1.5rem;
-        }
-        
-        .feature-title {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .feature-desc {
-            color: #d1d1d1;
-        }
-        
-        /* How It Works Section */
-        .how-it-works {
-            padding: 6rem 5%;
-        }
-        
-        .steps {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 3rem;
-            flex-wrap: wrap;
-        }
-        
-        .step {
-            flex: 1;
-            min-width: 250px;
-            padding: 0 1.5rem;
-            text-align: center;
-            position: relative;
-            margin-bottom: 3rem;
-        }
-        
-        .step:not(:last-child)::after {
-            content: '→';
-            position: absolute;
-            right: -10px;
-            top: 40px;
-            font-size: 2rem;
-            color: #6366f1;
-        }
-        
-        .step-number {
-            background-color: #6366f1;
-            color: white;
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin: 0 auto 1.5rem;
-        }
-        
-        .step-title {
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-        }
-        
-        .step-desc {
-            color: #d1d1d1;
-            font-size: 0.95rem;
-        }
-        
-        /* Testimonials */
-        .testimonials {
-            padding: 6rem 5%;
-            background-color: #0d0d1d;
-        }
-        
-        .testimonial-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-        
-        .testimonial-card {
-            background-color: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 2rem;
-            position: relative;
-        }
-        
-        .testimonial-text {
-            font-style: italic;
-            margin-bottom: 1.5rem;
-            color: #d1d1d1;
-        }
-        
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-        }
-        
-        .author-image {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            margin-right: 1rem;
-            object-fit: cover;
-        }
-        
-        .author-name {
-            font-weight: 600;
-        }
-        
-        .author-title {
-            font-size: 0.85rem;
-            color: #a1a1a1;
-        }
-        
-        /* CTA Section */
-        .cta-section {
-            padding: 6rem 5%;
-            text-align: center;
-            background: linear-gradient(135deg, #4338ca, #6366f1);
-        }
-        
-        .cta-title {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .cta-subtitle {
-            max-width: 700px;
-            margin: 0 auto 2rem;
-            font-size: 1.1rem;
-        }
-        
-        .btn-white {
-            background-color: white;
-            color: #4338ca;
-        }
-        
-        .btn-white:hover {
-            background-color: #f5f5f7;
-        }
-        
-        /* Footer */
-        .footer {
-            padding: 4rem 5% 2rem;
-            background-color: #070712;
-        }
-        
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            margin-bottom: 3rem;
-        }
-        
-        .footer-col {
-            flex: 1;
-            min-width: 200px;
-            margin-bottom: 2rem;
-        }
-        
-        .footer-logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            display: block;
-            color: #6366f1;
-        }
-        
-        .footer-desc {
-            color: #a1a1a1;
-            margin-bottom: 1.5rem;
-        }
-        
-        .social-links {
-            display: flex;
-            gap: 1rem;
-        }
-        
-        .social-link {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.05);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #f5f5f7;
-            transition: all 0.3s;
-            text-decoration: none;
-        }
-        
-        .social-link:hover {
-            background-color: #6366f1;
-            transform: translateY(-3px);
-        }
-        
-        .footer-title {
-            font-size: 1.2rem;
-            margin-bottom: 1.5rem;
-            color: #f5f5f7;
-        }
-        
-        .footer-links {
-            list-style: none;
-        }
-        
-        .footer-links li {
-            margin-bottom: 0.8rem;
-        }
-        
-        .footer-links a {
-            color: #a1a1a1;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        
-        .footer-links a:hover {
-            color: #6366f1;
-        }
-        
-        .footer-bottom {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: #a1a1a1;
-            font-size: 0.9rem;
-        }
-        
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .navbar {
-                padding: 1rem 5%;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-            
-            .hero-title {
-                font-size: 2.5rem;
-            }
-            
-            .step:not(:last-child)::after {
-                display: none;
-            }
-            
-            .footer-content {
-                flex-direction: column;
-            }
-        }
+      dt {
+        opacity: 80%;
+      }
+
+      object {
+        object-fit: cover;
+      }
     </style>
-</head>
-<body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <a href="#" class="logo">Tune<span>Flow</span></a>
-        <ul class="nav-links">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Discover</a></li>
-            <li><a href="#">How It Works</a></li>
-            <li><a href="#">For Artists</a></li>
-            <li><a href="#" class="btn">Connect Wallet</a></li>
-        </ul>
-    </nav>
-    
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1 class="hero-title">Empower Artists, Reward Fans, Transform Music</h1>
-            <p class="hero-subtitle">TuneFlow connects artists directly with fans through blockchain, enabling fair royalty distribution and exclusive high-quality music experiences.</p>
-            <div class="hero-cta">
-                <a href="#" class="btn">Discover Music</a>
-                <a href="#" class="btn btn-secondary">For Artists</a>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Features Section -->
-    <section class="features">
-        <h2 class="section-title">Why TuneFlow?</h2>
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">💰</div>
-                <h3 class="feature-title">Fair Revenue Distribution</h3>
-                <p class="feature-desc">Artists and contributors receive automatic royalty payments with predetermined splits, ensuring fair compensation for everyone involved.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🔍</div>
-                <h3 class="feature-title">Full Transparency</h3>
-                <p class="feature-desc">Real-time visibility into royalties, streaming data, and fan engagement through blockchain technology.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🎧</div>
-                <h3 class="feature-title">Quality Tiers</h3>
-                <p class="feature-desc">Sample music in standard quality, then unlock premium high-fidelity streaming by supporting your favorite artists.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🤝</div>
-                <h3 class="feature-title">Direct Artist-Fan Connection</h3>
-                <p class="feature-desc">Support artists directly and gain access to exclusive content, early releases, and special perks.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">⚡</div>
-                <h3 class="feature-title">Instant Payments</h3>
-                <p class="feature-desc">Smart contracts handle automatic royalty splits on every sale and stream, with instant payouts to all contributors.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">📊</div>
-                <h3 class="feature-title">Performance Analytics</h3>
-                <p class="feature-desc">Comprehensive dashboard with real-time data on streams, sales, and royalties for artists.</p>
-            </div>
-        </div>
-    </section>
-    
-    <!-- How It Works Section -->
-    <section class="how-it-works">
-        <h2 class="section-title">How It Works</h2>
-        <div class="steps">
-            <div class="step">
-                <div class="step-number">1</div>
-                <h3 class="step-title">Artists Upload Music</h3>
-                <p class="step-desc">Upload both standard and high-quality versions of your music and set royalty splits for all contributors.</p>
-            </div>
-            <div class="step">
-                <div class="step-number">2</div>
-                <h3 class="step-title">Fans Discover Music</h3>
-                <p class="step-desc">Browse the platform and listen to standard quality streams of any track for free.</p>
-            </div>
-            <div class="step">
-                <div class="step-number">3</div>
-                <h3 class="step-title">Unlock Premium</h3>
-                <p class="step-desc">Purchase access to high-quality versions and exclusive content from your favorite artists.</p>
-            </div>
-            <div class="step">
-                <div class="step-number">4</div>
-                <h3 class="step-title">Automatic Royalties</h3>
-                <p class="step-desc">Every purchase automatically distributes payments to all contributors based on preset splits.</p>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Testimonials Section -->
-    <section class="testimonials">
-        <h2 class="section-title">Artist Success Stories</h2>
-        <div class="testimonial-grid">
-            <div class="testimonial-card">
-                <p class="testimonial-text">"TuneFlow has completely changed how I release music. I can finally ensure everyone who contributed gets paid fairly and instantly."</p>
-                <div class="testimonial-author">
-                    <img src="/api/placeholder/50/50" alt="Artist" class="author-image">
-                    <div>
-                        <p class="author-name">Michael Rivers</p>
-                        <p class="author-title">Independent Artist</p>
-                    </div>
+  </head>
+
+  <body>
+    <script>
+      const SUI_NETWORK = "testnet";
+      const SUI_VIEW_TX_URL = `https://suiscan.xyz/${SUI_NETWORK}/tx`;
+      const SUI_VIEW_OBJECT_URL = `https://suiscan.xyz/${SUI_NETWORK}/object`;
+
+      /**
+       * Handler for submit events from the HTML form.
+       *
+       * Stores the blob provided in the form, and disable the default HTML form submission.
+       */
+      function onSubmit(event) {
+        // Ensure that the event does not propagate, so that the browser does not
+        // perform a POST with the file.
+        event.preventDefault();
+
+        // Disable the form while uploading.
+        enableForm(false);
+
+        // Store and display the blob, then re-enable the form.
+        storeBlob()
+          .then((storageInfo) => {
+            displayUpload(storageInfo.info, storageInfo.media_type);
+            alert(null);
+            enableForm(true);
+          })
+          .catch((error) => {
+            console.error(error);
+            alert(
+              "An error occurred while uploading. Check the browser console and ensure that \
+                    the aggregator and publisher URLs are correct."
+            );
+            enableForm(true);
+          });
+
+        // Return false to cancel form submission.
+        return false;
+      }
+
+      /**
+       * Stores the file from the HTML form on Walrus.
+       */
+      function storeBlob() {
+        const inputFile = document.getElementById("file-input").files[0];
+        const numEpochs = document.getElementById("epochs-input").value;
+        const basePublisherUrl = document.getElementById(
+          "publisher-url-input"
+        ).value;
+
+        // Submit a PUT request with the file's content as the body to the /v1/blobs endpoint.
+        let sendTo = document.getElementById("send-to-input").value.trim();
+        let sendToParam = sendTo ? `&send_object_to=${sendTo}` : "";
+        return fetch(
+          `${basePublisherUrl}/v1/blobs?epochs=${numEpochs}${sendToParam}`,
+          {
+            method: "PUT",
+            body: inputFile,
+          }
+        ).then((response) => {
+          if (response.status === 200) {
+            // Parse successful responses as JSON, and return it along with the
+            // mime type from the the file input element.
+            return response.json().then((info) => {
+              console.log(info);
+              return { info: info, media_type: inputFile.type };
+            });
+          } else {
+            throw new Error("Something went wrong when storing the blob!");
+          }
+        });
+      }
+
+      /**
+       * Display the result of uploading the file to Walrus.
+       */
+      function displayUpload(storage_info, media_type) {
+        // Extract the displayed fields from either of the two successful responses:
+        // - newlyCreated for blobs that have been uploaded for the first time,
+        //   or whose duration has been extended.
+        // - alreadyCertified for blobs that have already been uploaded and certified.
+        if ("alreadyCertified" in storage_info) {
+          info = {
+            status: "Already certified",
+            blobId: storage_info.alreadyCertified.blobId,
+            endEpoch: storage_info.alreadyCertified.endEpoch,
+            suiRefType: "Previous Sui Certified Event",
+            suiRef: storage_info.alreadyCertified.event.txDigest,
+            suiBaseUrl: SUI_VIEW_TX_URL,
+          };
+        } else if ("newlyCreated" in storage_info) {
+          info = {
+            status: "Newly created",
+            blobId: storage_info.newlyCreated.blobObject.blobId,
+            endEpoch: storage_info.newlyCreated.blobObject.storage.endEpoch,
+            suiRefType: "Associated Sui Object",
+            suiRef: storage_info.newlyCreated.blobObject.id,
+            suiBaseUrl: SUI_VIEW_OBJECT_URL,
+          };
+        } else {
+          throw Error("Unhandled successful response!");
+        }
+
+        // The URL used to download and view the blob.
+        const baseAggregatorUrl = document.getElementById(
+          "aggregator-url-input"
+        ).value;
+        const blobUrl = `${baseAggregatorUrl}/v1/blobs/${info.blobId}`;
+
+        // The URL for viewing the event or object on chain
+        const suiUrl = `${info.suiBaseUrl}/${info.suiRef}`;
+
+        const isImage = media_type.startsWith("image");
+        // Create the HTML entry in the page for the uploaded blob.
+        //
+        // For the associated icon, we use the `<object/>` HTML element, as it allows specifying
+        // the media type. The walrus aggregator returns blobs as `application/octect-stream`,
+        // so it's necessary to specify the content type to the browser in the `object` element.
+        document.getElementById("uploaded-blobs").insertAdjacentHTML(
+          "afterBegin",
+          `<article class="row border rounded-2 shadow-sm mb-3">
+          <object type="${isImage ? media_type : ""}" data="${
+            isImage ? blobUrl : ""
+          }" class="col-4 ps-0"></object>
+          <dl class="blob-info col-8 my-2">
+            <dt>Status</dt><dd>${info.status}</dd>
+
+            <dt>Blob ID</dt>
+            <dd class="text-truncate"><a href="${blobUrl}">${
+            info.blobId
+          }</a></dd>
+
+            <dt>${info.suiRefType}</dt>
+            <dd class="text-truncate">
+              <a href="${suiUrl}" target="_blank">${info.suiRef}</a>
+            </dd>
+            <dt>Stored until epoch</dt><dd>${info.endEpoch}</dd>
+          </dl>
+        </article>`
+        );
+      }
+
+      /**
+       * Helper function to disable the form while uploading.
+       */
+      function enableForm(isEnabled) {
+        if (isEnabled) {
+          // Copy the urls, so that they are not reset.
+          const publisherUrl = document.getElementById(
+            "publisher-url-input"
+          ).value;
+          const aggregatorUrl = document.getElementById(
+            "aggregator-url-input"
+          ).value;
+          // Reset the form
+          document.getElementById("upload-form").reset();
+          // Revert the URLs to their previous values
+          document.getElementById("publisher-url-input").value = publisherUrl;
+          document.getElementById("aggregator-url-input").value = aggregatorUrl;
+          // Disable the progress indication
+          document.getElementById("submit-spinner").style.visibility =
+            "collapse";
+          document.getElementById("submit-text").textContent = "Upload";
+          // Re-enable the form
+          document
+            .querySelector("#upload-form fieldset")
+            .removeAttribute("disabled");
+        } else {
+          document
+            .querySelector("#upload-form fieldset")
+            .setAttribute("disabled", "");
+          document.getElementById("submit-spinner").style.visibility =
+            "visible";
+          document.getElementById("submit-text").textContent = "Uploading ...";
+        }
+      }
+
+      /**
+       * Helper to display an error message.
+       */
+      function alert(message) {
+        const alertElement = document.getElementById("alert");
+        if (message !== null) {
+          alertElement.textContent = message;
+        }
+        alertElement.style.visibility = message !== null ? "visible" : "hidden";
+      }
+    </script>
+
+    <header class="container my-3">
+      <hgroup>
+        <h1>Walrus Blob Upload</h1>
+        <p class="lead">
+          An example uploading and displaying files with Walrus.
+        </p>
+      </hgroup>
+    </header>
+    <main class="container">
+      <div class="row align-items-start gx-5">
+        <section class="col-lg-5 mb-3">
+          <hgroup>
+            <h2>Blob Upload</h2>
+            <p>
+              Upload blobs to Walrus, and display them on this page. See the
+              <a href="https://docs.wal.app" target="_blank">
+                Walrus documentation
+              </a>
+              for more information. The file size is limited to 10 MiB on the
+              default publisher. Use the
+              <a
+                href="https://docs.wal.app/usage/client-cli.html"
+                target="_blank"
+                >CLI tool</a
+              >
+              to store bigger files.
+            </p>
+          </hgroup>
+
+          <form id="upload-form" onsubmit="return onSubmit(event)" class="mb-3">
+            <fieldset class="row g-3">
+              <div class="col-lg-6">
+                <label for="publisher-url-input" class="form-label">
+                  Walrus publisher URL
+                </label>
+                <input
+                  id="publisher-url-input"
+                  type="url"
+                  class="form-control"
+                  placeholder="https://publisher.walrus-testnet.walrus.space"
+                  value="https://publisher.walrus-testnet.walrus.space"
+                  required
+                />
+              </div>
+
+              <div class="col-lg-6">
+                <label for="aggregator-url-input" class="form-label">
+                  Walrus aggregator URL
+                </label>
+                <input
+                  id="aggregator-url-input"
+                  type="url"
+                  class="form-control"
+                  placeholder="https://aggregator.walrus-testnet.walrus.space"
+                  value="https://aggregator.walrus-testnet.walrus.space"
+                  required
+                />
+              </div>
+
+              <div class="col-12">
+                <label for="file-input" class="form-label"
+                  >Blob to upload (<strong>Max 10 MiB size</strong> on the
+                  default publisher!)</label
+                >
+                <input
+                  id="file-input"
+                  type="file"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              <div class="col-12">
+                <label for="epochs-input" class="form-label">Epochs</label>
+                <input
+                  id="epochs-input"
+                  type="number"
+                  value="1"
+                  min="1"
+                  placeholder="Epochs"
+                  class="form-control"
+                  required
+                />
+                <div class="form-text">
+                  The number of Walrus epochs for which to store the blob.
                 </div>
-            </div>
-            <div class="testimonial-card">
-                <p class="testimonial-text">"As a producer, I often had to chase payments. With TuneFlow, I get my fair share instantly whenever a track sells or streams."</p>
-                <div class="testimonial-author">
-                    <img src="/api/placeholder/50/50" alt="Producer" class="author-image">
-                    <div>
-                        <p class="author-name">Jenna Kim</p>
-                        <p class="author-title">Music Producer</p>
-                    </div>
+              </div>
+
+              <div class="col-12">
+                <label for="send-to-input" class="form-label">Send to</label>
+                <input
+                  id="send-to-input"
+                  placeholder="0x9d8a07f9f5cb4d10ad3a8c949f17b9ae6c51fc76c2b7ef62dc5babec551e79e6"
+                  class="form-control"
+                  required
+                />
+                <div class="form-text">
+                  The address to which the newly created `Blob` object should be
+                  sent (optional).
                 </div>
-            </div>
-            <div class="testimonial-card">
-                <p class="testimonial-text">"The transparency is incredible. I can see exactly how my music is performing and where my royalties are coming from in real-time."</p>
-                <div class="testimonial-author">
-                    <img src="/api/placeholder/50/50" alt="Artist" class="author-image">
-                    <div>
-                        <p class="author-name">David Okafor</p>
-                        <p class="author-title">Singer-Songwriter</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <h2 class="cta-title">Ready to Transform Your Music Experience?</h2>
-        <p class="cta-subtitle">Join TuneFlow today and be part of the revolution that's creating a fairer, more transparent music ecosystem for artists and fans alike.</p>
-        <a href="#" class="btn btn-white">Get Started Today</a>
-    </section>
-    
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-col">
-                <a href="#" class="footer-logo">TuneFlow</a>
-                <p class="footer-desc">A decentralized music platform empowering artists and fans through blockchain technology.</p>
-                <div class="social-links">
-                    <a href="#" class="social-link">FB</a>
-                    <a href="#" class="social-link">TW</a>
-                    <a href="#" class="social-link">IG</a>
-                    <a href="#" class="social-link">DC</a>
-                </div>
-            </div>
-            <div class="footer-col">
-                <h3 class="footer-title">Platform</h3>
-                <ul class="footer-links">
-                    <li><a href="#">Discover Music</a></li>
-                    <li><a href="#">For Artists</a></li>
-                    <li><a href="#">How It Works</a></li>
-                    <li><a href="#">Pricing</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h3 class="footer-title">Resources</h3>
-                <ul class="footer-links">
-                    <li><a href="#">Help Center</a></li>
-                    <li><a href="#">Artist Guide</a></li>
-                    <li><a href="#">Blockchain 101</a></li>
-                    <li><a href="#">FAQs</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h3 class="footer-title">Company</h3>
-                <ul class="footer-links">
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Careers</a></li>
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">Contact Us</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 TuneFlow. All rights reserved.</p>
-        </div>
-    </footer>
-</body>
+              </div>
+
+              <button id="submit" class="btn btn-primary">
+                <span
+                  id="submit-spinner"
+                  class="spinner-border spinner-border-sm"
+                  aria-hidden="true"
+                  style="visibility: collapse"
+                ></span>
+                <span id="submit-text" role="status">Upload</span>
+              </button>
+            </fieldset>
+          </form>
+
+          <div
+            id="alert"
+            class="alert alert-danger"
+            role="alert"
+            style="visibility: hidden"
+          ></div>
+        </section>
+
+        <section class="col-lg-7">
+          <h2>Uploaded Blobs</h2>
+          <div id="uploaded-blobs">
+            <!-- Container for info about uploaded blobs -->
+          </div>
+        </section>
+      </div>
+    </main>
+  </body>
 </html>
