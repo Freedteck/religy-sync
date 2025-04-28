@@ -8,9 +8,12 @@ const ContentList = ({ items, type, showQuestionLink = false }) => {
       {items.map((item, index) => {
         const content = item.data.content.fields;
         const timestamp = formatTime(item.timestampMs);
-        const linkTo = `/questions/${
-          type === "question" ? content.id : content.related_to
-        }`;
+        const linkTo =
+          type === "prayer"
+            ? `/prayers`
+            : `/questions/${
+                type === "question" ? content.id.id : content.related_to
+              }`;
 
         return (
           <Link to={linkTo} key={index} className={styles.contentItemLink}>

@@ -1,6 +1,6 @@
 .header {
   background-color: var(--dark-blue-3);
-  opacity: 0.7;
+  /* opacity: 0.7; */
   width: 100%;
   position: fixed;
   top: 0;
@@ -19,6 +19,10 @@
   font-weight: bold;
   color: var(--text-white);
   text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  line-height: 1;
 }
 
 .navList {

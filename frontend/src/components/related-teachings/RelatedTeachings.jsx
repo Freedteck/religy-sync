@@ -19,7 +19,7 @@ const RelatedTeachings = ({ insights }) => {
       <h2 className={styles.sectionHeading}>Related Insights</h2>
       <div className={styles.relatedGrid}>
         {insights.map((insight) => (
-          <TeachingCard key={insight.id} teaching={insight} />
+          <TeachingCard key={insight?.data?.objectId} teaching={insight} />
         ))}
       </div>
     </section>

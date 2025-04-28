@@ -73,7 +73,8 @@ export const parseMetadata = (metadataStr, defaultValue = {}) => {
 export const filterAndSortContent = (
   contentList,
   filters,
-  sortBy = "newest"
+  sortBy = "newest",
+  searchQuery = ""
 ) => {
   if (!contentList || !Array.isArray(contentList)) return [];
 
@@ -113,6 +114,16 @@ export const filterAndSortContent = (
       }
       return true;
     });
+  }
+
+  if (searchQuery) {
+    const query = searchQuery.toLowerCase();
+    filtered = filtered.filter(
+      (prayer) =>
+        prayer.title.toLowerCase().includes(query) ||
+        prayer.content.toLowerCase().includes(query) ||
+        prayer.author.toLowerCase().includes(query)
+    );
   }
 
   // Apply sorting

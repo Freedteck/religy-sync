@@ -1,0 +1,149 @@
+.note {
+  background: linear-gradient(
+    to bottom right,
+    var(--dark-blue-5),
+    var(--dark-blue-6)
+  );
+  border: 1px solid var(--accent-purple);
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+  transform: rotate(var(--rotation));
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.note::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  width: 30px;
+  height: 30px;
+  background: var(--accent-blue-light);
+  transform: translateX(-50%) rotate(45deg);
+  z-index: -1;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  clip-path: polygon(0% 0%, 100% 100%, 0% 100%);
+  opacity: 0.7;
+}
+
+.note:hover {
+  transform: rotate(var(--rotation)) translateY(-5px) scale(1.02);
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+.noteTitle {
+  font-size: 1.3rem;
+  color: var(--accent-blue);
+  margin-bottom: 10px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--accent-purple);
+}
+
+.content {
+  color: var(--text-light);
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.tags {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.tag {
+  background-color: var(--dark-blue-6);
+  color: var(--accent-blue);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-gray);
+  font-size: 0.8rem;
+  border-top: 1px dashed var(--accent-purple-dark);
+}
+
+.author {
+  color: var(--accent-blue);
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.date {
+  font-style: italic;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.likeBtn {
+  background: linear-gradient(
+    to bottom right,
+    var(--accent-blue-light),
+    var(--accent-purple-dark)
+  );
+  color: var(--text-white);
+  border-radius: 15px;
+  padding: 6px 15px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.likeBtn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.tipBtn {
+  background: transparent;
+  color: var(--text-white);
+  border: 1px solid var(--accent-blue-light);
+  border-radius: 15px;
+  padding: 5px 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tipBtn:hover {
+  background-color: rgba(67, 97, 238, 0.1);
+  transform: translateY(-1px);
+}
+
+.rotate1 {
+  --rotation: -2deg;
+}
+.rotate2 {
+  --rotation: 1deg;
+}
+.rotate3 {
+  --rotation: -1.5deg;
+}
+.rotate4 {
+  --rotation: 2deg;
+}
+.rotate5 {
+  --rotation: -0.5deg;
+}

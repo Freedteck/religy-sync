@@ -25,6 +25,7 @@ const Profile = () => {
     questions: [],
     answers: [],
     insights: [],
+    prayers: [],
   });
   const { id: userAddress } = useParams();
   const suiClient = useSuiClient();
@@ -90,6 +91,7 @@ const Profile = () => {
       const questions = [];
       const answers = [];
       const insights = [];
+      const prayers = [];
 
       contentObjects.forEach((obj, index) => {
         const event = userContentEvents[index];
@@ -105,6 +107,8 @@ const Profile = () => {
           answers.push(contentWithTimestamp);
         } else if (contentType === 2) {
           insights.push(contentWithTimestamp);
+        } else if (contentType === 3) {
+          prayers.push(contentWithTimestamp);
         }
       });
 
@@ -112,6 +116,7 @@ const Profile = () => {
         questions,
         answers,
         insights,
+        prayers,
       });
     }
   }, [contentObjects, userContentEvents]);
@@ -178,6 +183,7 @@ const Profile = () => {
     answers: userContent.answers.length,
     questions: userContent.questions.length,
     insights: userContent.insights.length,
+    prayers: userContent.prayers.length,
   };
 
   // Mock about data
@@ -308,6 +314,16 @@ const Profile = () => {
           >
             Questions ({scholarStats.questions})
           </li>
+
+          <li
+            className={`${styles.tabItem} ${
+              activeTab === "prayers" ? styles.active : ""
+            }`}
+            onClick={() => setActiveTab("prayers")}
+          >
+            Prayers ({scholarStats.prayers})
+          </li>
+
           {isApprovedScholar && (
             <>
               <li
@@ -371,6 +387,21 @@ const Profile = () => {
         ) : (
           <div className={styles.emptyState}>
             <p>No questions yet.</p>
+          </div>
+        )}
+      </div>
+
+      {/* Prayers Tab Content */}
+      <div
+        className={`${styles.contentContainer} ${
+          activeTab !== "prayers" ? styles.hidden : ""
+        }`}
+      >
+        {userContent.prayers.length > 0 ? (
+          <ContentList items={userContent.prayers} type="prayer" />
+        ) : (
+          <div className={styles.emptyState}>
+            <p>No prayers yet.</p>
           </div>
         )}
       </div>

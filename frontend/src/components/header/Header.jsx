@@ -6,7 +6,9 @@ const Header = () => {
   return (
     <header className={styles.header}>
       <Link to="/" className={styles.logo}>
-        ReligySync
+        <img src="/religy_sync.png" alt="" width={60} />
+        Religy <br />
+        Sync
       </Link>
       <nav className={styles.nav}>
         <ul className={styles.navList}>
@@ -40,6 +42,14 @@ const Header = () => {
               className={({ isActive }) => (isActive ? styles.active : "")}
             >
               Teachings
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/prayers"
+              className={({ isActive }) => (isActive ? styles.active : "")}
+            >
+              Prayer Wall
             </NavLink>
           </li>
           <ConnectButton />

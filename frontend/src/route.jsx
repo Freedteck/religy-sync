@@ -14,6 +14,8 @@ import Applications from "./routes/admin/pages/applications/Applications";
 import Teachings from "./routes/teachings/Teachings";
 import TeachingDetails from "./routes/teaching-details/TeachingDetails";
 import CreateInsight from "./routes/create-insight/CreateInsight";
+import PrayerWall from "./routes/prayer-wall/PrayerWall";
+import CreatePrayer from "./routes/create-prayer/CreatePrayer";
 
 export const router = createBrowserRouter([
   {
@@ -48,6 +50,14 @@ export const router = createBrowserRouter([
       {
         path: "questions",
         Component: Questions,
+      },
+      {
+        path: "prayers",
+        Component: PrayerWall,
+      },
+      {
+        path: "create-prayer",
+        Component: CreatePrayer,
       },
       {
         path: "questions/:id",

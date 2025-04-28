@@ -141,6 +141,31 @@ const useCreateContent = (
     });
   };
 
+  const createPrayer = async (title, details, metadata, onSuccess) => {
+    const tx = new Transaction();
+
+    // Convert metadata to string if it's an object
+    const metadataStr =
+      typeof metadata === "object" ? JSON.stringify(metadata) : metadata;
+
+    tx.moveCall({
+      arguments: [
+        tx.object(platformId),
+        tx.pure.string(title),
+        tx.pure.string(details),
+        tx.pure.string(metadataStr),
+      ],
+      target: `${religySyncPackageId}::religy_sync::create_prayer`,
+    });
+
+    return executeTransaction(tx, {
+      successMessage: "Prayer submitted successfully!",
+      errorMessage: "Error submitting prayer. Please try again.",
+      loadingMessage: "Submitting prayer...",
+      onSuccess,
+    });
+  };
+
   const createInsight = async (
     scholarCapId,
     title,
@@ -293,6 +318,7 @@ const useCreateContent = (
     approveScholar,
     revokeScholar,
     createInsight,
+    createPrayer,
   };
 };
 

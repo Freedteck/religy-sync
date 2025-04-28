@@ -182,6 +182,14 @@ const Home = () => {
               <div className={styles["stat-description"]}>Answers Provided</div>
             </div>
             <div className={styles["stat-box"]}>
+              <div className={styles["stat-number"]}>
+                {allContent.filter(
+                  (content) => content.data.content.fields.content_type === 3
+                ).length || "0"}
+              </div>
+              <div className={styles["stat-description"]}>Prayers Posted</div>
+            </div>
+            <div className={styles["stat-box"]}>
               <div className={styles["stat-number"]}>{scholars.length}</div>
               <div className={styles["stat-description"]}>
                 Verified Scholars
