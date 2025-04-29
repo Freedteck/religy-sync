@@ -6,10 +6,11 @@ import {
 import { useNetworkVariables } from "../../config/networkConfig";
 import Button from "../button/Button";
 import styles from "./QuestionForm.module.css";
-import { useState, useEffect } from "react";
+import { useContext, useState } from "react";
 import { Form, useNavigate } from "react-router-dom";
 import useCreateContent from "../../hooks/useCreateContent";
 import QuestionPreview from "../../modals/question-preview/QuestionPreview";
+import { WalletContext } from "../../context/walletContext";
 
 const QuestionForm = () => {
   const { religySyncPackageId, platformId } = useNetworkVariables(
@@ -23,13 +24,13 @@ const QuestionForm = () => {
   const [newTag, setNewTag] = useState("");
   const [tokenAmount, setTokenAmount] = useState(0);
   const [preferredScholar, setPreferredScholar] = useState("");
-  const [balance, setBalance] = useState(0);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const navigate = useNavigate();
   const suiClient = useSuiClient();
   const { mutate: signAndExecute, isPending } = useSignAndExecuteTransaction();
   const account = useCurrentAccount();
+  const { balance } = useContext(WalletContext);
 
   // Use our custom hook for content creation
   const { createQuestion } = useCreateContent(
@@ -78,28 +79,6 @@ const QuestionForm = () => {
   const handleClosePreview = () => {
     setIsPreviewOpen(false);
   };
-
-  useEffect(() => {
-    const fetchBalance = async () => {
-      if (account && suiClient) {
-        try {
-          // Fetch the user's SUI coin balance
-          const { totalBalance } = await suiClient.getBalance({
-            owner: account.address,
-          });
-
-          // Format the balance (e.g., convert from MIST to SUI)
-          const formattedBalance = Number(totalBalance) / 1_000_000_000;
-
-          setBalance(formattedBalance.toFixed(2));
-        } catch (err) {
-          console.error("Error fetching balance:", err);
-        }
-      }
-    };
-
-    fetchBalance();
-  }, [account, suiClient]);
 
   const isFormValid = title && details && tradition;
 
@@ -262,27 +241,35 @@ const QuestionForm = () => {
             Higher offerings often receive quicker responses.
           </div>
         </div>
-
-        <div className={styles["submission-buttons"]}>
-          <div className={styles["submission-cost"]}>
-            Base cost: <strong>1 SUI</strong> + Gas fees
+        {account ? (
+          <div className={styles["submission-buttons"]}>
+            <div className={styles["submission-cost"]}>
+              Base cost: <strong>SUI Token</strong> + Gas fees
+            </div>
+            <div className={styles["button-group"]}>
+              <Button
+                type="button"
+                text={"Preview"}
+                btnClass={"secondary"}
+                onClick={handleOpenPreview}
+                disabled={!isFormValid}
+              />
+              <Button
+                type="submit"
+                text={isPending ? "Submitting..." : "Submit Question"}
+                btnClass={"primary"}
+                disabled={isPending || !isFormValid}
+              />
+            </div>
           </div>
-          <div className={styles["button-group"]}>
-            <Button
-              type="button"
-              text={"Preview"}
-              btnClass={"secondary"}
-              onClick={handleOpenPreview}
-              disabled={!isFormValid}
-            />
-            <Button
-              type="submit"
-              text={isPending ? "Submitting..." : "Submit Question"}
-              btnClass={"primary"}
-              disabled={isPending || !isFormValid}
-            />
+        ) : (
+          <div className={styles["submission-buttons"]}>
+            <p className={styles["not-connected-message"]}>
+              You need to be connected to submit a question. Please connect your
+              wallet to proceed.
+            </p>
           </div>
-        </div>
+        )}
       </Form>
 
       <QuestionPreview

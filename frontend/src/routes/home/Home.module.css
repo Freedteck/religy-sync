@@ -1,3 +1,15 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.religionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
 .section {
   padding-block: 30px;
 }
@@ -13,7 +25,7 @@
 
 .row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
 }
 
@@ -25,8 +37,9 @@
 
 /* Stats Section */
 .platform-stats {
-  display: flex;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
   background: linear-gradient(to right, var(--dark-blue-5), var(--dark-blue-6));
   padding: 30px;
   border-radius: 8px;
@@ -52,14 +65,6 @@
   font-size: 16px;
 }
 
-/* Home.module.css */
-
-.home {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-}
-
 .emptyState {
   color: var(--text-gray-light);
   font-style: italic;
@@ -67,10 +72,4 @@
   background-color: var(--dark-blue-3);
   border-radius: 8px;
   text-align: center;
-}
-
-.religionsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
 }

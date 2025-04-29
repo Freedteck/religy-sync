@@ -285,3 +285,35 @@
   border-color: var(--accent-purple);
   box-shadow: 0 0 0 2px rgba(114, 9, 183, 0.3);
 }
+
+.submission-buttons .not-scholar-message {
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+  background-color: rgba(255, 71, 87, 0.1);
+  border: 1px solid rgba(255, 71, 87, 0.3);
+  border-radius: 8px;
+  color: var(--accent-red);
+  font-size: 16px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.submission-buttons .not-scholar-message::before {
+  content: "⚠️";
+  font-size: 18px;
+}
+
+.submission-buttons .not-scholar-message a {
+  color: var(--accent-blue-light);
+  text-decoration: underline;
+  margin-left: 5px;
+}
+
+.submission-buttons .not-scholar-message a:hover {
+  color: var(--accent-blue);
+}

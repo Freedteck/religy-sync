@@ -243,8 +243,6 @@ const Teachings = () => {
 
         {showErrorState && <ErrorState />}
 
-        {showEmptyState && <EmptyState />}
-
         {!initialLoading && !showErrorState && !showEmptyState && (
           <>
             <section className={styles.insightsGrid}>
@@ -308,6 +306,7 @@ const Teachings = () => {
             )}
           </>
         )}
+        {showEmptyState && <EmptyState />}
       </div>
     </main>
   );

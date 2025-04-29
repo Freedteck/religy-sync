@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useContext } from "react";
 import {
   useCurrentAccount,
   useSignAndExecuteTransaction,
@@ -7,12 +7,13 @@ import {
 import { useNetworkVariables } from "../../config/networkConfig";
 import Button from "../button/Button";
 import styles from "./InsightForm.module.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useCreateContent from "../../hooks/useCreateContent";
 import InsightPreview from "../../modals/insight-preview/InsightPreview";
 import useScholarStatus from "../../hooks/useScholarStatus";
 import toast from "react-hot-toast";
 import { uploadMultiple } from "../../utils/pinataService";
+import { WalletContext } from "../../context/walletContext";
 
 const MAX_FILE_SIZE_MB = 10;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
@@ -34,12 +35,12 @@ const InsightForm = () => {
   const [videoUrl, setVideoUrl] = useState("");
   const [videoFile, setVideoFile] = useState(null);
   const [tokenAmount, setTokenAmount] = useState(0);
-  const [balance, setBalance] = useState(0);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [videoInputMethod, setVideoInputMethod] = useState("file");
   const [thumbnailInputMethod, setThumbnailInputMethod] = useState("file");
   const [isUploading, setIsUploading] = useState(false);
 
+  const { balance, isScholar } = useContext(WalletContext);
   const navigate = useNavigate();
   const suiClient = useSuiClient();
   const { mutate: signAndExecute, isPending } = useSignAndExecuteTransaction();
@@ -168,23 +169,6 @@ const InsightForm = () => {
   const handleClosePreview = () => {
     setIsPreviewOpen(false);
   };
-
-  useEffect(() => {
-    const fetchBalance = async () => {
-      if (account && suiClient) {
-        try {
-          const { totalBalance } = await suiClient.getBalance({
-            owner: account.address,
-          });
-          setBalance((Number(totalBalance) / 1_000_000_000).toFixed(2));
-        } catch (err) {
-          console.error("Error fetching balance:", err);
-        }
-      }
-    };
-
-    fetchBalance();
-  }, [account, suiClient]);
 
   const isFormValid =
     title &&
@@ -518,32 +502,41 @@ const InsightForm = () => {
           </div>
         </div>
 
-        <div className={styles["submission-buttons"]}>
-          <div className={styles["submission-cost"]}>
-            Base cost: <strong>2 SUI</strong> + Gas fees
+        {isScholar ? (
+          <div className={styles["submission-buttons"]}>
+            <div className={styles["submission-cost"]}>
+              Base cost: <strong>SUI Token</strong> + Gas fees
+            </div>
+            <div className={styles["button-group"]}>
+              <Button
+                type="button"
+                text={"Preview"}
+                btnClass={"secondary"}
+                onClick={handleOpenPreview}
+                disabled={!isFormValid || isUploading}
+              />
+              <Button
+                type="submit"
+                text={
+                  isUploading
+                    ? "Uploading files..."
+                    : isPending
+                    ? "Publishing..."
+                    : "Publish Insight"
+                }
+                btnClass={"primary"}
+                disabled={isPending || !isFormValid || isUploading}
+              />
+            </div>
           </div>
-          <div className={styles["button-group"]}>
-            <Button
-              type="button"
-              text={"Preview"}
-              btnClass={"secondary"}
-              onClick={handleOpenPreview}
-              disabled={!isFormValid || isUploading}
-            />
-            <Button
-              type="submit"
-              text={
-                isUploading
-                  ? "Uploading files..."
-                  : isPending
-                  ? "Publishing..."
-                  : "Publish Insight"
-              }
-              btnClass={"primary"}
-              disabled={isPending || !isFormValid || isUploading}
-            />
+        ) : (
+          <div className={styles["submission-buttons"]}>
+            <p className={styles["not-scholar-message"]}>
+              You need to be a verified scholar to publish insights.
+              <Link to={"/scholar-application"}>Apply now</Link>
+            </p>
           </div>
-        </div>
+        )}
       </form>
 
       <InsightPreview

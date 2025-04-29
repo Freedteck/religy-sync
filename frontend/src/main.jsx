@@ -9,6 +9,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./route.jsx";
 import { networkConfig } from "./config/networkConfig.js";
+import { lightTheme } from "./themes/lightTeheme.js";
 
 const queryClient = new QueryClient();
 // const networks = {
@@ -21,7 +22,14 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <SuiClientProvider networks={networkConfig} defaultNetwork="devnet">
-        <WalletProvider autoConnect={true}>
+        <WalletProvider
+          autoConnect={true}
+          theme={[
+            {
+              variables: lightTheme,
+            },
+          ]}
+        >
           <RouterProvider router={router} />
         </WalletProvider>
       </SuiClientProvider>

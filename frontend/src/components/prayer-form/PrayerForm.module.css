@@ -187,3 +187,25 @@
   display: flex;
   gap: 15px;
 }
+
+.submission-buttons .not-connected-message {
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+  background-color: rgba(255, 71, 87, 0.1);
+  border: 1px solid rgba(255, 71, 87, 0.3);
+  border-radius: 8px;
+  color: var(--accent-red);
+  font-size: 16px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.submission-buttons .not-connected-message::before {
+  content: "⚠️";
+  font-size: 18px;
+}

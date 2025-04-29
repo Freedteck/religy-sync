@@ -55,25 +55,27 @@ const QuestionDetails = () => {
     );
 
   // Fetch answers to the question
-  const { data: eventsData } = useSuiClientInfiniteQuery(
-    "queryEvents",
-    {
-      query: {
-        MoveEventType: `${religySyncPackageId}::religy_sync::ContentCreated`,
+  const { data: eventsData, refetch: refreshAnswers } =
+    useSuiClientInfiniteQuery(
+      "queryEvents",
+      {
+        query: {
+          MoveEventType: `${religySyncPackageId}::religy_sync::ContentCreated`,
+        },
+        cursor: null,
       },
-      cursor: null,
-    },
-    {
-      enabled: true,
-      select: (data) =>
-        data.pages
-          .flatMap((page) => page.data)
-          .filter(
-            (x) =>
-              x.parsedJson.content_type === 1 && x.parsedJson.related_to === id
-          ),
-    }
-  );
+      {
+        enabled: true,
+        select: (data) =>
+          data.pages
+            .flatMap((page) => page.data)
+            .filter(
+              (x) =>
+                x.parsedJson.content_type === 1 &&
+                x.parsedJson.related_to === id
+            ),
+      }
+    );
 
   // Fetch follow-ups (content_type = 4) that relate to answers
   const { data: followupEventsData, refetch: refreshFollowups } =
@@ -135,7 +137,7 @@ const QuestionDetails = () => {
       }
     );
 
-  const { data: answerListData, refetch: refreshAnswers } = useSuiClientQuery(
+  const { data: answerListData } = useSuiClientQuery(
     "multiGetObjects",
     {
       ids: objectIds,
