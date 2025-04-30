@@ -13,7 +13,7 @@ const CreatePrayer = () => {
         </p>
       </section>
       <PrayerForm />
-      <BlockchainInfo />
+      <BlockchainInfo contentType={"Prayer"} />
     </main>
   );
 };

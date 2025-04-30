@@ -13,7 +13,7 @@ const CreateInsight = () => {
         </p>
       </section>
       <InsightForm />
-      <BlockchainInfo />
+      <BlockchainInfo contentType={"Insight"} />
     </main>
   );
 };

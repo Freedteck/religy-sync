@@ -1,5 +1,10 @@
+import { truncateAddress } from "../../utils/truncateAddress";
 import styles from "./BlockchainInfo.module.css";
-const BlockchainInfo = () => {
+import { useCurrentAccount, useSuiClientContext } from "@mysten/dapp-kit";
+const BlockchainInfo = ({ contentType }) => {
+  const { network } = useSuiClientContext();
+  const account = useCurrentAccount();
+
   return (
     <section className={styles["blockchain-info"]}>
       <div className={styles["blockchain-title"]}>
@@ -10,17 +15,19 @@ const BlockchainInfo = () => {
         <div className={styles["blockchain-item"]}>
           <div className={styles["blockchain-item-title"]}>Wallet Status</div>
           <div className={styles["blockchain-item-value"]}>
-            Connected (0x7a12...5f92)
+            Connected ({truncateAddress(account?.address)})
           </div>
         </div>
         <div className={styles["blockchain-item"]}>
           <div className={styles["blockchain-item-title"]}>Network</div>
-          <div className={styles["blockchain-item-value"]}>Sui Mainnet</div>
+          <div className={styles["blockchain-item-value"]}>
+            Sui {network?.slice(0, 1).toUpperCase() + network?.slice(1)}
+          </div>
         </div>
         <div className={styles["blockchain-item"]}>
           <div className={styles["blockchain-item-title"]}>NFT Status</div>
           <div className={styles["blockchain-item-value"]}>
-            Question will be minted as NFT
+            {contentType} will be minted as NFT
           </div>
         </div>
       </div>

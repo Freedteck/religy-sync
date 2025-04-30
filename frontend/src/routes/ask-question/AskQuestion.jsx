@@ -13,7 +13,7 @@ const AskQuestion = () => {
         </p>
       </section>
       <QuestionForm />
-      <BlockchainInfo />
+      <BlockchainInfo contentType={"Question"} />
     </main>
   );
 };
