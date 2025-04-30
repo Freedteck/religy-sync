@@ -1,15 +1,43 @@
 .about {
-  padding-block: 50px;
+  color: var(--text-light);
 }
 
-.top-header {
+/* Hero Section */
+.hero {
+  background: linear-gradient(
+    135deg,
+    rgba(58, 134, 255, 0.2),
+    rgba(114, 9, 183, 0.2)
+  );
+  padding: 5rem 1rem;
   text-align: center;
-  margin-bottom: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(58, 134, 255, 0.1),
+    transparent 70%
+  );
+  z-index: -1;
+}
+
+.heroContent {
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .title {
-  font-size: 42px;
-  margin-bottom: 15px;
+  font-size: 3rem;
+  margin-bottom: 1rem;
   background: linear-gradient(
     to right,
     var(--accent-blue-light),
@@ -18,133 +46,167 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  line-height: 1.2;
 }
 
-.sub-title {
+.subtitle {
+  font-size: 1.25rem;
   color: var(--text-gray-light);
-  font-size: 18px;
-  max-width: 700px;
+  max-width: 600px;
   margin: 0 auto;
 }
 
-.about-section {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 40px;
-  margin-bottom: 60px;
+/* General Section Styles */
+.section {
+  padding: 4rem 1rem;
 }
 
-.about-content {
-  background: linear-gradient(
-    to bottom right,
-    var(--dark-blue-5),
-    var(--dark-blue-6)
-  );
-  border-radius: 8px;
-  padding: 30px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.section-title {
-  font-size: 28px;
-  margin-bottom: 20px;
-  color: var(--text-light);
-  border-bottom: 2px solid var(--accent-purple);
+.sectionTitle {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: var(--text-white);
+  position: relative;
   display: inline-block;
-  padding-bottom: 8px;
 }
 
-.about-content p {
-  color: var(--text-gray-light);
-  line-height: 1.6;
-  margin-bottom: 20px;
-}
-
-.about-content p:last-child {
-  margin-bottom: 0;
-}
-
-.platform-features {
+.sectionTitle::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 3px;
   background: linear-gradient(
-    to bottom right,
-    var(--dark-blue-4),
-    var(--dark-blue-3)
+    to right,
+    var(--accent-blue-light),
+    var(--accent-purple)
   );
-  border-radius: 8px;
-  padding: 30px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.faq-section {
-  margin-bottom: 60px;
+/* Mission Section */
+.missionSection {
+  background-color: var(--dark-blue-6);
 }
 
-.faq-container {
-  background: linear-gradient(
-    to bottom right,
-    var(--dark-blue-5),
-    var(--dark-blue-6)
-  );
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  padding: 30px;
-}
-
-.blockchain-section {
-  background: radial-gradient(
-    circle at 50% 50%,
-    rgba(114, 9, 183, 0.1),
-    transparent 70%
-  );
-  border-radius: 8px;
-  /* padding: 30px; */
-  text-align: center;
-  margin-bottom: 60px;
-}
-
-.blockchain-title {
-  font-size: 28px;
-  margin-bottom: 20px;
-  color: var(--text-light);
-}
-
-.blockchain-description {
-  color: var(--text-gray-light);
-  line-height: 1.6;
+.missionContent {
   max-width: 800px;
-  margin: 0 auto 30px;
+  margin: 0 auto;
 }
 
-.benefit-cards {
+.missionText p {
+  color: var(--text-gray-light);
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+/* Features Section */
+.featuresSection {
+  background-color: var(--dark-blue-5);
+}
+
+.featuresGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
+  gap: 2rem;
 }
 
-.team-section {
-  margin-bottom: 60px;
+/* FAQ Section */
+.faqSection {
+  background-color: var(--dark-blue-6);
 }
 
-.team-container {
+.faqContainer {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Blockchain Section */
+.blockchainSection {
   background: linear-gradient(
-    to bottom right,
-    var(--dark-blue-5),
-    var(--dark-blue-6)
+    135deg,
+    rgba(58, 134, 255, 0.05),
+    rgba(114, 9, 183, 0.05)
   );
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  padding: 30px;
 }
 
-.team-grid {
+.blockchainDescription {
+  color: var(--text-gray-light);
+  max-width: 700px;
+  margin: 0 auto 3rem;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  text-align: center;
+}
+
+.benefitsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
+  gap: 2rem;
 }
 
-.contact-section {
+/* Team Section */
+.teamSection {
+  background-color: var(--dark-blue-5);
+}
+
+.teamGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+/* Contact Section */
+.contactSection {
+  background-color: var(--dark-blue-6);
+}
+
+.contactGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 40px;
-  margin-bottom: 60px;
+  gap: 3rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .title {
+    font-size: 2.5rem;
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+  }
+
+  .section {
+    padding: 3rem 1rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.75rem;
+  }
+
+  .contactGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 2rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.5rem;
+  }
+
+  .featuresGrid,
+  .benefitsGrid,
+  .teamGrid {
+    grid-template-columns: 1fr;
+  }
 }
