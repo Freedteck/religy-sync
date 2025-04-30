@@ -15,7 +15,9 @@ const BlockchainInfo = ({ contentType }) => {
         <div className={styles["blockchain-item"]}>
           <div className={styles["blockchain-item-title"]}>Wallet Status</div>
           <div className={styles["blockchain-item-value"]}>
-            Connected ({truncateAddress(account?.address)})
+            {account
+              ? `Connected (${truncateAddress(account?.address)})`
+              : "Not Connected"}
           </div>
         </div>
         <div className={styles["blockchain-item"]}>
