@@ -73,13 +73,12 @@ export const parseMetadata = (metadataStr, defaultValue = {}) => {
 export const filterAndSortContent = (
   contentList,
   filters,
-  sortBy = "newest",
-  searchQuery = ""
+  sortBy = "newest"
 ) => {
   if (!contentList || !Array.isArray(contentList)) return [];
 
   let filtered = [...contentList];
-  const { faithTradition, status } = filters || {};
+  const { faithTradition, status, searchQuery } = filters || {};
 
   // Apply faith tradition filter
   if (faithTradition) {
@@ -118,11 +117,12 @@ export const filterAndSortContent = (
 
   if (searchQuery) {
     const query = searchQuery.toLowerCase();
+
     filtered = filtered.filter(
       (prayer) =>
-        prayer.title.toLowerCase().includes(query) ||
-        prayer.content.toLowerCase().includes(query) ||
-        prayer.author.toLowerCase().includes(query)
+        prayer.data?.content?.fields?.title.toLowerCase().includes(query) ||
+        prayer.data?.content?.fields?.body.toLowerCase().includes(query) ||
+        prayer.data?.content?.fields?.creator.toLowerCase().includes(query)
     );
   }
 

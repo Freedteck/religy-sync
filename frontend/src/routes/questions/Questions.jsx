@@ -1,9 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/button/Button";
-import Pagination from "../../components/pagination/Pagination";
+// import Pagination from "../../components/pagination/Pagination";
 import QuestionList from "../../components/question-list/QuestionList";
 import styles from "./Questions.module.css";
-import { useSuiClientInfiniteQuery } from "@mysten/dapp-kit";
 import { useNetworkVariable } from "../../config/networkConfig";
 import { useEffect, useState } from "react";
 import useContentFromEvents from "../../hooks/useContentFromEvent";
@@ -11,6 +10,7 @@ import { filterAndSortContent } from "../../utils/helpers";
 import Loading from "../../components/loading/Loading";
 import EmptyState from "../../components/empty/EmptyState";
 import ErrorState from "../../components/error/ErrorState";
+import { useQueryEvents } from "../../hooks/useQueryEvents";
 
 const Questions = () => {
   const [filteredQuestions, setFilteredQuestions] = useState([]);
@@ -24,29 +24,21 @@ const Questions = () => {
 
   const religySyncPackageId = useNetworkVariable("religySyncPackageId");
   const {
-    data: eventsData,
+    data: questinsEventsData,
     isFetching,
-    fetchNextPage,
-    hasNextPage,
     isError,
-  } = useSuiClientInfiniteQuery(
-    "queryEvents",
-    {
-      query: {
-        MoveEventType: `${religySyncPackageId}::religy_sync::ContentCreated`,
-      },
-      cursor: null,
+    hasNextPage,
+    fetchNextPage,
+  } = useQueryEvents({
+    packageId: religySyncPackageId,
+    eventType: "ContentCreated",
+    filters: {
+      contentType: 0, // 0 = question
     },
-    {
-      enabled: true,
-      select: (data) =>
-        data.pages
-          .flatMap((page) => page.data)
-          .filter((x) => x.parsedJson.content_type === 0), // 0 = question
-    }
-  );
+  });
 
-  const { contentList: questionList } = useContentFromEvents(eventsData);
+  const { contentList: questionList } =
+    useContentFromEvents(questinsEventsData);
 
   useEffect(() => {
     if (!questionList || questionList.length === 0) return;

@@ -7,15 +7,12 @@ import Loading from "../../components/loading/Loading";
 import EmptyState from "../../components/empty/EmptyState";
 import ErrorState from "../../components/error/ErrorState";
 import { useNetworkVariables } from "../../config/networkConfig";
-import {
-  useSignAndExecuteTransaction,
-  useSuiClient,
-  useSuiClientInfiniteQuery,
-} from "@mysten/dapp-kit";
+import { useSignAndExecuteTransaction, useSuiClient } from "@mysten/dapp-kit";
 import useContentFromEvents from "../../hooks/useContentFromEvent";
 import { filterAndSortContent } from "../../utils/helpers";
 import useCreateContent from "../../hooks/useCreateContent";
 import TipModal from "../../modals/tip-modal/TipModal";
+import { useQueryEvents } from "../../hooks/useQueryEvents";
 
 const PrayerWall = () => {
   const navigate = useNavigate();
@@ -44,22 +41,13 @@ const PrayerWall = () => {
     fetchNextPage,
     hasNextPage,
     isError,
-  } = useSuiClientInfiniteQuery(
-    "queryEvents",
-    {
-      query: {
-        MoveEventType: `${religySyncPackageId}::religy_sync::ContentCreated`,
-      },
-      cursor: null,
+  } = useQueryEvents({
+    packageId: religySyncPackageId,
+    eventType: "ContentCreated",
+    filters: {
+      contentType: 3, // 3 = prayer
     },
-    {
-      enabled: true,
-      select: (data) =>
-        data.pages
-          .flatMap((page) => page.data)
-          .filter((x) => x.parsedJson.content_type === 3), // 3 = prayer
-    }
-  );
+  });
 
   const { contentList: prayers, refetch: refetchPrayers } =
     useContentFromEvents(eventsData);
@@ -216,7 +204,7 @@ const PrayerWall = () => {
         </div>
         <div className={styles.searchBar}>
           <input
-            type="sear"
+            type="search"
             placeholder="Search prayers..."
             value={searchQuery}
             onChange={handleSearchChange}
@@ -233,11 +221,10 @@ const PrayerWall = () => {
         {!initialLoading && !showErrorState && !showEmptyState && (
           <>
             <div className={styles.grid}>
-              {filteredPrayers.map((prayer, index) => (
+              {filteredPrayers.map((prayer) => (
                 <PrayerNote
-                  key={prayer.data.obJectId}
+                  key={prayer.data.objectId}
                   data={prayer}
-                  rotationClass={`rotate${index + 1}`}
                   onLike={() =>
                     likeContent(prayer.data.objectId, refetchPrayers)
                   }

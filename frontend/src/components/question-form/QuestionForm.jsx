@@ -23,7 +23,6 @@ const QuestionForm = () => {
   const [tags, setTags] = useState(["Meditation"]);
   const [newTag, setNewTag] = useState("");
   const [tokenAmount, setTokenAmount] = useState(0);
-  const [preferredScholar, setPreferredScholar] = useState("");
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const navigate = useNavigate();
@@ -58,7 +57,6 @@ const QuestionForm = () => {
     const metadata = {
       tags: tags,
       tradition: tradition,
-      preferredScholar: preferredScholar,
       tokenOffering: tokenAmount,
     };
 
@@ -202,28 +200,6 @@ const QuestionForm = () => {
 
         <div className={styles["form-group"]}>
           <label className={styles["form-label"]}>
-            Preferred Scholar (Optional)
-            <select
-              name="preferredScholar"
-              className={styles["form-select"]}
-              value={preferredScholar}
-              onChange={(e) => setPreferredScholar(e.target.value)}
-            >
-              <option value="">Any verified scholar</option>
-              <option value="venerable-sumedho">Venerable Sumedho</option>
-              <option value="imam-ahmad">Imam Ahmad</option>
-              <option value="swami-vivekananda">Swami Vivekananda</option>
-              <option value="rev-sarah-thompson">Rev. Sarah Thompson</option>
-            </select>
-          </label>
-          <div className={styles["form-helper"]}>
-            You can request a specific scholar to answer your question
-            (additional SUI tokens may be required).
-          </div>
-        </div>
-
-        <div className={styles["form-group"]}>
-          <label className={styles["form-label"]}>
             SUI Token Offering (Optional)
             <input
               type="number"
@@ -279,7 +255,6 @@ const QuestionForm = () => {
         details={details}
         tradition={tradition}
         tags={tags}
-        preferredScholar={preferredScholar}
         tokenAmount={tokenAmount}
       />
     </>

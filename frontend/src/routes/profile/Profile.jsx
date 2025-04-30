@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import styles from "./Profile.module.css";
 import {
   useSuiClient,
-  useSuiClientInfiniteQuery,
   useSuiClientQuery,
   useCurrentAccount,
 } from "@mysten/dapp-kit";
@@ -16,6 +15,7 @@ import Loading from "../../components/loading/Loading";
 import useScholarStatus from "../../hooks/useScholarStatus";
 import TeachingCard from "../../components/teaching-card/TeachingCard";
 import Button from "../../components/button/Button";
+import { useQueryEvents } from "../../hooks/useQueryEvents";
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("questions");
@@ -48,22 +48,16 @@ const Profile = () => {
   );
 
   // Fetch all content created by this user
-  const { data: userContentEvents } = useSuiClientInfiniteQuery(
-    "queryEvents",
-    {
-      query: {
-        MoveEventType: `${religySyncPackageId}::religy_sync::ContentCreated`,
-      },
-      cursor: null,
+  const { data: userContentEvents } = useQueryEvents({
+    packageId: religySyncPackageId,
+    eventType: "ContentCreated",
+    filters: {
+      sender: userAddress,
     },
-    {
+    queryOptions: {
       enabled: !!userAddress,
-      select: (data) =>
-        data.pages
-          .flatMap((page) => page.data)
-          .filter((x) => x.sender === userAddress),
-    }
-  );
+    },
+  });
 
   // Fetch the actual content objects
   const contentIds =

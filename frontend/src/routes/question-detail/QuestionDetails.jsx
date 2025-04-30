@@ -19,6 +19,7 @@ import useScholarStatus from "../../hooks/useScholarStatus";
 import Loading from "../../components/loading/Loading";
 import useContentFromEvents from "../../hooks/useContentFromEvent";
 import { parseMetadata } from "../../utils/helpers";
+import { useQueryEvents } from "../../hooks/useQueryEvents";
 
 const QuestionDetails = () => {
   const { id } = useParams();
@@ -54,53 +55,33 @@ const QuestionDetails = () => {
       signAndExecute
     );
 
-  // Fetch answers to the question
-  const { data: eventsData, refetch: refreshAnswers } =
-    useSuiClientInfiniteQuery(
-      "queryEvents",
-      {
-        query: {
-          MoveEventType: `${religySyncPackageId}::religy_sync::ContentCreated`,
-        },
-        cursor: null,
-      },
-      {
-        enabled: true,
-        select: (data) =>
-          data.pages
-            .flatMap((page) => page.data)
-            .filter(
-              (x) =>
-                x.parsedJson.content_type === 1 &&
-                x.parsedJson.related_to === id
-            ),
-      }
-    );
+  const { data: eventsData, refetch: refreshAnswers } = useQueryEvents({
+    packageId: religySyncPackageId,
+    eventType: "ContentCreated",
+    filters: {
+      contentType: 1, // 1 = answer
+      relatedTo: id, // question ID
+    },
+  });
 
   // Fetch follow-ups (content_type = 4) that relate to answers
   const { data: followupEventsData, refetch: refreshFollowups } =
-    useSuiClientInfiniteQuery(
-      "queryEvents",
-      {
-        query: {
-          MoveEventType: `${religySyncPackageId}::religy_sync::ContentCreated`,
-        },
-        cursor: null,
+    useQueryEvents({
+      packageId: religySyncPackageId,
+      eventType: "ContentCreated",
+      filters: {
+        contentType: 4, // 4 = followup
       },
-      {
+      queryOptions: {
         enabled: answers.length > 0,
         select: (data) =>
-          data.pages
-            .flatMap((page) => page.data)
-            .filter(
-              (x) =>
-                x.parsedJson.content_type === 4 &&
-                answers.some(
-                  (answer) => x.parsedJson.related_to === answer.data.objectId
-                )
-            ),
-      }
-    );
+          data.filter((x) =>
+            answers.some(
+              (answer) => x.parsedJson.related_to === answer.data.objectId
+            )
+          ),
+      },
+    });
 
   // Fetch all follow-up IDs
   const [followupIds, setFollowupIds] = useState([]);
@@ -116,26 +97,18 @@ const QuestionDetails = () => {
 
   // Fetch clarifications (content_type = 5) that relate to follow-ups
   const { data: clarificationEventsData, refetch: refreshClarifications } =
-    useSuiClientInfiniteQuery(
-      "queryEvents",
-      {
-        query: {
-          MoveEventType: `${religySyncPackageId}::religy_sync::ContentCreated`,
-        },
-        cursor: null,
+    useQueryEvents({
+      packageId: religySyncPackageId,
+      eventType: "ContentCreated",
+      filters: {
+        contentType: 5, // 5 = clarification
       },
-      {
+      queryOptions: {
         enabled: followupIds.length > 0,
         select: (data) =>
-          data.pages
-            .flatMap((page) => page.data)
-            .filter(
-              (x) =>
-                x.parsedJson.content_type === 5 &&
-                followupIds.includes(x.parsedJson.related_to)
-            ),
-      }
-    );
+          data.filter((x) => followupIds.includes(x.parsedJson.related_to)),
+      },
+    });
 
   const { data: answerListData } = useSuiClientQuery(
     "multiGetObjects",
