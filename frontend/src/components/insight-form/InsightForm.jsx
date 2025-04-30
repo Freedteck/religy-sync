@@ -14,6 +14,7 @@ import useScholarStatus from "../../hooks/useScholarStatus";
 import toast from "react-hot-toast";
 import { uploadMultiple } from "../../utils/pinataService";
 import { WalletContext } from "../../context/walletContext";
+import { FaPlus, FaTimes, FaUpload, FaLink, FaCoins } from "react-icons/fa";
 
 const MAX_FILE_SIZE_MB = 10;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
@@ -186,7 +187,9 @@ const InsightForm = () => {
       <form className={styles["insight-form"]} onSubmit={submitInsight}>
         <div className={styles["token-info"]}>
           <div className={styles["token-balance"]}>
-            <div className={styles["token-icon"]}></div>
+            <div className={styles["token-icon"]}>
+              <FaCoins size={12} />
+            </div>
             <span>Balance: {balance} SUI</span>
           </div>
         </div>
@@ -253,7 +256,7 @@ const InsightForm = () => {
                   }`}
                   onClick={() => setVideoInputMethod("file")}
                 >
-                  Upload Video
+                  <FaUpload /> Upload Video
                 </button>
                 <button
                   type="button"
@@ -262,7 +265,7 @@ const InsightForm = () => {
                   }`}
                   onClick={() => setVideoInputMethod("url")}
                 >
-                  Use URL
+                  <FaLink /> Use URL
                 </button>
               </div>
               {videoInputMethod === "file" ? (
@@ -292,7 +295,9 @@ const InsightForm = () => {
                       </>
                     ) : (
                       <>
-                        <span className={styles["upload-icon"]}>📁</span>
+                        <span className={styles["upload-icon"]}>
+                          <FaUpload size={20} />
+                        </span>
                         <span>Click to select video file</span>
                         <span className={styles["file-hint"]}>
                           (MP4, WebM, max {MAX_FILE_SIZE_MB}MB)
@@ -331,7 +336,7 @@ const InsightForm = () => {
                 }`}
                 onClick={() => setThumbnailInputMethod("file")}
               >
-                Upload Image
+                <FaUpload /> Upload Image
               </button>
               <button
                 type="button"
@@ -340,7 +345,7 @@ const InsightForm = () => {
                 }`}
                 onClick={() => setThumbnailInputMethod("url")}
               >
-                Use URL
+                <FaLink /> Use URL
               </button>
             </div>
             {thumbnailInputMethod === "file" ? (
@@ -374,7 +379,9 @@ const InsightForm = () => {
                     </>
                   ) : (
                     <>
-                      <span className={styles["upload-icon"]}>📁</span>
+                      <span className={styles["upload-icon"]}>
+                        <FaUpload size={20} />
+                      </span>
                       <span>Click to select image file</span>
                       <span className={styles["file-hint"]}>
                         (JPG, PNG, max {MAX_FILE_SIZE_MB}MB)
@@ -453,7 +460,7 @@ const InsightForm = () => {
                     className={styles["remove-tag"]}
                     onClick={() => removeTag(tag)}
                   >
-                    ×
+                    <FaTimes size={10} />
                   </span>
                 </div>
               ))}
@@ -473,7 +480,7 @@ const InsightForm = () => {
                     onClick={addTag}
                     disabled={!newTag}
                   >
-                    <span>+</span> Add
+                    <FaPlus size={12} /> Add
                   </button>
                 </div>
               )}

@@ -1,16 +1,19 @@
 .profile {
-  padding-block: 50px;
+  padding: 2rem 1rem;
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* Profile Header Redesign */
+/* Profile Header */
 .profileHeader {
   display: flex;
-  align-items: flex-start;
-  gap: 30px;
-  padding: 30px;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
   background: linear-gradient(to right, var(--dark-blue-3), var(--dark-blue-4));
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
@@ -23,37 +26,19 @@
   position: absolute;
   top: 0;
   right: 0;
-  width: 40%;
-  height: 100%;
+  width: 100%;
+  height: 40%;
   background: linear-gradient(
     135deg,
     rgba(114, 9, 183, 0.1),
     rgba(58, 134, 255, 0.1)
   );
-  clip-path: polygon(30% 0, 100% 0, 100% 100%, 0% 100%);
-}
-
-.apply-button {
-  background: linear-gradient(
-    to right,
-    var(--accent-blue-light),
-    var(--accent-purple)
-  );
-  color: var(--text-white);
-  border: none;
-  border-radius: 4px;
-  padding: 8px 16px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  width: fit-content;
-  align-self: center;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 30%);
 }
 
 .profileAvatar {
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   background: linear-gradient(
     135deg,
@@ -63,56 +48,45 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 48px;
+  font-size: 2.5rem;
   font-weight: bold;
   color: var(--text-white);
-  margin-right: 0;
-  flex-shrink: 0;
   border: 4px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  position: relative;
   z-index: 1;
 }
 
 .profileInfo {
-  flex: 1;
-  position: relative;
+  width: 100%;
+  text-align: center;
   z-index: 1;
 }
 
 .profileInfo h1 {
-  margin: 0 0 8px 0;
-  font-size: 28px;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.75rem;
   font-weight: 700;
   color: var(--text-white);
-  line-height: 1.2;
 }
 
 .profileMeta {
   display: flex;
-  align-items: center;
+  justify-content: center;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 12px;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .verifiedBadge {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: var(--text-white);
-  border: none;
-  border-radius: 20px;
-  padding: 6px 14px;
-  font-size: 13px;
-  font-weight: 600;
   display: inline-flex;
   align-items: center;
-  backdrop-filter: blur(5px);
-}
-
-.verifiedBadge::before {
-  content: "✓";
-  margin-right: 6px;
-  font-size: 12px;
+  gap: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-white);
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
 }
 
 .verified {
@@ -126,77 +100,50 @@
 }
 
 .profileWallet {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   background-color: rgba(255, 255, 255, 0.05);
   color: var(--text-gray-light);
-  font-size: 13px;
-  padding: 6px 12px;
+  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
   border-radius: 20px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
 }
 
-.profileWallet::before {
-  content: "🔗";
-  font-size: 12px;
-}
-
-.email {
-  color: var(--accent-blue-lightest);
-  margin: 0 0 12px 0;
-  font-size: 15px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.email::before {
-  content: "✉️";
-  font-size: 14px;
-}
-
+.email,
 .specialty {
-  color: var(--text-light);
-  font-size: 16px;
-  margin-bottom: 16px;
   display: flex;
   align-items: center;
-  gap: 8px;
-}
-
-.specialty::before {
-  content: "🕊️";
-  font-size: 14px;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
 }
 
 .expertise {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 20px;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .expertiseTag {
   background-color: rgba(255, 255, 255, 0.08);
   color: var(--accent-blue-lightest);
-  padding: 6px 14px;
+  padding: 0.5rem 1rem;
   border-radius: 20px;
-  font-size: 13px;
+  font-size: 0.85rem;
   font-weight: 500;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.2s ease;
-}
-
-.expertiseTag:hover {
-  background-color: rgba(58, 134, 255, 0.2);
-  transform: translateY(-1px);
 }
 
 .profileStats {
   display: flex;
-  gap: 25px;
-  margin-top: 20px;
-  padding-top: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -208,23 +155,40 @@
 }
 
 .statValue {
-  font-size: 24px;
+  font-size: 1.5rem;
   font-weight: 700;
   color: var(--text-white);
-  margin-bottom: 4px;
 }
 
 .statLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
   color: var(--text-gray-light);
-  font-size: 13px;
+  font-size: 0.85rem;
+}
+
+.apply-button {
+  background: linear-gradient(
+    to right,
+    var(--accent-blue-light),
+    var(--accent-purple)
+  );
+  color: var(--text-white);
+  border: none;
+  border-radius: 4px;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
   font-weight: 500;
-  opacity: 0.8;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 /* Tabs */
 .profileTabs {
-  margin-top: 40px;
+  margin-top: 2rem;
   border-bottom: 1px solid var(--text-gray-dark);
+  overflow-x: auto;
 }
 
 .tabList {
@@ -232,14 +196,19 @@
   list-style-type: none;
   margin: 0;
   padding: 0;
+  min-width: max-content;
 }
 
 .tabItem {
-  padding: 15px 30px;
-  font-size: 18px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  font-size: 0.95rem;
   cursor: pointer;
   border-bottom: 3px solid transparent;
   transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
 .tabItem.active {
@@ -247,185 +216,23 @@
   border-bottom-color: var(--accent-blue-light);
 }
 
-/* Answer Cards */
-.answersContainer {
-  margin-top: 30px;
+/* Content Containers */
+.contentContainer {
+  margin-top: 1.5rem;
 }
 
-.answerCard {
-  background: linear-gradient(
-    to bottom right,
-    var(--dark-blue-5),
-    var(--dark-blue-6)
-  );
-  border: 1px solid var(--accent-purple);
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.questionLink {
-  font-size: 20px;
-  font-weight: bold;
-  color: var(--text-white);
-  margin-bottom: 15px;
-  display: block;
-  text-decoration: none;
-}
-
-.questionLink:hover {
-  color: var(--accent-blue-light);
-}
-
-.answerContent {
+.emptyState {
+  text-align: center;
+  padding: 2rem;
   color: var(--text-gray-light);
-  margin-bottom: 20px;
-  line-height: 1.6;
 }
 
-.answerMeta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: var(--text-gray);
-  font-size: 14px;
-}
-
-.metaActions {
-  display: flex;
-  align-items: center;
-}
-
-.voteCircle {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background-color: rgba(114, 9, 183, 0.2);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: var(--accent-purple);
-  font-weight: bold;
-  margin-right: 10px;
-}
-
-.actionButton {
-  color: var(--text-gray);
-  margin-left: 15px;
-  cursor: pointer;
-}
-
-.actionButton:hover {
-  color: var(--accent-blue-light);
-}
-
-/* Credentials Section */
-.credentialsContainer {
-  margin-top: 30px;
-}
-
-.credentialCard {
-  background: linear-gradient(
-    to bottom right,
-    var(--dark-blue-4),
-    var(--dark-blue-3)
-  );
-  border: 1px solid var(--accent-blue);
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.credentialTitle {
-  font-size: 20px;
-  font-weight: bold;
-  color: var(--text-white);
-  margin-bottom: 10px;
-}
-
-.credentialMeta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: var(--text-gray);
-  font-size: 14px;
-  margin-bottom: 15px;
-}
-
-.credentialIssuer {
-  font-weight: bold;
-}
-
-.credentialContent {
-  color: var(--text-gray-light);
-  line-height: 1.6;
-}
-
-.credentialVerify {
-  display: flex;
-  align-items: center;
-  margin-top: 15px;
-}
-
-.verifyIcon {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: rgba(67, 97, 238, 0.2);
-  color: var(--accent-blue-light);
-  font-size: 12px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 8px;
-}
-
-.verifyText {
-  color: var(--accent-blue-light);
-  font-size: 14px;
-}
-
-.insights {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 30px;
-}
-
-/* Reward button */
-.rewardButton {
-  background: linear-gradient(
-    to bottom right,
-    var(--accent-blue-light),
-    var(--accent-purple-dark)
-  );
-  color: var(--text-white);
-  border-radius: 20px;
-  padding: 10px 25px;
-  font-weight: bold;
-  border: none;
-  cursor: pointer;
-  transition: opacity 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  margin-left: auto;
-  margin-top: 20px;
-}
-
-.rewardButton:hover {
-  opacity: 0.9;
-}
-
-.rewardIcon {
-  margin-right: 8px;
-}
-
-/* About Section */
+.credentialsContainer,
 .aboutContainer {
-  margin-top: 30px;
+  margin-top: 1.5rem;
 }
 
+.credentialCard,
 .aboutContent {
   background: linear-gradient(
     to bottom right,
@@ -434,23 +241,82 @@
   );
   border: 1px solid var(--accent-blue);
   border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.aboutContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.credentialTitle {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: var(--text-white);
+  margin-bottom: 0.75rem;
+}
+
+.credentialContent {
+  color: var(--text-gray-light);
   line-height: 1.6;
 }
 
-.aboutContent h3 {
-  margin-top: 0;
-  margin-bottom: 15px;
+.insights {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
 }
 
-.aboutContent p {
-  color: var(--text-gray-light);
-  margin-bottom: 15px;
-}
-
-/* Hide inactive tab content */
 .hidden {
   display: none;
+}
+
+/* Responsive Styles */
+@media (min-width: 768px) {
+  .profileHeader {
+    flex-direction: row;
+    align-items: flex-start;
+    text-align: left;
+    padding: 2rem;
+  }
+
+  .profileHeader::before {
+    width: 40%;
+    height: 100%;
+    clip-path: polygon(30% 0, 100% 0, 100% 100%, 0% 100%);
+  }
+
+  .profileInfo {
+    text-align: left;
+  }
+
+  .profileMeta {
+    justify-content: flex-start;
+  }
+
+  .email,
+  .specialty {
+    justify-content: flex-start;
+  }
+
+  .expertise {
+    justify-content: flex-start;
+  }
+
+  .profileStats {
+    justify-content: flex-start;
+  }
+}
+
+@media (min-width: 1024px) {
+  .profile {
+    padding: 3rem 2rem;
+  }
+
+  .profileAvatar {
+    width: 120px;
+    height: 120px;
+    font-size: 3rem;
+  }
 }

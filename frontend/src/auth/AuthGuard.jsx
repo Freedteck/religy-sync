@@ -51,7 +51,7 @@ const AuthGuard = ({ children, requireAdmin = false }) => {
 
   return (
     <>
-      <Toaster position="bottom-center" />
+      <Toaster position="top-center" />
       {children}
     </>
   );

@@ -116,11 +116,11 @@ const Home = () => {
           <section className={styles.section}>
             <h2>Featured Questions</h2>
             {questions.length > 0 ? (
-              <ul className={styles.row}>
+              <div className={styles.cardsContainer}>
                 {questions.map((question, index) => (
                   <FeaturedCard key={index} data={question} />
                 ))}
-              </ul>
+              </div>
             ) : (
               <p className={styles.emptyState}>
                 No questions yet. Be the first to ask!
@@ -132,14 +132,14 @@ const Home = () => {
           <section className={styles.section}>
             <h2>Featured Insights</h2>
             {featuredContents.length > 0 ? (
-              <ul className={styles.row}>
+              <div className={styles.cardsContainer}>
                 {featuredContents.map((content) => (
                   <TeachingCard
                     key={content.data.objectId}
                     teaching={content}
                   />
                 ))}
-              </ul>
+              </div>
             ) : (
               <p className={styles.emptyState}>
                 No insights yet. Check back later!
@@ -151,11 +151,11 @@ const Home = () => {
           <section className={styles.section}>
             <h2>Featured Scholars</h2>
             {scholars.length > 0 ? (
-              <ul className={`${styles.row} ${styles.scholars}`}>
+              <div className={styles.cardsContainer}>
                 {scholars.slice(0, 6).map((scholar, index) => (
                   <ProfileCard key={index} data={scholar} />
                 ))}
-              </ul>
+              </div>
             ) : (
               <p className={styles.emptyState}>
                 No scholars available at the moment.
@@ -164,36 +164,34 @@ const Home = () => {
           </section>
 
           {/* Stats */}
-          <section className={styles["platform-stats"]}>
-            <div className={styles["stat-box"]}>
-              <div className={styles["stat-number"]}>
+          <section className={styles.platformStats}>
+            <div className={styles.statBox}>
+              <div className={styles.statNumber}>
                 {allContent.filter(
                   (content) => content.data.content.fields.content_type === 0
                 ).length || "0"}
               </div>
-              <div className={styles["stat-description"]}>Questions Asked</div>
+              <div className={styles.statDescription}>Questions Asked</div>
             </div>
-            <div className={styles["stat-box"]}>
-              <div className={styles["stat-number"]}>
+            <div className={styles.statBox}>
+              <div className={styles.statNumber}>
                 {allContent.filter(
                   (content) => content.data.content.fields.content_type === 1
                 ).length || "0"}
               </div>
-              <div className={styles["stat-description"]}>Answers Provided</div>
+              <div className={styles.statDescription}>Answers Provided</div>
             </div>
-            <div className={styles["stat-box"]}>
-              <div className={styles["stat-number"]}>
+            <div className={styles.statBox}>
+              <div className={styles.statNumber}>
                 {allContent.filter(
                   (content) => content.data.content.fields.content_type === 3
                 ).length || "0"}
               </div>
-              <div className={styles["stat-description"]}>Prayers Posted</div>
+              <div className={styles.statDescription}>Prayers Posted</div>
             </div>
-            <div className={styles["stat-box"]}>
-              <div className={styles["stat-number"]}>{scholars.length}</div>
-              <div className={styles["stat-description"]}>
-                Verified Scholars
-              </div>
+            <div className={styles.statBox}>
+              <div className={styles.statNumber}>{scholars.length}</div>
+              <div className={styles.statDescription}>Verified Scholars</div>
             </div>
           </section>
         </>

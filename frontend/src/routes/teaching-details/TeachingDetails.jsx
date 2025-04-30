@@ -17,6 +17,13 @@ import TipModal from "../../modals/tip-modal/TipModal";
 import useContentFromEvents from "../../hooks/useContentFromEvent";
 import { formatTime } from "../../utils/timeFormatter";
 import Loading from "../../components/loading/Loading";
+import {
+  FaArrowLeft,
+  FaHeart,
+  FaShare,
+  FaGift,
+  FaCalendarAlt,
+} from "react-icons/fa";
 
 const TeachingDetails = () => {
   const { id } = useParams();
@@ -123,7 +130,6 @@ const TeachingDetails = () => {
       return null;
     } catch (e) {
       console.log(e);
-
       return null;
     }
   };
@@ -137,7 +143,7 @@ const TeachingDetails = () => {
   return (
     <div className={styles.container}>
       <Link to="/teachings" className={styles.backBtn}>
-        ← Back to Insights
+        <FaArrowLeft /> Back to Insights
       </Link>
 
       <div className={styles.insightHeader}>
@@ -166,10 +172,10 @@ const TeachingDetails = () => {
             </span>
           </div>
           <div className={styles.metaItem}>
-            📅 {formatTime(insightData?.timestampMs)}
+            <FaCalendarAlt /> {formatTime(insightData?.timestampMs)}
           </div>
           <div className={styles.metaItem}>
-            👍 {insightData?.data.content.fields.likes} Likes
+            <FaHeart /> {insightData?.data.content.fields.likes} Likes
           </div>
         </div>
       </div>
@@ -177,19 +183,16 @@ const TeachingDetails = () => {
       {isVideo ? (
         <div className={styles.videoContainer}>
           {youtubeId ? (
-            // YouTube embed
             <div className={styles.videoWrapper}>
               <iframe
                 src={metadata.videoUrl}
                 className={styles.videoPlayer}
-                // frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 title={insightData?.data.content.fields.title}
               ></iframe>
             </div>
           ) : (
-            // Native video player for direct video files
             <video
               className={styles.videoPlayer}
               controls
@@ -231,9 +234,7 @@ const TeachingDetails = () => {
           <div className={styles.actionsContainer}>
             <div className={styles.actionsGroup}>
               <button className={styles.actionBtn} onClick={handleLike}>
-                <svg className={styles.actionIcon} viewBox="0 0 24 24">
-                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                </svg>
+                <FaHeart className={styles.actionIcon} />
                 <span className={styles.actionText}>
                   {insightData?.data.content.fields.likes}{" "}
                   {insightData?.data.content.fields?.likes > 1
@@ -242,16 +243,12 @@ const TeachingDetails = () => {
                 </span>
               </button>
               <button className={styles.actionBtn}>
-                <svg className={styles.actionIcon} viewBox="0 0 24 24">
-                  <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z" />
-                </svg>
+                <FaShare className={styles.actionIcon} />
                 <span className={styles.actionText}>Share</span>
               </button>
               <button className={styles.actionBtn} onClick={handleTip}>
-                <svg className={styles.actionIcon} viewBox="0 0 24 24">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 11.41L16 12l-2.59-1.41L12 8l-1.41 2.59L8 12l2.59 1.41L12 16l1.41-2.59z" />
-                </svg>
-                Tip
+                <FaGift className={styles.actionIcon} />
+                <span className={styles.actionText}>Tip</span>
               </button>
             </div>
           </div>

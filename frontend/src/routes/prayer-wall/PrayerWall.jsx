@@ -13,6 +13,7 @@ import { filterAndSortContent } from "../../utils/helpers";
 import useCreateContent from "../../hooks/useCreateContent";
 import TipModal from "../../modals/tip-modal/TipModal";
 import { useQueryEvents } from "../../hooks/useQueryEvents";
+import { FaSearch, FaTimes, FaFilter } from "react-icons/fa";
 
 const PrayerWall = () => {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ const PrayerWall = () => {
   const [openTipModal, setOpenTipModal] = useState(false);
   const [selectedPrayer, setSelectedPrayer] = useState(null);
   const [isRewardSent, setIsRewardSent] = useState(false);
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   const { religySyncPackageId, platformId } = useNetworkVariables(
     "religySyncPackageId",
@@ -97,6 +99,7 @@ const PrayerWall = () => {
     setActiveTag("");
     setSortBy("newest");
     setSearchQuery("");
+    setShowMobileFilters(false);
   };
 
   const openTipModalHandler = (id) => {
@@ -112,11 +115,14 @@ const PrayerWall = () => {
     setIsRewardSent(false); // Reset before sending new reward
     sendReward(objectId, amount, () => {
       setIsRewardSent(true);
-
       setTimeout(() => {
         setIsRewardSent(false);
       }, 1000);
     });
+  };
+
+  const toggleMobileFilters = () => {
+    setShowMobileFilters(!showMobileFilters);
   };
 
   const initialLoading = isFetching && !prayers?.length;
@@ -138,7 +144,17 @@ const PrayerWall = () => {
         <Button text={"Create Prayer"} onClick={createPrayer} />
       </section>
 
-      <section className={styles.filters}>
+      <div className={styles.mobileFilterToggle}>
+        <button onClick={toggleMobileFilters} className={styles.filterButton}>
+          <FaFilter /> Filters
+        </button>
+      </div>
+
+      <section
+        className={`${styles.filters} ${
+          showMobileFilters ? styles.showMobileFilters : ""
+        }`}
+      >
         <div className={styles.filterOptions}>
           <div className={styles.filterGroup}>
             <label>
@@ -181,7 +197,7 @@ const PrayerWall = () => {
                     className={styles.removeFilter}
                     onClick={() => setFaithTradition("")}
                   >
-                    ×
+                    <FaTimes size={10} />
                   </span>
                 </div>
               )}
@@ -192,7 +208,7 @@ const PrayerWall = () => {
                     className={styles.removeFilter}
                     onClick={() => setActiveTag("")}
                   >
-                    ×
+                    <FaTimes size={10} />
                   </span>
                 </div>
               )}
@@ -203,6 +219,7 @@ const PrayerWall = () => {
           )}
         </div>
         <div className={styles.searchBar}>
+          <FaSearch className={styles.searchIcon} />
           <input
             type="search"
             placeholder="Search prayers..."

@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/button/Button";
-// import Pagination from "../../components/pagination/Pagination";
 import QuestionList from "../../components/question-list/QuestionList";
 import styles from "./Questions.module.css";
 import { useNetworkVariable } from "../../config/networkConfig";
@@ -11,6 +10,7 @@ import Loading from "../../components/loading/Loading";
 import EmptyState from "../../components/empty/EmptyState";
 import ErrorState from "../../components/error/ErrorState";
 import { useQueryEvents } from "../../hooks/useQueryEvents";
+import { FaTimes, FaFilter, FaQuestionCircle } from "react-icons/fa";
 
 const Questions = () => {
   const [filteredQuestions, setFilteredQuestions] = useState([]);
@@ -95,13 +95,19 @@ const Questions = () => {
 
   return (
     <main className={styles.questions}>
-      <section className={styles["top-header"]}>
+      <section className={styles.topHeader}>
         <h1>Divine Dialogue</h1>
-        <Button text={"Ask a Question"} onClick={askQuestion} />
+        <Button
+          text={"Ask a Question"}
+          onClick={askQuestion}
+          icon={<FaQuestionCircle />}
+        />
       </section>
 
       <section className={styles.filters}>
-        <h3 className={styles.title}>Filter Questions</h3>
+        <h3 className={styles.title}>
+          <FaFilter /> Filter Questions
+        </h3>
         <div className={styles.options}>
           <label>
             Faith Tradition
@@ -154,7 +160,7 @@ const Questions = () => {
             <div className={styles.tag}>
               {activeTag}
               <span className={styles.remove} onClick={removeTag}>
-                ×
+                <FaTimes />
               </span>
             </div>
           </div>

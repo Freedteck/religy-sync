@@ -6,6 +6,7 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .card:hover {
@@ -16,7 +17,7 @@
 .thumbnail {
   position: relative;
   width: 100%;
-  height: 180px;
+  aspect-ratio: 16/9;
   overflow: hidden;
 }
 
@@ -37,10 +38,11 @@
   right: 15px;
   background-color: var(--accent-purple);
   color: white;
-  padding: 5px 10px;
+  padding: 5px 12px;
   border-radius: 20px;
   font-size: 0.8rem;
   font-weight: 600;
+  text-transform: capitalize;
 }
 
 .videoBadge {
@@ -51,7 +53,7 @@
   padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   flex: 1;
 }
 
@@ -59,12 +61,14 @@
   font-size: 1.25rem;
   font-weight: 700;
   color: var(--text-white);
+  margin: 0;
+  line-height: 1.3;
 }
 
 .description {
   color: var(--text-gray-light);
-  margin-bottom: 5px;
-  line-height: 1.4;
+  margin: 0;
+  line-height: 1.5;
   font-size: 0.95rem;
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -88,13 +92,6 @@
   gap: 10px;
 }
 
-.scholarInfo img {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
 .scholarName {
   font-size: 0.9rem;
   font-weight: 600;
@@ -109,11 +106,17 @@
 .stat {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   color: var(--text-gray);
   font-size: 0.9rem;
 }
 
+.actionIcon {
+  color: var(--accent-blue);
+  font-size: 14px;
+}
+
+/* Featured card styles */
 .featuredCard {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -124,7 +127,7 @@
 }
 
 .featuredCard .thumbnail {
-  /* height: 100%; */
+  aspect-ratio: unset;
   min-height: 350px;
 }
 
@@ -135,17 +138,11 @@
   justify-content: center;
 }
 
-.actionIcon {
-  width: 18px;
-  height: 18px;
-  fill: var(--accent-blue);
-  transition: all 0.2s ease;
-}
-
 .featuredCard .title {
   font-size: 1.8rem;
   font-weight: 700;
   margin-bottom: 15px;
+  line-height: 1.2;
 }
 
 .featuredCard .description {
@@ -153,10 +150,26 @@
   margin-bottom: 25px;
   line-height: 1.6;
   font-size: 1.05rem;
+  -webkit-line-clamp: 4;
 }
 
 .featuredCard .meta {
   margin-top: auto;
+}
+
+.featuredCard .actionIcon {
+  font-size: 16px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .featuredCard .title {
+    font-size: 1.5rem;
+  }
+
+  .featuredCard .description {
+    font-size: 1rem;
+  }
 }
 
 @media (max-width: 768px) {
@@ -165,6 +178,43 @@
   }
 
   .featuredCard .thumbnail {
-    min-height: 200px;
+    min-height: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    padding: 15px;
+  }
+
+  .title {
+    font-size: 1.1rem;
+  }
+
+  .description {
+    font-size: 0.85rem;
+  }
+
+  .featuredCard .content {
+    padding: 20px;
+  }
+
+  .featuredCard .title {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+  }
+
+  .featuredCard .description {
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+  }
+
+  .stat {
+    gap: 4px;
+    font-size: 0.8rem;
+  }
+
+  .actionIcon {
+    font-size: 12px;
   }
 }

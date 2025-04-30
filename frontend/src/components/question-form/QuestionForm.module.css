@@ -5,7 +5,7 @@
     var(--dark-blue-6)
   );
   border-radius: 8px;
-  padding: 30px;
+  padding: 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   margin-bottom: 40px;
 }
@@ -67,7 +67,7 @@
 .tags-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
 }
 
 .tag-input {
@@ -78,6 +78,7 @@
   padding: 6px 12px;
   border-radius: 15px;
   font-size: 14px;
+  gap: 6px;
 }
 
 .tag-input-container {
@@ -85,8 +86,9 @@
   align-items: center;
   background-color: rgba(13, 27, 42, 0.6);
   border-radius: 15px;
-  gap: 10px;
-  padding: 8px;
+  gap: 8px;
+  padding: 6px;
+  flex: 1 0 150px;
 }
 
 .tag-input-container:focus-within {
@@ -100,6 +102,7 @@
   border: none;
   color: var(--text-white);
   font-size: 14px;
+  min-width: 80px;
   outline: none;
 }
 
@@ -112,8 +115,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 8px;
-  font-size: 12px;
   cursor: pointer;
 }
 
@@ -128,15 +129,17 @@
   transition: background-color 0.3s ease;
   display: flex;
   align-items: center;
+  gap: 5px;
+  white-space: nowrap;
 }
 
 .add-tag-btn:hover {
   background-color: rgba(114, 9, 183, 0.2);
 }
 
-.add-tag-btn span {
-  margin-right: 5px;
-  font-size: 16px;
+.add-tag-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .token-info {
@@ -155,14 +158,13 @@
   font-weight: bold;
   display: flex;
   align-items: center;
+  gap: 8px;
 }
 
 .token-icon {
-  width: 20px;
-  height: 20px;
-  background-color: var(--accent-blue);
-  border-radius: 50%;
-  margin-right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .submission-buttons {
@@ -186,6 +188,7 @@
 .button-group {
   display: flex;
   gap: 15px;
+  flex-wrap: wrap;
 }
 
 .submission-buttons .not-connected-message {
@@ -205,7 +208,52 @@
   margin-top: 20px;
 }
 
-.submission-buttons .not-connected-message::before {
-  content: "⚠️";
-  font-size: 18px;
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .question-form {
+    padding: 15px;
+  }
+
+  .submission-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .button-group {
+    width: 100%;
+  }
+
+  .button-group button {
+    flex: 1;
+  }
+
+  .tag-input-container {
+    flex: 1 0 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-input,
+  .form-textarea,
+  .form-select {
+    padding: 10px 12px;
+    font-size: 15px;
+  }
+
+  .form-textarea {
+    min-height: 120px;
+  }
+
+  .button-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .button-group button {
+    width: 100%;
+  }
 }

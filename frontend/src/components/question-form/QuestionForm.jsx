@@ -11,6 +11,12 @@ import { Form, useNavigate } from "react-router-dom";
 import useCreateContent from "../../hooks/useCreateContent";
 import QuestionPreview from "../../modals/question-preview/QuestionPreview";
 import { WalletContext } from "../../context/walletContext";
+import {
+  FaPlus,
+  FaTimes,
+  FaExclamationTriangle,
+  FaCoins,
+} from "react-icons/fa";
 
 const QuestionForm = () => {
   const { religySyncPackageId, platformId } = useNetworkVariables(
@@ -89,7 +95,9 @@ const QuestionForm = () => {
       >
         <div className={styles["token-info"]}>
           <div className={styles["token-balance"]}>
-            <div className={styles["token-icon"]}></div>
+            <div className={styles["token-icon"]}>
+              <FaCoins size={12} />
+            </div>
             <span>Balance: {balance} SUI</span>
           </div>
         </div>
@@ -169,7 +177,7 @@ const QuestionForm = () => {
                     className={styles["remove-tag"]}
                     onClick={() => removeTag(tag)}
                   >
-                    ×
+                    <FaTimes size={10} />
                   </span>
                 </div>
               ))}
@@ -188,7 +196,7 @@ const QuestionForm = () => {
                   onClick={addTag}
                   disabled={tags.length >= 5 || !newTag}
                 >
-                  <span>+</span> Add
+                  <FaPlus size={12} /> Add
                 </button>
               </div>
             </div>
@@ -241,8 +249,8 @@ const QuestionForm = () => {
         ) : (
           <div className={styles["submission-buttons"]}>
             <p className={styles["not-connected-message"]}>
-              You need to be connected to submit a question. Please connect your
-              wallet to proceed.
+              <FaExclamationTriangle /> You need to be connected to submit a
+              question. Please connect your wallet to proceed.
             </p>
           </div>
         )}

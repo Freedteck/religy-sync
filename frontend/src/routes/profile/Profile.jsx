@@ -1,4 +1,17 @@
 import { useEffect, useState } from "react";
+import {
+  FaEnvelope,
+  FaDove,
+  FaLink,
+  FaCheck,
+  FaTimes,
+  FaGraduationCap,
+  FaBook,
+  FaPrayingHands,
+  FaQuestion,
+  FaInfoCircle,
+  FaUserTie,
+} from "react-icons/fa";
 import styles from "./Profile.module.css";
 import {
   useSuiClient,
@@ -140,14 +153,12 @@ const Profile = () => {
           wallet: user.applicant,
         });
       } else {
-        // Explicitly set as non-scholar
         setUserData({
           wallet: userAddress,
           status: "not-approved",
         });
       }
     } else {
-      // Handle case where applications couldn't be loaded
       setUserData({
         wallet: userAddress,
         status: "unknown",
@@ -155,7 +166,6 @@ const Profile = () => {
     }
   }, [applications, userAddress]);
 
-  // Show loading state until all data is loaded
   if (isScholarLoading || currentUser === undefined || userData === undefined) {
     return <Loading message="Loading profile..." />;
   }
@@ -172,7 +182,6 @@ const Profile = () => {
       .toUpperCase();
   };
 
-  // Calculate stats from actual content
   const scholarStats = {
     answers: userContent.answers.length,
     questions: userContent.questions.length,
@@ -180,7 +189,6 @@ const Profile = () => {
     prayers: userContent.prayers.length,
   };
 
-  // Mock about data
   const aboutData = {
     biography: [
       `${userData.name} is a ${
@@ -196,13 +204,11 @@ const Profile = () => {
     <main className={styles.profile}>
       {/* Profile Header */}
       <div
-        className={`${styles.profileHeader} ${
-          userData === undefined ? styles.loading : ""
-        }`}
+        className={`${styles.profileHeader} ${!userData ? styles.loading : ""}`}
       >
         <div
           className={`${styles.profileAvatar} ${
-            userData === undefined ? styles.loading : ""
+            !userData ? styles.loading : ""
           }`}
         >
           {getInitials(userData?.name)}
@@ -216,17 +222,29 @@ const Profile = () => {
                   isApprovedScholar ? styles.verified : styles.unverified
                 }`}
               >
-                {isApprovedScholar ? "Verified Scholar" : "Not Verified"}
+                {isApprovedScholar ? (
+                  <>
+                    <FaCheck size={12} /> Verified Scholar
+                  </>
+                ) : (
+                  <>
+                    <FaTimes size={12} /> Not Verified
+                  </>
+                )}
               </div>
             )}
             <div className={styles.profileWallet}>
-              {truncateAddress(userAddress)}
+              <FaLink size={12} /> {truncateAddress(userAddress)}
             </div>
           </div>
-          {userData?.email && <p className={styles.email}>{userData.email}</p>}
+          {userData?.email && (
+            <p className={styles.email}>
+              <FaEnvelope size={14} /> {userData.email}
+            </p>
+          )}
           {(userData?.faithTradition || userData?.denomination) && (
             <p className={styles.specialty}>
-              {userData.faithTradition}{" "}
+              <FaDove size={14} /> {userData.faithTradition}{" "}
               {userData.denomination && `• ${userData.denomination}`}
             </p>
           )}
@@ -248,27 +266,29 @@ const Profile = () => {
             {isApprovedScholar && (
               <div
                 className={`${styles.statItem} ${
-                  userData === undefined ? styles.loading : ""
+                  !userData ? styles.loading : ""
                 }`}
               >
                 <div className={styles.statValue}>{scholarStats.answers}</div>
-                <div className={styles.statLabel}>Answers</div>
+                <div className={styles.statLabel}>
+                  <FaUserTie size={14} /> Answers
+                </div>
               </div>
             )}
             <div
               className={`${styles.statItem} ${
-                userData === undefined ? styles.loading : ""
+                !userData ? styles.loading : ""
               }`}
             >
               <div className={styles.statValue}>{scholarStats.questions}</div>
-              <div className={styles.statLabel}>Questions</div>
+              <div className={styles.statLabel}>
+                <FaQuestion size={14} /> Questions
+              </div>
             </div>
             {!isApprovedScholar && (
               <button
                 className={styles["apply-button"]}
-                onClick={() => {
-                  navigate("/scholar-application");
-                }}
+                onClick={() => navigate("/scholar-application")}
               >
                 Apply for scholar
               </button>
@@ -276,11 +296,13 @@ const Profile = () => {
             {isApprovedScholar && (
               <div
                 className={`${styles.statItem} ${
-                  userData === undefined ? styles.loading : ""
+                  !userData ? styles.loading : ""
                 }`}
               >
                 <div className={styles.statValue}>{scholarStats.insights}</div>
-                <div className={styles.statLabel}>Insights/Teachings</div>
+                <div className={styles.statLabel}>
+                  <FaBook size={14} /> Insights
+                </div>
               </div>
             )}
           </div>
@@ -297,7 +319,7 @@ const Profile = () => {
               }`}
               onClick={() => setActiveTab("answers")}
             >
-              Answers ({scholarStats.answers})
+              <FaUserTie /> Answers ({scholarStats.answers})
             </li>
           )}
           <li
@@ -306,18 +328,16 @@ const Profile = () => {
             }`}
             onClick={() => setActiveTab("questions")}
           >
-            Questions ({scholarStats.questions})
+            <FaQuestion /> Questions ({scholarStats.questions})
           </li>
-
           <li
             className={`${styles.tabItem} ${
               activeTab === "prayers" ? styles.active : ""
             }`}
             onClick={() => setActiveTab("prayers")}
           >
-            Prayers ({scholarStats.prayers})
+            <FaPrayingHands /> Prayers ({scholarStats.prayers})
           </li>
-
           {isApprovedScholar && (
             <>
               <li
@@ -326,7 +346,7 @@ const Profile = () => {
                 }`}
                 onClick={() => setActiveTab("insights")}
               >
-                Insights/Teachings ({scholarStats.insights})
+                <FaBook /> Insights ({scholarStats.insights})
               </li>
               <li
                 className={`${styles.tabItem} ${
@@ -334,7 +354,7 @@ const Profile = () => {
                 }`}
                 onClick={() => setActiveTab("credentials")}
               >
-                Credentials
+                <FaGraduationCap /> Credentials
               </li>
               <li
                 className={`${styles.tabItem} ${
@@ -342,14 +362,14 @@ const Profile = () => {
                 }`}
                 onClick={() => setActiveTab("about")}
               >
-                About
+                <FaInfoCircle /> About
               </li>
             </>
           )}
         </ul>
       </div>
 
-      {/* Answers Tab Content */}
+      {/* Tab Content Sections */}
       {isApprovedScholar && (
         <div
           className={`${styles.contentContainer} ${
@@ -370,7 +390,6 @@ const Profile = () => {
         </div>
       )}
 
-      {/* Questions Tab Content */}
       <div
         className={`${styles.contentContainer} ${
           activeTab !== "questions" ? styles.hidden : ""
@@ -385,7 +404,6 @@ const Profile = () => {
         )}
       </div>
 
-      {/* Prayers Tab Content */}
       <div
         className={`${styles.contentContainer} ${
           activeTab !== "prayers" ? styles.hidden : ""
@@ -400,7 +418,6 @@ const Profile = () => {
         )}
       </div>
 
-      {/* Insights Tab Content - Only visible for scholars */}
       {isApprovedScholar && (
         <div
           className={`${styles.contentContainer} ${
@@ -413,13 +430,12 @@ const Profile = () => {
             ))
           ) : (
             <div className={styles.emptyState}>
-              <p>No insights/teachings yet.</p>
+              <p>No insights yet.</p>
             </div>
           )}
         </div>
       )}
 
-      {/* Credentials Tab Content */}
       {isApprovedScholar && (
         <div
           className={`${styles.credentialsContainer} ${
@@ -428,14 +444,10 @@ const Profile = () => {
         >
           <div className={styles.credentialCard}>
             <div className={styles.credentialTitle}>Religious Credentials</div>
-            <div className={styles.credentialMeta}>
-              <div className={styles.credentialIssuer}>Self-attested</div>
-            </div>
             <div className={styles.credentialContent}>
               {userData.credentials || "No detailed credentials provided"}
             </div>
           </div>
-
           <div className={styles.credentialCard}>
             <div className={styles.credentialTitle}>Faith Tradition</div>
             <div className={styles.credentialContent}>
@@ -445,7 +457,6 @@ const Profile = () => {
         </div>
       )}
 
-      {/* About Tab Content */}
       {isApprovedScholar && (
         <div
           className={`${styles.aboutContainer} ${
@@ -462,7 +473,6 @@ const Profile = () => {
             {aboutData.focus.map((item, index) => (
               <p key={index}>• {item}</p>
             ))}
-
             <h3>Languages</h3>
             {aboutData.languages.map((language, index) => (
               <p key={index}>• {language}</p>

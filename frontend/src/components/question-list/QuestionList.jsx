@@ -3,6 +3,7 @@ import styles from "./QuestionList.module.css";
 import PropTypes from "prop-types";
 import { formatTime } from "../../utils/timeFormatter";
 import { truncateAddress } from "../../utils/truncateAddress";
+import { FaArrowUp, FaComment, FaUser } from "react-icons/fa";
 
 const QuestionList = ({ questionList }) => {
   return (
@@ -42,17 +43,17 @@ const QuestionList = ({ questionList }) => {
             <div className={styles.meta}>
               <div className={styles.left}>
                 <div className={styles.item}>
-                  <span className={styles.icon}>↑</span>
+                  <FaArrowUp className={styles.icon} />
                   <span>{question.data.content.fields.likes} votes</span>
                 </div>
                 <div className={styles.item}>
-                  <span className={styles.icon}>💬</span>
+                  <FaComment className={styles.icon} />
                   <span>{question.data.content.fields.answers} answers</span>
                 </div>
               </div>
               <div className={styles.user}>
                 <div className={styles.avatar}>
-                  {question.data.content.fields.creator.charAt(0)}
+                  <FaUser size={10} />
                 </div>
                 <span>
                   Asked by{" "}

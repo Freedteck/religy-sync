@@ -9,6 +9,7 @@ import useContentFromEvents from "../../hooks/useContentFromEvent";
 import Loading from "../../components/loading/Loading";
 import ErrorState from "../../components/error/ErrorState";
 import EmptyState from "../../components/empty/EmptyState";
+import { FaSearch, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const Teachings = () => {
   const navigate = useNavigate();
@@ -233,7 +234,7 @@ const Teachings = () => {
             value={searchQuery}
             onChange={handleSearchChange}
           />
-          <div className={styles.searchIcon}>🔍</div>
+          <FaSearch className={styles.searchIcon} />
         </div>
       </div>
 
@@ -265,7 +266,7 @@ const Teachings = () => {
                   disabled={currentPage === 1}
                   onClick={() => handlePageChange(currentPage - 1)}
                 >
-                  ◀
+                  <FaChevronLeft />
                 </button>
 
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
@@ -300,7 +301,7 @@ const Teachings = () => {
                   disabled={currentPage === totalPages}
                   onClick={() => handlePageChange(currentPage + 1)}
                 >
-                  ▶
+                  <FaChevronRight />
                 </button>
               </div>
             )}

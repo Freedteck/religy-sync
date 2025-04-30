@@ -1,17 +1,23 @@
+/* Header.module.css */
+
 .header {
   background-color: var(--dark-blue-3);
-  /* opacity: 0.7; */
   width: 100%;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 100;
+  padding: 20px 0;
+}
+
+.headerContainer {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  gap: 10px 24px;
+  align-items: center;
   flex-wrap: wrap;
-  padding: 20px 50px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 .logo {
@@ -25,12 +31,22 @@
   line-height: 1;
 }
 
+.logoText {
+  display: inline-block;
+}
+
+.nav {
+  transition: all 0.3s ease;
+}
+
 .navList {
   display: flex;
   gap: 10px 24px;
   list-style: none;
   align-items: center;
   flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
 }
 
 .navList a {
@@ -48,18 +64,68 @@
   color: var(--text-white);
 }
 
-.connect a {
-  background: linear-gradient(
-    to bottom right,
-    var(--accent-blue-light),
-    var(--accent-purple-dark)
-  );
-  color: var(--text-white);
-  border-radius: 20px;
-  padding: 12px 30px;
-  font-weight: bold;
+.connectButton {
+  margin-left: 10px;
+}
+
+/* Mobile menu button (hidden by default) */
+.mobileMenuButton {
+  display: none;
+  background: none;
   border: none;
+  color: white;
+  font-size: 24px;
   cursor: pointer;
-  transition: opacity 0.3s ease;
-  font-size: 16px;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .header {
+    padding: 15px 0;
+  }
+
+  .mobileMenuButton {
+    display: block;
+    z-index: 101;
+  }
+
+  .nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 70%;
+    height: 100vh;
+    background-color: var(--dark-blue-3);
+    padding: 80px 20px 20px;
+    transition: right 0.3s ease;
+  }
+
+  .navOpen {
+    right: 0;
+  }
+
+  .navList {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .connectButton {
+    margin-left: 0;
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logoText {
+    font-size: 22px;
+  }
+
+  .logo img {
+    width: 50px;
+  }
+
+  .nav {
+    width: 85%;
+  }
 }

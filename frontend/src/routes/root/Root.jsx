@@ -8,6 +8,7 @@ import { useNetworkVariables } from "../../config/networkConfig";
 import { useCurrentAccount, useSuiClient } from "@mysten/dapp-kit";
 import { useEffect, useState } from "react";
 import { WalletContext } from "../../context/walletContext";
+import ScrollToTop from "../../components/scroll-to-top/ScrollToTop";
 
 const Root = () => {
   const [balance, setBalance] = useState(null);
@@ -47,8 +48,9 @@ const Root = () => {
     <WalletContext.Provider
       value={{ balance, isScholar, isConnected: !!account }}
     >
+      <ScrollToTop />
       <div className={styles.root}>
-        <Toaster position="bottom-center" />
+        <Toaster position="top-center" />
         <Header />
         <div className="container">
           <Outlet />

@@ -7,6 +7,7 @@ import ThreadContainer from "../answer-thread/ThreadContainer";
 import ResponseForm from "../response-form/ResponseForm";
 import Jazzicon from "react-jazzicon";
 import TipModal from "../../modals/tip-modal/TipModal";
+import { FaCheck, FaCoins, FaReply, FaChevronDown, FaChevronUp } from "react-icons/fa";
 
 const AnswerItem = ({
   answer,
@@ -45,7 +46,6 @@ const AnswerItem = ({
     );
   };
 
-  // Open and close the tip modal
   const openTipModalHandler = () => {
     setOpenTipModal(true);
   };
@@ -62,12 +62,10 @@ const AnswerItem = ({
 
       <div className={styles["answer-meta"]}>
         <div className={styles["scholar-info"]}>
-          {/* <div className={styles["scholar-avatar"]}> */}
           <Jazzicon
             diameter={40}
             seed={parseInt(answer.data.content.fields.creator.slice(2, 8), 16)}
           />
-          {/* </div> */}
           <div className={styles["scholar-details"]}>
             <h3 className={styles["scholar-name"]}>
               {truncateAddress(answer.data.content.fields.creator)}
@@ -81,11 +79,11 @@ const AnswerItem = ({
             className={styles["helpful-btn"]}
             onClick={() => likeAnswer(answer.data.objectId, "answer")}
           >
-            <span>✓</span>
+            <FaCheck />
             <span>Helpful ({answer.data.content.fields.likes})</span>
           </button>
           <button className={styles["tip-btn"]} onClick={openTipModalHandler}>
-            <span className={styles["tip-icon"]}>🪙</span>
+            <FaCoins className={styles["tip-icon"]} />
             <span>Tip Scholar</span>
           </button>
           <div className={styles["answer-date"]}>
@@ -101,7 +99,7 @@ const AnswerItem = ({
               className={styles["reply-btn"]}
               onClick={toggleFollowupForm}
             >
-              Reply
+              <FaReply /> Reply
             </button>
           )}
 
@@ -110,9 +108,15 @@ const AnswerItem = ({
               className={styles["toggle-thread-btn"]}
               onClick={() => setExpandedAnswer((prev) => !prev)}
             >
-              {expandedAnswer
-                ? "Hide replies"
-                : `Show replies (${answer.followups.length})`}
+              {expandedAnswer ? (
+                <>
+                  <FaChevronUp /> Hide replies
+                </>
+              ) : (
+                <>
+                  <FaChevronDown /> Show replies ({answer.followups.length})
+                </>
+              )}
             </button>
           )}
         </div>
@@ -126,7 +130,6 @@ const AnswerItem = ({
         )}
       </div>
 
-      {/* Thread with followups and clarifications */}
       {answer.followups && answer.followups.length > 0 && expandedAnswer && (
         <ThreadContainer
           followups={answer.followups}
@@ -136,7 +139,6 @@ const AnswerItem = ({
         />
       )}
 
-      {/* Tip Modal */}
       <TipModal
         isOpen={openTipModal}
         onClose={closeTipModalHandler}
