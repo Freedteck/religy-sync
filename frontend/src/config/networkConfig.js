@@ -22,12 +22,16 @@ const { networkConfig, useNetworkVariable, useNetworkVariables } =
       url: getFullnodeUrl("testnet"),
       variables: {
         religySyncPackageId: TESTNET_RELIGY_SYNC_PACKAGE_ID,
+        platformId: PLATFORM_ID,
+        adminCapId: ADMIN_CAP_ID,
       },
     },
     mainnet: {
       url: getFullnodeUrl("mainnet"),
       variables: {
         religySyncPackageId: MAINNET_RELIGY_SYNC_PACKAGE_ID,
+        platformId: PLATFORM_ID,
+        adminCapId: ADMIN_CAP_ID,
       },
     },
   });
