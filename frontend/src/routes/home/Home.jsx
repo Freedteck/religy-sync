@@ -12,6 +12,13 @@ import TeachingCard from "../../components/teaching-card/TeachingCard";
 import Loading from "../../components/loading/Loading";
 import ErrorState from "../../components/error/ErrorState";
 import EmptyState from "../../components/empty/EmptyState";
+import {
+  FaCross,
+  FaStarAndCrescent,
+  FaOm,
+  FaYinYang,
+  FaStarOfDavid,
+} from "react-icons/fa";
 
 const Home = () => {
   const [scholars, setScholars] = useState([]);
@@ -83,11 +90,11 @@ const Home = () => {
     !isLoading && !isError && (!allContent?.length || allContent.length === 0);
 
   const religions = [
-    { id: 1, name: "Christianity", followers: "2.4B", icon: "✝️" },
-    { id: 2, name: "Islam", followers: "1.9B", icon: "☪️" },
-    { id: 3, name: "Hinduism", followers: "1.2B", icon: "🕉️" },
-    { id: 4, name: "Buddhism", followers: "506M", icon: "☸️" },
-    { id: 5, name: "Judaism", followers: "14M", icon: "✡️" },
+    { id: 1, name: "Christianity", followers: "2.4B", icon: <FaCross /> },
+    { id: 2, name: "Islam", followers: "1.9B", icon: <FaStarAndCrescent /> },
+    { id: 3, name: "Hinduism", followers: "1.2B", icon: <FaOm /> },
+    { id: 4, name: "Buddhism", followers: "506M", icon: <FaYinYang /> },
+    { id: 5, name: "Judaism", followers: "14M", icon: <FaStarOfDavid /> },
   ];
 
   return (
