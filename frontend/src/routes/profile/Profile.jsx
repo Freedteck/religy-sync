@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   FaEnvelope,
   FaDove,
@@ -29,11 +29,14 @@ import useScholarStatus from "../../hooks/useScholarStatus";
 import TeachingCard from "../../components/teaching-card/TeachingCard";
 import Button from "../../components/button/Button";
 import { useQueryEvents } from "../../hooks/useQueryEvents";
+import { WalletContext } from "../../context/walletContext";
+import { FaCopy } from "react-icons/fa";
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("questions");
   const [currentUser, setCurrentUser] = useState(undefined);
   const [userData, setUserData] = useState(undefined);
+  const [copyStatus, setCopyStatus] = useState(false);
   const [userContent, setUserContent] = useState({
     questions: [],
     answers: [],
@@ -44,6 +47,8 @@ const Profile = () => {
   const suiClient = useSuiClient();
   const navigate = useNavigate();
   const account = useCurrentAccount();
+  const { balance } = useContext(WalletContext);
+  const isOwnProfile = account?.address === userAddress;
 
   const { religySyncPackageId, platformId } = useNetworkVariables(
     "religySyncPackageId",
@@ -177,9 +182,16 @@ const Profile = () => {
       return truncateAddress(userAddress).substring(0, 2).toUpperCase();
     const names = name.split(" ");
     return names
+      .slice(0, 2)
       .map((n) => n[0])
       .join("")
       .toUpperCase();
+  };
+
+  const copyAddress = () => {
+    navigator.clipboard.writeText(userAddress);
+    setCopyStatus(true);
+    setTimeout(() => setCopyStatus(false), 2000);
   };
 
   const scholarStats = {
@@ -233,8 +245,21 @@ const Profile = () => {
                 )}
               </div>
             )}
-            <div className={styles.profileWallet}>
-              <FaLink size={12} /> {truncateAddress(userAddress)}
+            <div className={styles.walletContainer}>
+              <div className={styles.walletAddress} onClick={copyAddress}>
+                <span>{truncateAddress(userAddress)}</span>
+                <FaCopy className={styles.copyIcon} />
+                {copyStatus && (
+                  <span className={styles.copyNotification}>Copied!</span>
+                )}
+              </div>
+
+              {isOwnProfile && (
+                <div className={styles.balancePill}>
+                  <div className={styles.balanceLabel}>Balance:</div>
+                  <div className={styles.balanceAmount}>{balance} SUI</div>
+                </div>
+              )}
             </div>
           </div>
           {userData?.email && (

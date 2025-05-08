@@ -16,9 +16,10 @@ export function RegisterEnokiWallets() {
           clientId: `${import.meta.env.VITE_GOOGLE_CLIENT_ID}`,
           redirectUrl: window.location.origin,
         },
-        // facebook: {
-        //   clientId: "YOUR_FACEBOOK_CLIENT_ID",
-        // },
+        facebook: {
+          clientId: `${import.meta.env.VITE_FACEBOOK_APP_ID}`,
+          redirectUrl: window.location.origin,
+        },
         // twitch: {
         //   clientId: "YOUR_TWITCH_CLIENT_ID",
         // },
