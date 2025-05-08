@@ -16,6 +16,7 @@ import TeachingDetails from "./routes/teaching-details/TeachingDetails";
 import CreateInsight from "./routes/create-insight/CreateInsight";
 import PrayerWall from "./routes/prayer-wall/PrayerWall";
 import CreatePrayer from "./routes/create-prayer/CreatePrayer";
+import AuthPage from "./routes/auth-page/AuthPage";
 
 export const router = createBrowserRouter([
   {
@@ -30,10 +31,6 @@ export const router = createBrowserRouter([
       {
         index: true,
         Component: Home,
-      },
-      {
-        path: "connect",
-        // Component: <div>Connect</div>,
       },
       {
         path: "teachings",
@@ -99,5 +96,9 @@ export const router = createBrowserRouter([
         Component: Applications,
       },
     ],
+  },
+  {
+    path: "/connect",
+    Component: AuthPage,
   },
 ]);

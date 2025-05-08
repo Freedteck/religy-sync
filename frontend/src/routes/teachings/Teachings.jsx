@@ -139,13 +139,12 @@ const Teachings = () => {
   // Get featured teaching (most recent or most popular)
   const featuredTeaching = useMemo(() => {
     if (!filteredTeachings.length) return null;
-    return [...filteredTeachings].sort((a, b) =>
-      sortBy === "popular"
-        ? parseInt(b.data.content.fields.likes || "0") -
-          parseInt(a.data.content.fields.likes || "0")
-        : parseInt(b.data.timestampMs) - parseInt(a.data.timestampMs)
+    return [...filteredTeachings].sort(
+      (a, b) =>
+        parseInt(b.data.content.fields.likes || "0") -
+        parseInt(a.data.content.fields.likes || "0")
     )[0];
-  }, [filteredTeachings, sortBy]);
+  }, [filteredTeachings]);
 
   // Handle search input
   const handleSearchChange = (e) => {

@@ -1,12 +1,19 @@
-import { ConnectButton, useCurrentAccount } from "@mysten/dapp-kit";
+import {
+  ConnectButton,
+  useCurrentAccount,
+  useCurrentWallet,
+} from "@mysten/dapp-kit";
 import styles from "./Header.module.css";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { FaBars, FaTimes, FaUser } from "react-icons/fa";
+import Button from "../button/Button";
 
 const Header = () => {
   const account = useCurrentAccount();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const { isConnected } = useCurrentWallet();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -52,15 +59,6 @@ const Header = () => {
             </li>
             <li>
               <NavLink
-                to={"/profile" + "/" + account?.address}
-                className={({ isActive }) => (isActive ? styles.active : "")}
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Profile
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
                 to="/about"
                 className={({ isActive }) => (isActive ? styles.active : "")}
                 onClick={() => setIsMobileMenuOpen(false)}
@@ -86,8 +84,27 @@ const Header = () => {
                 Prayer Wall
               </NavLink>
             </li>
+            {isConnected && (
+              <li className={styles.profileLink}>
+                <NavLink
+                  to={"/profile" + "/" + account?.address}
+                  className={({ isActive }) => (isActive ? styles.active : "")}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <FaUser className={styles.userIcon} />
+                  <span>Profile</span>
+                </NavLink>
+              </li>
+            )}
+
             <li className={styles.connectButton}>
-              <ConnectButton />
+              {isConnected ? (
+                <div className={styles.btn}>
+                  <ConnectButton className={styles.connectButton} />
+                </div>
+              ) : (
+                <Button text={"Connect"} onClick={() => navigate("/connect")} />
+              )}
             </li>
           </ul>
         </nav>

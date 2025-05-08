@@ -1,5 +1,6 @@
 .card {
   background: var(--dark-blue-2);
+  border: 1px solid var(--accent-blue-light);
   border-radius: 8px;
   padding: 20px;
   text-align: center;

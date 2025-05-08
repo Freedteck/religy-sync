@@ -10,6 +10,7 @@ import { RouterProvider } from "react-router-dom";
 import { router } from "./route.jsx";
 import { networkConfig } from "./config/networkConfig.js";
 import { lightTheme } from "./themes/lightTeheme.js";
+import { RegisterEnokiWallets } from "./utils/enokiWallet.jsx";
 
 const queryClient = new QueryClient();
 // const networks = {
@@ -22,6 +23,7 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <SuiClientProvider networks={networkConfig} defaultNetwork="testnet">
+        <RegisterEnokiWallets />
         <WalletProvider
           autoConnect={true}
           theme={[
