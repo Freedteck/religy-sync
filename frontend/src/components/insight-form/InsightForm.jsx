@@ -35,7 +35,6 @@ const InsightForm = () => {
   const [thumbnailFile, setThumbnailFile] = useState(null);
   const [videoUrl, setVideoUrl] = useState("");
   const [videoFile, setVideoFile] = useState(null);
-  const [tokenAmount, setTokenAmount] = useState(0);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [videoInputMethod, setVideoInputMethod] = useState("file");
   const [thumbnailInputMethod, setThumbnailInputMethod] = useState("file");
@@ -148,7 +147,6 @@ const InsightForm = () => {
         thumbnailUrl: finalThumbnailUrl,
         description,
         videoUrl: type === "video" ? finalVideoUrl : undefined,
-        tokenOffering: tokenAmount,
       };
 
       createInsight(scholarCapId, title, content, metadata, () =>
@@ -488,24 +486,6 @@ const InsightForm = () => {
           </label>
           <div className={styles["form-helper"]}>
             Add up to 5 tags to help categorize your insight
-          </div>
-        </div>
-
-        <div className={styles["form-group"]}>
-          <label className={styles["form-label"]}>
-            SUI Token Offering (Optional)
-            <input
-              type="number"
-              className={styles["form-input"]}
-              placeholder="0"
-              min="0"
-              step="0.1"
-              value={tokenAmount}
-              onChange={(e) => setTokenAmount(parseFloat(e.target.value) || 0)}
-            />
-          </label>
-          <div className={styles["form-helper"]}>
-            Add SUI tokens to promote your insight to more users
           </div>
         </div>
 

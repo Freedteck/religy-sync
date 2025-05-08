@@ -2,18 +2,19 @@ import { Navigate } from "react-router-dom";
 import { useCurrentAccount, useSuiClientQuery } from "@mysten/dapp-kit";
 import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
-import { ADMIN_CAP_ID } from "../config/constants";
+import { useNetworkVariable } from "../config/networkConfig";
 
 const AuthGuard = ({ children, requireAdmin = false }) => {
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
 
   const account = useCurrentAccount();
+  const adminCapId = useNetworkVariable("adminCapId");
 
   const { data, isLoading } = useSuiClientQuery(
     "getObject",
     {
-      id: ADMIN_CAP_ID,
+      id: adminCapId,
       options: {
         showOwner: true,
       },

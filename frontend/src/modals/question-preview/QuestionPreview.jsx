@@ -11,7 +11,6 @@ const QuestionPreview = ({
   tradition,
   tags,
   preferredScholar,
-  tokenAmount,
 }) => {
   const [formattedDate, setFormattedDate] = useState("");
 
@@ -75,12 +74,6 @@ const QuestionPreview = ({
               <div className={styles.metaItem}>
                 <span className={styles.metaLabel}>Preferred Scholar:</span>{" "}
                 {scholarMap[preferredScholar] || preferredScholar}
-              </div>
-            )}
-            {tokenAmount > 0 && (
-              <div className={styles.metaItem}>
-                <span className={styles.metaLabel}>Token Offering:</span>{" "}
-                {tokenAmount} SUI
               </div>
             )}
           </div>

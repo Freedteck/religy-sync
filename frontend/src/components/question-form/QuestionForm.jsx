@@ -28,7 +28,6 @@ const QuestionForm = () => {
   const [tradition, setTradition] = useState("");
   const [tags, setTags] = useState(["Meditation"]);
   const [newTag, setNewTag] = useState("");
-  const [tokenAmount, setTokenAmount] = useState(0);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const navigate = useNavigate();
@@ -63,7 +62,6 @@ const QuestionForm = () => {
     const metadata = {
       tags: tags,
       tradition: tradition,
-      tokenOffering: tokenAmount,
     };
 
     // Use our createQuestion function from the hook
@@ -206,25 +204,6 @@ const QuestionForm = () => {
           </div>
         </div>
 
-        <div className={styles["form-group"]}>
-          <label className={styles["form-label"]}>
-            SUI Token Offering (Optional)
-            <input
-              type="number"
-              name="tokenAmount"
-              className={styles["form-input"]}
-              placeholder="0"
-              min="0"
-              step="0.1"
-              value={tokenAmount}
-              onChange={(e) => setTokenAmount(parseFloat(e.target.value) || 0)}
-            />
-          </label>
-          <div className={styles["form-helper"]}>
-            Add SUI tokens as an incentive for scholars to answer your question.
-            Higher offerings often receive quicker responses.
-          </div>
-        </div>
         {account ? (
           <div className={styles["submission-buttons"]}>
             <div className={styles["submission-cost"]}>
@@ -263,7 +242,6 @@ const QuestionForm = () => {
         details={details}
         tradition={tradition}
         tags={tags}
-        tokenAmount={tokenAmount}
       />
     </>
   );
