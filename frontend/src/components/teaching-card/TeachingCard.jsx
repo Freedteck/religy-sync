@@ -17,6 +17,7 @@ const TeachingCard = ({ teaching, featured = false }) => {
             parseMetadata(teaching?.data?.content?.fields.metadata).thumbnailUrl
           }
           alt={teaching?.data?.content?.fields.title}
+          loading="lazy"
         />
         <span
           className={`${styles.typeBadge} ${

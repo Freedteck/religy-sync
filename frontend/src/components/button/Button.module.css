@@ -1,10 +1,10 @@
 .btn {
   border-radius: 20px;
-  padding: 12px 30px;
+  padding: clamp(0.75rem, 2vw, 0.85rem) clamp(1.5rem, 3vw, 2rem);
   font-weight: bold;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-size: 16px;
+  font-size: clamp(0.9rem, 2vw, 1rem);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -13,6 +13,8 @@
   font-family: inherit;
   position: relative;
   overflow: hidden;
+  min-width: max-content;
+  min-height: 44px;
 }
 
 /* Primary Button Styles */
@@ -41,6 +43,7 @@
   background: transparent;
   color: var(--text-white);
   border: 2px solid var(--accent-blue-light);
+  transition: all 0.2s ease, background-color 0.1s ease;
 }
 
 .secondary:hover:not(:disabled) {

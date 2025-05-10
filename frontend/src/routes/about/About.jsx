@@ -9,9 +9,10 @@ import {
   FaMapMarkerAlt,
   FaDiscord,
   FaShieldAlt,
+  FaFingerprint,
 } from "react-icons/fa";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
-import { MdInterests } from "react-icons/md";
+import { MdInterests, MdSecurity } from "react-icons/md";
 import BenefitCard from "../../components/benefit-card/BenefitCard";
 import ContactForm from "../../components/contact-form/ContactForm";
 import ContactInfo from "../../components/contact-info/ContactInfo";
@@ -35,10 +36,10 @@ const About = () => {
         "All religious experts are thoroughly verified to ensure authentic and accurate information.",
     },
     {
-      icon: <FaShieldAlt className={styles.featureIcon} />,
-      title: "Blockchain Authentication",
+      icon: <MdSecurity className={styles.featureIcon} />,
+      title: "Flexible Authentication",
       description:
-        "All content is stored on the Sui blockchain as NFTs for authenticity and permanence.",
+        "Choose between traditional wallet connection or privacy-preserving zkLogin to access the platform.",
     },
     {
       icon: <FaCoins className={styles.featureIcon} />,
@@ -61,9 +62,14 @@ const About = () => {
         "ReligySync is a Web3 platform that connects spiritual seekers with verified religious scholars. It allows users to ask religious questions, access faith-based knowledge, and engage with authentic spiritual content. All contributions are stored on the Sui blockchain for transparency and permanence.",
     },
     {
-      question: "How do I ask a question?",
+      question: "How do I create an account?",
       answer:
-        'To ask a question, click on the "Ask a Question" button on the homepage or Questions page. You\'ll be prompted to select relevant tags for your question, write your question in detail, and submit it. Once submitted, your question will be available for verified scholars to answer.',
+        "You can create an account either by connecting a crypto wallet (like Sui Wallet, Slush, or other Sui compatible wallets) or by using our zkLogin feature which allows you to sign in with Google, Facebook, or email without exposing personal information on the blockchain.",
+    },
+    {
+      question: "What are the benefits of zkLogin?",
+      answer:
+        "zkLogin provides a familiar login experience while maintaining your privacy. It uses zero-knowledge proofs to verify your identity without storing personal data on-chain. This is ideal for users who want Web3 benefits without managing crypto wallets.",
     },
     {
       question: "How are scholars verified?",
@@ -78,17 +84,12 @@ const About = () => {
     {
       question: "How does the reward system work?",
       answer:
-        "Users can reward helpful scholars and content creators by sending them SUI tokens directly through the platform. This incentivizes high-quality contributions and allows the community to show appreciation for valuable insights and teachings.",
+        "Users can reward helpful scholars and content creators by sending them SUI tokens directly through the platform. Both wallet users and zkLogin users can participate in the reward system, with zkLogin users receiving a managed wallet automatically.",
     },
     {
       question: "Which faith traditions are supported?",
       answer:
         "ReligySync currently supports major world religions including Buddhism, Christianity, Hinduism, Islam, Judaism, and Sikhism, as well as other spiritual traditions. We're continuously expanding our network of verified scholars to include more diverse religious perspectives.",
-    },
-    {
-      question: "Do I need a crypto wallet to use ReligySync?",
-      answer:
-        "While you can browse questions and answers without a wallet, connecting a wallet allows you to ask questions, reward scholars, and have your contributions stored on-chain. We support most major Sui-compatible wallets for a seamless Web3 experience.",
     },
   ];
 
@@ -126,9 +127,9 @@ const About = () => {
       text: "Blockchain verification ensures that all content is authentic and cannot be altered after posting, preserving the integrity of religious teachings.",
     },
     {
-      icon: <FaShieldAlt className={styles.benefitIcon} />,
-      title: "Permanence",
-      text: "Religious insights and teachings are stored permanently on-chain, creating an enduring repository of spiritual knowledge for future generations.",
+      icon: <FaFingerprint className={styles.benefitIcon} />,
+      title: "Privacy Options",
+      text: "Choose between full Web3 wallet authentication or privacy-preserving zkLogin based on your comfort level with blockchain technology.",
     },
     {
       icon: <FaLink className={styles.benefitIcon} />,
@@ -138,7 +139,7 @@ const About = () => {
     {
       icon: <FaCoins className={styles.benefitIcon} />,
       title: "Reward System",
-      text: "Direct token transfers enable seamless rewards for valuable contributions, encouraging high-quality religious scholarship.",
+      text: "Direct token transfers enable seamless rewards for valuable contributions, with options for both crypto-native and mainstream users.",
     },
     {
       icon: <MdInterests className={styles.benefitIcon} />,

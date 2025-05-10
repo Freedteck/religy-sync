@@ -93,10 +93,10 @@
   background-color: var(--dark-blue-6);
 }
 
-.missionContent {
+/* .missionContent {
   max-width: 800px;
   margin: 0 auto;
-}
+} */
 
 .missionText p {
   color: var(--text-gray-light);
@@ -121,10 +121,10 @@
   background-color: var(--dark-blue-6);
 }
 
-.faqContainer {
+/* .faqContainer {
   max-width: 800px;
   margin: 0 auto;
-}
+} */
 
 /* Blockchain Section */
 .blockchainSection {
