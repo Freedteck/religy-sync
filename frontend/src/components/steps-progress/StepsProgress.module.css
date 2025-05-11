@@ -10,6 +10,7 @@
   align-items: center;
   flex: 1;
   position: relative;
+  text-align: center;
 }
 
 .step:not(:last-child):after {
@@ -57,4 +58,29 @@
 
 .active .stepLabel {
   color: var(--text-light);
+}
+
+@media (max-width: 600px) {
+  .stepsProgress {
+    gap: 4px;
+    padding: 0 4px;
+  }
+
+  .stepNumber {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+
+  .stepLabel {
+    font-size: 12px;
+  }
+
+  .step {
+    min-width: 70px;
+  }
+
+  .step:not(:last-child):after {
+    top: 16px;
+  }
 }
