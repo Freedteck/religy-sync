@@ -12,9 +12,10 @@ import useCreateContent from "../../hooks/useCreateContent";
 import InsightPreview from "../../modals/insight-preview/InsightPreview";
 import useScholarStatus from "../../hooks/useScholarStatus";
 import toast from "react-hot-toast";
-import { uploadMultiple } from "../../utils/pinataService";
+// import { uploadMultiple } from "../../utils/pinataService";
 import { WalletContext } from "../../context/walletContext";
 import { FaPlus, FaTimes, FaUpload, FaLink, FaCoins } from "react-icons/fa";
+import { uploadMultipleFiles } from "../../utils/walrusService";
 
 const MAX_FILE_SIZE_MB = 10;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
@@ -128,7 +129,10 @@ const InsightForm = () => {
       }
 
       if (filesToUpload.length > 0) {
-        const uploadedUrls = await uploadMultiple(filesToUpload);
+        const uploadedUrls = await uploadMultipleFiles(
+          filesToUpload,
+          account?.address
+        );
 
         // Assign URLs based on their original order
         fileTypes.forEach((type, index) => {

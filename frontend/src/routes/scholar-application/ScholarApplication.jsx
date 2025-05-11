@@ -14,7 +14,8 @@ import {
 import useCreateContent from "../../hooks/useCreateContent";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { uploadToPinata } from "../../utils/pinataService";
+// import { uploadToPinata } from "../../utils/pinataService";
+import { uploadFile } from "../../utils/walrusService";
 
 const MAX_FILE_SIZE_MB = 10;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
@@ -142,7 +143,7 @@ const ScholarApplication = () => {
 
       // Upload credentials document if it exists and hasn't been uploaded yet
       if (formData.credentialsDoc && !credentialsDocUrl) {
-        credentialsDocUrl = await uploadToPinata(formData.credentialsDoc);
+        credentialsDocUrl = await uploadFile(formData.credentialsDoc);
       }
 
       const additionalInfo = JSON.stringify({

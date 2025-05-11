@@ -1,323 +1,349 @@
+<!--
+  Copyright (c) Walrus Foundation
+  SPDX-License-Identifier: Apache-2.0
+-->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ReligySync - Authentication</title>
+    <meta charset="utf-8" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      rel="stylesheet"
+      crossorigin="anonymous"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Upload Blobs</title>
+
     <style>
-      /* ReligySync Global CSS */
-      :root {
-        /* Primary Colors */
-        --dark-blue-1: #1a1a2e;
-        --dark-blue-2: #16213e;
-        --dark-blue-3: #0d1b2a;
-        --dark-blue-4: #161b33;
-        --dark-blue-5: #1e2a3b;
-        --dark-blue-6: #121e2e;
-
-        /* Accent Colors */
-        --accent-blue: #3a86ff;
-        --accent-blue-light: #4361ee;
-        --accent-blue-lightest: #4cc9f0;
-        --accent-purple: #7209b7;
-        --accent-purple-dark: #3a0ca3;
-
-        /* Text Colors */
-        --text-white: #ffffff;
-        --text-light: #e9ecef;
-        --text-gray-light: #d8e2dc;
-        --text-gray: #8d99ae;
-        --text-gray-dark: #5c677d;
+      dt {
+        opacity: 80%;
       }
 
-      /* Base Styles */
-      body {
-        font-family: "Arial", sans-serif;
-        color: var(--text-white);
-        background: linear-gradient(
-          135deg,
-          var(--dark-blue-1),
-          var(--dark-blue-3)
-        );
-        margin: 0;
-        padding: 0;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-      }
-
-      .container {
-        width: 100%;
-        max-width: 500px;
-        margin: 0 auto;
-        padding: 80px 20px 40px;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-      }
-
-      /* Header */
-      header {
-        background-color: var(--dark-blue-3);
-        height: 80px;
-        width: 100%;
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 100;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0 20px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-      }
-
-      .logo {
-        font-size: 28px;
-        font-weight: bold;
-        color: var(--text-white);
-        text-decoration: none;
-      }
-
-      /* Auth Card */
-      .auth-card {
-        background: linear-gradient(
-          to bottom right,
-          var(--dark-blue-5),
-          var(--dark-blue-6)
-        );
-        border-radius: 12px;
-        padding: 40px;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-        text-align: center;
-      }
-
-      .auth-title {
-        font-size: 28px;
-        color: var(--text-light);
-        margin: 0 0 10px 0;
-      }
-
-      .auth-subtitle {
-        color: var(--text-gray);
-        font-size: 16px;
-        margin-bottom: 30px;
-        line-height: 1.5;
-      }
-
-      .auth-divider {
-        display: flex;
-        align-items: center;
-        margin: 25px 0;
-        color: var(--text-gray);
-        font-size: 14px;
-      }
-
-      .auth-divider::before,
-      .auth-divider::after {
-        content: "";
-        flex: 1;
-        border-bottom: 1px solid rgba(141, 153, 174, 0.3);
-      }
-
-      .auth-divider::before {
-        margin-right: 15px;
-      }
-
-      .auth-divider::after {
-        margin-left: 15px;
-      }
-
-      /* Auth Buttons */
-      .auth-buttons {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        margin-bottom: 20px;
-      }
-
-      .auth-button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 14px;
-        border-radius: 8px;
-        font-weight: 600;
-        font-size: 16px;
-        border: none;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-decoration: none;
-      }
-
-      .auth-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-      }
-
-      .auth-button i {
-        margin-right: 12px;
-        font-size: 20px;
-      }
-
-      .auth-button-google {
-        background-color: #ffffff;
-        color: #5f6368;
-      }
-
-      .auth-button-google:hover {
-        background-color: #f8f9fa;
-      }
-
-      .auth-button-facebook {
-        background-color: #1877f2;
-        color: white;
-      }
-
-      .auth-button-facebook:hover {
-        background-color: #166fe5;
-      }
-
-      .auth-button-twitch {
-        background-color: #9146ff;
-        color: white;
-      }
-
-      .auth-button-twitch:hover {
-        background-color: #833ae0;
-      }
-
-      .auth-button-wallet {
-        background: linear-gradient(
-          to right,
-          var(--accent-purple),
-          var(--accent-blue)
-        );
-        color: white;
-        padding: 16px;
-        font-weight: bold;
-      }
-
-      .auth-button-wallet:hover {
-        background: linear-gradient(
-          to right,
-          var(--accent-purple-dark),
-          var(--accent-blue-light)
-        );
-      }
-
-      /* Footer */
-      footer {
-        background-color: var(--dark-blue-3);
-        padding: 20px 0;
-        text-align: center;
-        margin-top: auto;
-      }
-
-      .footer-links {
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-        margin-bottom: 10px;
-      }
-
-      .footer-links a {
-        color: var(--text-gray);
-        text-decoration: none;
-        font-size: 14px;
-        transition: color 0.3s ease;
-      }
-
-      .footer-links a:hover {
-        color: var(--accent-blue-light);
-      }
-
-      .copyright {
-        color: var(--text-gray);
-        font-size: 12px;
-      }
-
-      /* ZK Info */
-      .zk-info {
-        background-color: rgba(26, 26, 46, 0.6);
-        border-radius: 8px;
-        padding: 15px;
-        margin-top: 30px;
-        text-align: center;
-      }
-
-      .zk-info-title {
-        color: var(--accent-blue-lightest);
-        font-size: 16px;
-        margin-bottom: 8px;
-      }
-
-      .zk-info-text {
-        color: var(--text-gray-light);
-        font-size: 14px;
-        line-height: 1.5;
+      object {
+        object-fit: cover;
       }
     </style>
-    <!-- Font Awesome for icons -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
   </head>
+
   <body>
-    <!-- Header -->
-    <header>
-      <a href="index.html" class="logo">ReligySync</a>
-    </header>
+    <script>
+      const SUI_NETWORK = "testnet";
+      const SUI_VIEW_TX_URL = `https://suiscan.xyz/${SUI_NETWORK}/tx`;
+      const SUI_VIEW_OBJECT_URL = `https://suiscan.xyz/${SUI_NETWORK}/object`;
 
-    <div class="container">
-      <!-- Authentication Card -->
-      <div class="auth-card">
-        <h1 class="auth-title">Welcome to ReligySync</h1>
-        <p class="auth-subtitle">
-          Connect securely using your favorite provider or crypto wallet. Your
-          privacy is protected with zkLogin technology.
+      /**
+       * Handler for submit events from the HTML form.
+       *
+       * Stores the blob provided in the form, and disable the default HTML form submission.
+       */
+      function onSubmit(event) {
+        // Ensure that the event does not propagate, so that the browser does not
+        // perform a POST with the file.
+        event.preventDefault();
+
+        // Disable the form while uploading.
+        enableForm(false);
+
+        // Store and display the blob, then re-enable the form.
+        storeBlob()
+          .then((storageInfo) => {
+            displayUpload(storageInfo.info, storageInfo.media_type);
+            alert(null);
+            enableForm(true);
+          })
+          .catch((error) => {
+            console.error(error);
+            alert(
+              "An error occurred while uploading. Check the browser console and ensure that \
+                    the aggregator and publisher URLs are correct."
+            );
+            enableForm(true);
+          });
+
+        // Return false to cancel form submission.
+        return false;
+      }
+
+      /**
+       * Stores the file from the HTML form on Walrus.
+       */
+      function storeBlob() {
+        const inputFile = document.getElementById("file-input").files[0];
+        const numEpochs = document.getElementById("epochs-input").value;
+        const basePublisherUrl = document.getElementById(
+          "publisher-url-input"
+        ).value;
+
+        // Submit a PUT request with the file's content as the body to the /v1/blobs endpoint.
+        let sendTo = document.getElementById("send-to-input").value.trim();
+        let sendToParam = sendTo ? `&send_object_to=${sendTo}` : "";
+        return fetch(
+          `${basePublisherUrl}/v1/blobs?epochs=${numEpochs}${sendToParam}`,
+          {
+            method: "PUT",
+            body: inputFile,
+          }
+        ).then((response) => {
+          if (response.status === 200) {
+            // Parse successful responses as JSON, and return it along with the
+            // mime type from the the file input element.
+            return response.json().then((info) => {
+              console.log(info);
+              return { info: info, media_type: inputFile.type };
+            });
+          } else {
+            throw new Error("Something went wrong when storing the blob!");
+          }
+        });
+      }
+
+      /**
+       * Display the result of uploading the file to Walrus.
+       */
+      function displayUpload(storage_info, media_type) {
+        // Extract the displayed fields from either of the two successful responses:
+        // - newlyCreated for blobs that have been uploaded for the first time,
+        //   or whose duration has been extended.
+        // - alreadyCertified for blobs that have already been uploaded and certified.
+        if ("alreadyCertified" in storage_info) {
+          info = {
+            status: "Already certified",
+            blobId: storage_info.alreadyCertified.blobId,
+            endEpoch: storage_info.alreadyCertified.endEpoch,
+            suiRefType: "Previous Sui Certified Event",
+            suiRef: storage_info.alreadyCertified.event.txDigest,
+            suiBaseUrl: SUI_VIEW_TX_URL,
+          };
+        } else if ("newlyCreated" in storage_info) {
+          info = {
+            status: "Newly created",
+            blobId: storage_info.newlyCreated.blobObject.blobId,
+            endEpoch: storage_info.newlyCreated.blobObject.storage.endEpoch,
+            suiRefType: "Associated Sui Object",
+            suiRef: storage_info.newlyCreated.blobObject.id,
+            suiBaseUrl: SUI_VIEW_OBJECT_URL,
+          };
+        } else {
+          throw Error("Unhandled successful response!");
+        }
+
+        // The URL used to download and view the blob.
+        const baseAggregatorUrl = document.getElementById(
+          "aggregator-url-input"
+        ).value;
+        const blobUrl = `${baseAggregatorUrl}/v1/blobs/${info.blobId}`;
+
+        // The URL for viewing the event or object on chain
+        const suiUrl = `${info.suiBaseUrl}/${info.suiRef}`;
+
+        const isImage = media_type.startsWith("image");
+        // Create the HTML entry in the page for the uploaded blob.
+        //
+        // For the associated icon, we use the `<object/>` HTML element, as it allows specifying
+        // the media type. The walrus aggregator returns blobs as `application/octect-stream`,
+        // so it's necessary to specify the content type to the browser in the `object` element.
+        document.getElementById("uploaded-blobs").insertAdjacentHTML(
+          "afterBegin",
+          `<article class="row border rounded-2 shadow-sm mb-3">
+          <object type="${isImage ? media_type : ""}" data="${
+            isImage ? blobUrl : ""
+          }" class="col-4 ps-0"></object>
+          <dl class="blob-info col-8 my-2">
+            <dt>Status</dt><dd>${info.status}</dd>
+
+            <dt>Blob ID</dt>
+            <dd class="text-truncate"><a href="${blobUrl}">${
+            info.blobId
+          }</a></dd>
+
+            <dt>${info.suiRefType}</dt>
+            <dd class="text-truncate">
+              <a href="${suiUrl}" target="_blank">${info.suiRef}</a>
+            </dd>
+            <dt>Stored until epoch</dt><dd>${info.endEpoch}</dd>
+          </dl>
+        </article>`
+        );
+      }
+
+      /**
+       * Helper function to disable the form while uploading.
+       */
+      function enableForm(isEnabled) {
+        if (isEnabled) {
+          // Copy the urls, so that they are not reset.
+          const publisherUrl = document.getElementById(
+            "publisher-url-input"
+          ).value;
+          const aggregatorUrl = document.getElementById(
+            "aggregator-url-input"
+          ).value;
+          // Reset the form
+          document.getElementById("upload-form").reset();
+          // Revert the URLs to their previous values
+          document.getElementById("publisher-url-input").value = publisherUrl;
+          document.getElementById("aggregator-url-input").value = aggregatorUrl;
+          // Disable the progress indication
+          document.getElementById("submit-spinner").style.visibility =
+            "collapse";
+          document.getElementById("submit-text").textContent = "Upload";
+          // Re-enable the form
+          document
+            .querySelector("#upload-form fieldset")
+            .removeAttribute("disabled");
+        } else {
+          document
+            .querySelector("#upload-form fieldset")
+            .setAttribute("disabled", "");
+          document.getElementById("submit-spinner").style.visibility =
+            "visible";
+          document.getElementById("submit-text").textContent = "Uploading ...";
+        }
+      }
+
+      /**
+       * Helper to display an error message.
+       */
+      function alert(message) {
+        const alertElement = document.getElementById("alert");
+        if (message !== null) {
+          alertElement.textContent = message;
+        }
+        alertElement.style.visibility = message !== null ? "visible" : "hidden";
+      }
+    </script>
+
+    <header class="container my-3">
+      <hgroup>
+        <h1>Walrus Blob Upload</h1>
+        <p class="lead">
+          An example uploading and displaying files with Walrus.
         </p>
+      </hgroup>
+    </header>
+    <main class="container">
+      <div class="row align-items-start gx-5">
+        <section class="col-lg-5 mb-3">
+          <hgroup>
+            <h2>Blob Upload</h2>
+            <p>
+              Upload blobs to Walrus, and display them on this page. See the
+              <a href="https://docs.wal.app" target="_blank">
+                Walrus documentation
+              </a>
+              for more information. The file size is limited to 10 MiB on the
+              default publisher. Use the
+              <a
+                href="https://docs.wal.app/usage/client-cli.html"
+                target="_blank"
+                >CLI tool</a
+              >
+              to store bigger files.
+            </p>
+          </hgroup>
 
-        <div class="auth-buttons">
-          <a href="#" class="auth-button auth-button-google">
-            <i class="fab fa-google"></i> Continue with Google
-          </a>
-          <a href="#" class="auth-button auth-button-facebook">
-            <i class="fab fa-facebook-f"></i> Continue with Facebook
-          </a>
-          <a href="#" class="auth-button auth-button-twitch">
-            <i class="fab fa-twitch"></i> Continue with Twitch
-          </a>
-        </div>
+          <form id="upload-form" onsubmit="return onSubmit(event)" class="mb-3">
+            <fieldset class="row g-3">
+              <div class="col-lg-6">
+                <label for="publisher-url-input" class="form-label">
+                  Walrus publisher URL
+                </label>
+                <input
+                  id="publisher-url-input"
+                  type="url"
+                  class="form-control"
+                  placeholder="https://publisher.walrus-testnet.walrus.space"
+                  value="https://publisher.walrus-testnet.walrus.space"
+                  required
+                />
+              </div>
 
-        <div class="auth-divider">or</div>
+              <div class="col-lg-6">
+                <label for="aggregator-url-input" class="form-label">
+                  Walrus aggregator URL
+                </label>
+                <input
+                  id="aggregator-url-input"
+                  type="url"
+                  class="form-control"
+                  placeholder="https://aggregator.walrus-testnet.walrus.space"
+                  value="https://aggregator.walrus-testnet.walrus.space"
+                  required
+                />
+              </div>
 
-        <button class="auth-button auth-button-wallet">
-          <i class="fas fa-wallet"></i> Connect Wallet
-        </button>
+              <div class="col-12">
+                <label for="file-input" class="form-label"
+                  >Blob to upload (<strong>Max 10 MiB size</strong> on the
+                  default publisher!)</label
+                >
+                <input
+                  id="file-input"
+                  type="file"
+                  class="form-control"
+                  required
+                />
+              </div>
 
-        <div class="zk-info">
-          <div class="zk-info-title">Zero-Knowledge Privacy</div>
-          <p class="zk-info-text">
-            ReligySync uses zkLogin to verify your identity without exposing
-            personal data. Your Web2 and Web3 identities remain private.
-          </p>
-        </div>
+              <div class="col-12">
+                <label for="epochs-input" class="form-label">Epochs</label>
+                <input
+                  id="epochs-input"
+                  type="number"
+                  value="1"
+                  min="1"
+                  placeholder="Epochs"
+                  class="form-control"
+                  required
+                />
+                <div class="form-text">
+                  The number of Walrus epochs for which to store the blob.
+                </div>
+              </div>
+
+              <div class="col-12">
+                <label for="send-to-input" class="form-label">Send to</label>
+                <input
+                  id="send-to-input"
+                  placeholder="0x9d8a07f9f5cb4d10ad3a8c949f17b9ae6c51fc76c2b7ef62dc5babec551e79e6"
+                  class="form-control"
+                  required
+                />
+                <div class="form-text">
+                  The address to which the newly created `Blob` object should be
+                  sent (optional).
+                </div>
+              </div>
+
+              <button id="submit" class="btn btn-primary">
+                <span
+                  id="submit-spinner"
+                  class="spinner-border spinner-border-sm"
+                  aria-hidden="true"
+                  style="visibility: collapse"
+                ></span>
+                <span id="submit-text" role="status">Upload</span>
+              </button>
+            </fieldset>
+          </form>
+
+          <div
+            id="alert"
+            class="alert alert-danger"
+            role="alert"
+            style="visibility: hidden"
+          ></div>
+        </section>
+
+        <section class="col-lg-7">
+          <h2>Uploaded Blobs</h2>
+          <div id="uploaded-blobs">
+            <!-- Container for info about uploaded blobs -->
+          </div>
+        </section>
       </div>
-    </div>
-
-    <!-- Footer -->
-    <footer>
-      <div class="footer-links">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
-        <a href="#">Help Center</a>
-      </div>
-      <div class="copyright">
-        © 2025 ReligySync - Secure Authentication with zkLogin
-      </div>
-    </footer>
+    </main>
   </body>
 </html>
