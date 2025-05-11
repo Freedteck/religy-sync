@@ -5,7 +5,7 @@
     var(--dark-blue-6)
   );
   border-radius: 8px;
-  padding: 30px;
+  padding: 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   margin-bottom: 40px;
 }
@@ -158,11 +158,9 @@
 }
 
 .token-icon {
-  width: 20px;
-  height: 20px;
-  background-color: var(--accent-blue);
-  border-radius: 50%;
-  margin-right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .submission-buttons {
@@ -208,4 +206,53 @@
 .submission-buttons .not-connected-message::before {
   content: "⚠️";
   font-size: 18px;
+}
+
+@media (max-width: 768px) {
+  .question-form {
+    padding: 15px;
+  }
+
+  .submission-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .button-group {
+    width: 100%;
+  }
+
+  .button-group button {
+    flex: 1;
+  }
+
+  .tag-input-container {
+    flex: 1 0 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-input,
+  .form-textarea,
+  .form-select {
+    padding: 10px 12px;
+    font-size: 15px;
+  }
+
+  .form-textarea {
+    min-height: 120px;
+  }
+
+  .button-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .button-group button {
+    width: 100%;
+  }
 }

@@ -11,6 +11,7 @@ import { Form, useNavigate } from "react-router-dom";
 import useCreateContent from "../../hooks/useCreateContent";
 import PrayerPreview from "../../modals/prayer-preview/PrayerPreview";
 import { WalletContext } from "../../context/walletContext";
+import { FaCoins } from "react-icons/fa";
 
 const PrayerForm = () => {
   const { religySyncPackageId, platformId } = useNetworkVariables(
@@ -87,7 +88,9 @@ const PrayerForm = () => {
       >
         <div className={styles["token-info"]}>
           <div className={styles["token-balance"]}>
-            <div className={styles["token-icon"]}></div>
+            <div className={styles["token-icon"]}>
+              <FaCoins size={12} />
+            </div>
             <span>Balance: {balance} SUI</span>
           </div>
         </div>
