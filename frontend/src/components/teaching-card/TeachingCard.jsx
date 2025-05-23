@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import styles from "./TeachingCard.module.css";
-import { formatObjectId, parseMetadata } from "../../utils/helpers";
+import { parseMetadata } from "../../utils/helpers";
 import { formatTime } from "../../utils/timeFormatter";
 import Jazzicon from "react-jazzicon";
 import { FaHeart, FaCalendarAlt } from "react-icons/fa";
+import { formatAddress } from "@mysten/sui/utils";
 
 const TeachingCard = ({ teaching, featured = false }) => {
   return (
@@ -47,7 +48,7 @@ const TeachingCard = ({ teaching, featured = false }) => {
               )}
             />
             <span className={styles.scholarName}>
-              {formatObjectId(teaching?.data?.content?.fields.creator)}
+              {formatAddress(teaching?.data?.content?.fields.creator)}
             </span>
           </div>
           <div className={styles.stats}>

@@ -1,4 +1,5 @@
 import styles from "./Review.module.css";
+import { formatAddress } from "@mysten/sui/utils";
 
 const Review = ({ formData, handleInputChange }) => {
   // Format expertise areas for display
@@ -26,7 +27,9 @@ const Review = ({ formData, handleInputChange }) => {
         </div>
         <div className={styles.reviewItem}>
           <span className={styles.reviewLabel}>Wallet Address:</span>
-          <span className={styles.reviewValue}>{formData.walletAddress}</span>
+          <span className={styles.reviewValue}>
+            {formatAddress(formData.walletAddress)}
+          </span>
         </div>
       </div>
 
