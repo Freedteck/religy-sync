@@ -3,7 +3,7 @@ import styles from "./Question.module.css";
 import Jazzicon from "react-jazzicon";
 import { FaComment, FaHeart, FaRegHeart } from "react-icons/fa";
 
-const Question = ({ question, likeQuestion }) => {
+const Question = ({ question, likeQuestion, answer }) => {
   return (
     <section className={styles["question-container"]}>
       <div className={styles["question-header"]}>
@@ -37,7 +37,7 @@ const Question = ({ question, likeQuestion }) => {
         <div className={styles["meta-left"]}>
           <div className={styles["meta-item"]}>
             <FaComment className={styles["meta-icons"]} />
-            <span>{question.answers} answers</span>
+            <span>{answer} answers</span>
           </div>
         </div>
 

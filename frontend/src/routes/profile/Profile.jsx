@@ -61,7 +61,6 @@ const Profile = () => {
     suiClient,
     religySyncPackageId,
     platformId,
-    account,
     userAddress
   );
 

@@ -401,6 +401,7 @@ const QuestionDetails = () => {
           <Question
             question={question?.fields}
             likeQuestion={() => handleLike(id, "question")}
+            answer={answers.length}
           />
 
           <Answers

@@ -46,10 +46,10 @@ const QuestionList = ({ questionList }) => {
                   <FaArrowUp className={styles.icon} />
                   <span>{question.data.content.fields.likes} votes</span>
                 </div>
-                <div className={styles.item}>
+                {/* <div className={styles.item}>
                   <FaComment className={styles.icon} />
                   <span>{question.data.content.fields.answers} answers</span>
-                </div>
+                </div> */}
               </div>
               <div className={styles.user}>
                 <div className={styles.avatar}>
