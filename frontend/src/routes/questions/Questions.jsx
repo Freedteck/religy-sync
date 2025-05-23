@@ -62,10 +62,6 @@ const Questions = () => {
     addTag(e.target.value);
   };
 
-  const handleStatusChange = (e) => {
-    setStatus(e.target.value);
-  };
-
   const handleSortChange = (e) => {
     setSortBy(e.target.value);
   };
@@ -124,19 +120,6 @@ const Questions = () => {
               <option value="judaism">Judaism</option>
               <option value="sikhism">Sikhism</option>
               <option value="other">Other</option>
-            </select>
-          </label>
-
-          <label>
-            Status
-            <select
-              className={styles.select}
-              value={status}
-              onChange={handleStatusChange}
-            >
-              <option value="">All Questions</option>
-              <option value="answered">Answered</option>
-              <option value="pending">Awaiting Answer</option>
             </select>
           </label>
 
